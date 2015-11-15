@@ -1,0 +1,10 @@
+#version 150
+
+in vec3 randomColor;
+
+out vec4 finalColor;
+
+void main()
+{
+    finalColor = vec4(randomColor, 1);
+}

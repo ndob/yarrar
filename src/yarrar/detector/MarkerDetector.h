@@ -1,0 +1,38 @@
+#pragma once
+
+#include "Pipeline.h"
+#include "Pose.h"
+
+namespace yarrar
+{
+
+struct Marker
+{
+    std::vector<cv::Point2f> inner;
+    std::vector<cv::Point2f> outer;
+};
+
+class MarkerDetector: public Detector
+{
+public:
+    MarkerDetector(int width, int height);
+
+    Pose getPose(const cv::Mat& rawData) override;
+private:
+    std::vector<Marker> findMarkers(const cv::Mat& image);
+    int parseId(const std::vector<cv::Point2f>& imagePoints, const cv::Mat& image);
+    std::pair<cv::Mat, cv::Mat> getCameraRotationAndTranslation(const std::vector<cv::Point2f>& corners);
+
+    cv::Mat getCameraMatrix();
+    cv::Mat getDistCoeffs();
+
+    void drawAxes(const cv::Mat& image, const cv::Mat& rvec, const cv::Mat& tvec);
+    void drawPolygon(const std::vector<cv::Point2f>& vertices, const cv::Mat& image);
+
+    int m_width;
+    int m_height;
+    cv::RNG m_rng;
+};
+
+}
+
