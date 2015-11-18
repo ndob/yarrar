@@ -293,10 +293,10 @@ void MarkerDetector::drawPolygon(const std::vector<cv::Point2f>& vertices, const
     Scalar color = Scalar(m_rng.uniform(0,255), m_rng.uniform(0,255), m_rng.uniform(0,255));
 
     std::vector<Point> corners;
-    corners.push_back(Point(static_cast<int> (vertices[0].x), static_cast<int> (vertices[0].y)));
-    corners.push_back(Point(static_cast<int> (vertices[1].x), static_cast<int> (vertices[1].y)));
-    corners.push_back(Point(static_cast<int> (vertices[2].x), static_cast<int> (vertices[2].y)));
-    corners.push_back(Point(static_cast<int> (vertices[3].x), static_cast<int> (vertices[3].y)));
+    for(const auto& vertex : vertices)
+    {
+        corners.push_back(Point(static_cast<int> (vertex.x), static_cast<int> (vertex.y)));
+    }
 
     std::vector<std::vector<Point>> polygons;
     polygons.push_back(corners);
