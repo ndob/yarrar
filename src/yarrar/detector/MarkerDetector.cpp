@@ -11,6 +11,7 @@ const cv::Scalar RED = cv::Scalar(0, 0, 255);
 const cv::Scalar GREEN = cv::Scalar(0, 255, 0);
 const cv::Scalar BLUE = cv::Scalar(255, 0, 0);
 const bool PNP_USE_EXTRINSIC_GUESS = true;
+const uint64 RANDOM_SEED = 12345;
 
 }
 
@@ -21,7 +22,7 @@ using namespace cv;
 MarkerDetector::MarkerDetector(int width, int height):
     m_width(width),
     m_height(height),
-    m_rng(12345),
+    m_rng(RANDOM_SEED),
     m_poseRotation(3,1,cv::DataType<double>::type),
     m_poseTranslation(3,1,cv::DataType<double>::type)
 {
