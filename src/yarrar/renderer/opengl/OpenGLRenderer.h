@@ -45,7 +45,7 @@ public:
 private:
     void initializeGLFW();
     void initializeGLEW();
-    void render();
+    void render(bool renderBackground, bool renderWorld);
     void loadImage(const cv::Mat& image);
 
     std::map<std::string, std::unique_ptr<GLShader>> m_vertexShaders;

@@ -126,22 +126,28 @@ void OpenGLRenderer::initializeGLEW()
     std::cout << "OpenGLRenderer: " << glGetString(GL_RENDERER) << std::endl;
 }
 
-void OpenGLRenderer::render()
+void OpenGLRenderer::render(bool renderBackground, bool renderWorld)
 {
     // Clear screen.
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Disable depth buffering for background rendering.
-    glDisable(GL_DEPTH_TEST);
-    m_bgModel->setTexture(m_backgroundTex);
-    m_bgModel->render();
+    if(renderBackground)
+    {
+        // Disable depth buffering for background rendering.
+        glDisable(GL_DEPTH_TEST);
+        m_bgModel->setTexture(m_backgroundTex);
+        m_bgModel->render();
+    }
 
-    // Depth buffering back on for 3D models.
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
+    if(renderWorld)
+    {
+        // Depth buffering back on for 3D models.
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
 
-    m_cubeModel->render();
+        m_cubeModel->render();
+    }
 
     glfwSwapBuffers(m_window);
 }
@@ -233,7 +239,7 @@ void OpenGLRenderer::draw(const yarrar::Pose &cameraPose, const cv::Mat& image)
 
     // Load fresh background camera image.
     loadImage(image);
-    render();
+    render(true, cameraPose.valid);
 }
 
 }
