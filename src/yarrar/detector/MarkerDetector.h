@@ -21,7 +21,7 @@ public:
 private:
     std::vector<Marker> findMarkers(const cv::Mat& image);
     int parseId(const std::vector<cv::Point2f>& imagePoints, const cv::Mat& image);
-    std::pair<cv::Mat, cv::Mat> getCameraRotationAndTranslation(const std::vector<cv::Point2f>& corners);
+    void estimatePnP(const std::vector<cv::Point2f>& corners);
 
     cv::Mat getCameraMatrix();
     cv::Mat getDistCoeffs();
@@ -32,6 +32,8 @@ private:
     int m_width;
     int m_height;
     cv::RNG m_rng;
+    cv::Mat m_poseRotation;
+    cv::Mat m_poseTranslation;
 };
 
 }

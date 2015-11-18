@@ -10,6 +10,7 @@ namespace {
 const cv::Scalar RED = cv::Scalar(0, 0, 255);
 const cv::Scalar GREEN = cv::Scalar(0, 255, 0);
 const cv::Scalar BLUE = cv::Scalar(255, 0, 0);
+const bool PNP_USE_EXTRINSIC_GUESS = true;
 
 }
 
@@ -20,7 +21,9 @@ using namespace cv;
 MarkerDetector::MarkerDetector(int width, int height):
     m_width(width),
     m_height(height),
-    m_rng(12345)
+    m_rng(12345),
+    m_poseRotation(3,1,cv::DataType<double>::type),
+    m_poseTranslation(3,1,cv::DataType<double>::type)
 {
 }
 
@@ -35,10 +38,10 @@ Pose MarkerDetector::getPose(const cv::Mat& image)
         for(const auto& marker : markers)
         {
             int id = parseId(marker.inner, image);
-            auto pose = getCameraRotationAndTranslation(marker.outer);
+            estimatePnP(marker.outer);
             ret = {
-                pose.first,
-                pose.second,
+                m_poseRotation,
+                m_poseTranslation,
                 getCameraMatrix(),
                 id,
                 true
@@ -47,7 +50,7 @@ Pose MarkerDetector::getPose(const cv::Mat& image)
             // Debugging
             drawPolygon(marker.inner, image);
             drawPolygon(marker.outer, image);
-            drawAxes(image, pose.first, pose.second);
+            drawAxes(image, m_poseRotation, m_poseTranslation);
         }
     }
 
@@ -247,7 +250,7 @@ Mat MarkerDetector::getDistCoeffs()
     return distCoeffs;
 }
 
-std::pair<Mat, Mat> MarkerDetector::getCameraRotationAndTranslation(const std::vector<Point2f>& corners)
+void MarkerDetector::estimatePnP(const std::vector<Point2f>& corners)
 {
     std::vector<Point3f> objectPoints;
 
@@ -262,11 +265,8 @@ std::pair<Mat, Mat> MarkerDetector::getCameraRotationAndTranslation(const std::v
     objectPoints.push_back(Point3f(-1,-1,0));
     objectPoints.push_back(Point3f(1,-1,0));
 
-    Mat rotation(3,1,cv::DataType<double>::type);
-    Mat translation(3,1,cv::DataType<double>::type);
-    cv::solvePnPRansac(objectPoints, corners, getCameraMatrix(), getDistCoeffs(), rotation, translation);
-
-    return std::pair<Mat,Mat>(rotation, translation);
+    cv::solvePnPRansac(objectPoints, corners, getCameraMatrix(), getDistCoeffs(),
+                       m_poseRotation, m_poseTranslation, PNP_USE_EXTRINSIC_GUESS);
 };
 
 void MarkerDetector::drawAxes(const Mat& image, const Mat& rvec, const Mat& tvec)
