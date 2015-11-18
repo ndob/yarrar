@@ -1,9 +1,10 @@
 #include "MarkerDetector.h"
 
 #include <opencv2/opencv.hpp>
+#include <array>
 #include <iostream>
-#include <vector>
 #include <math.h>
+#include <vector>
 
 namespace {
 
@@ -158,13 +159,13 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& image)
 int MarkerDetector::parseId(const std::vector<Point2f>& imagePoints, const Mat& image)
 {
     // Size for image that will be parsed.
-    const int size = 100;
+    const int imageSize = 100;
 
     std::vector<Point2f> corners;
-    corners.push_back(Point2f(size,size));
-    corners.push_back(Point2f(0,size));
+    corners.push_back(Point2f(imageSize,imageSize));
+    corners.push_back(Point2f(0,imageSize));
     corners.push_back(Point2f(0,0));
-    corners.push_back(Point2f(size,0));
+    corners.push_back(Point2f(imageSize,0));
 
     // Find perspective transform for image points.
     Mat transform = findHomography(imagePoints, corners, CV_RANSAC );
@@ -173,40 +174,39 @@ int MarkerDetector::parseId(const std::vector<Point2f>& imagePoints, const Mat& 
     cv::warpPerspective(image, rectified, transform, image.size());
 
     // Select only the part of the image, which contains marker id.
-    Mat subImage(rectified, cv::Rect(0, 0, size, size));
+    Mat subImage(rectified, cv::Rect(0, 0, imageSize, imageSize));
     cvtColor(subImage, subImage, CV_BGR2GRAY);
     Mat binary;
     inRange(subImage, 0, 255/2, binary);
 
-    // TODO: A real parser. This is only for testing.
     // Works by dividing the image to 8x8 matrix (byte per line).
     // Then check if a cell is either black (1) or white (0).
-    // Currently only the first line will account for final id.
-    std::vector<bool> firstLine;
-    firstLine.push_back(false);
-    for(int i = 2; i < binary.rows; i += (binary.rows / 7))
-    {
-        for(int j = 2; j< binary.cols; j += (binary.rows / 7))
-        {
-            if(binary.at<uchar>(i,j) > 0)
-            {
-                circle(subImage, Point(j, i), 2, Scalar(255, 0,0), -1, 8, 0 );
-            }
+    const int dimension = 8;
+    const int stepSize = imageSize / dimension;
+    const int start = stepSize / 2;
+    std::array<std::array<bool, 8>, 8> field;
 
-            if(j > 2 && j < 30)
-            {
-                firstLine.push_back(binary.at<uchar>(i,j) > 0);
-            }
+    for(int i = 0; i < dimension; ++i)
+    {
+        for(int j = 0; j < dimension; ++j)
+        {
+            const int col = start + i * stepSize;
+            const int row = start + j * stepSize;
+            const bool isBlack = binary.at<uchar>(col, row) > 0;
+            field[i][j] = isBlack;
         }
     }
 
-    // Final id is first line as binary converted to integer.
-    char id = 0;
-    for(int i = 0; i < firstLine.size(); ++i)
+    // TODO: Determine orientation from field.
+
+    // TODO: A real parser. This is only for testing.
+    // Final id is fourth line as binary converted to integer.
+    unsigned char id = 0;
+    for(int i = 0; i < field[3].size(); ++i)
     {
-        if(firstLine[i])
+        if(field[3][i])
         {
-            id = id | (1 << (8 - i));
+            id = id | (unsigned char) (1 << (7 - i));
         }
     }
 
