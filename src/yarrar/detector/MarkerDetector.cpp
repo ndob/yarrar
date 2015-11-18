@@ -3,6 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 namespace {
 
@@ -35,7 +36,13 @@ Pose MarkerDetector::getPose(const cv::Mat& image)
         {
             int id = parseId(marker.inner, image);
             auto pose = getCameraRotationAndTranslation(marker.outer);
-            ret = { pose.first, pose.second, id, true };
+            ret = {
+                pose.first,
+                pose.second,
+                getCameraMatrix(),
+                id,
+                true
+            };
 
             // Debugging
             drawPolygon(marker.inner, image);
@@ -204,31 +211,38 @@ int MarkerDetector::parseId(const std::vector<Point2f>& imagePoints, const Mat& 
 
 Mat MarkerDetector::getCameraMatrix()
 {
-    Mat cameraMatrix(3,3,DataType<double>::type);
-    const float FOVX = 0.5f;
-    const float FOVY = 0.5f;
-    cameraMatrix.at<double>(0, 0) = m_width / (2* std::tan(FOVX));
-    cameraMatrix.at<double>(0, 1) = 0;
-    cameraMatrix.at<double>(0, 2) = m_width / 2;
+    Mat cameraMatrix(3,3,DataType<float>::type);
 
-    cameraMatrix.at<double>(1, 0) = 0;
-    cameraMatrix.at<double>(1, 1) = m_height / (2* std::tan(FOVY));
-    cameraMatrix.at<double>(1, 2) = m_height / 2;
+    const float horizFOVDegrees = 50.0f;
+    const float horizFOVRadians = horizFOVDegrees / 2.0f * (static_cast<float>(M_PI) / 180.0f);
 
-    cameraMatrix.at<double>(2, 0) = 0;
-    cameraMatrix.at<double>(2, 1) = 0;
-    cameraMatrix.at<double>(2, 2) = 1;
+    const float cx = static_cast<float> (m_width) / 2.0f;
+    const float cy = static_cast<float> (m_height) / 2.0f;
+    const float fx = cx / std::tan(horizFOVRadians);
+    const float fy = fx;
+
+    cameraMatrix.at<float>(0, 0) = fx;
+    cameraMatrix.at<float>(0, 1) = 0;
+    cameraMatrix.at<float>(0, 2) = cx;
+
+    cameraMatrix.at<float>(1, 0) = 0;
+    cameraMatrix.at<float>(1, 1) = fy;
+    cameraMatrix.at<float>(1, 2) = cy;
+
+    cameraMatrix.at<float>(2, 0) = 0;
+    cameraMatrix.at<float>(2, 1) = 0;
+    cameraMatrix.at<float>(2, 2) = 1;
 
     return cameraMatrix;
 }
 
 Mat MarkerDetector::getDistCoeffs()
 {
-    Mat distCoeffs(4,1,cv::DataType<double>::type);
-    distCoeffs.at<double>(0) = 0;
-    distCoeffs.at<double>(1) = 0;
-    distCoeffs.at<double>(2) = 0;
-    distCoeffs.at<double>(3) = 0;
+    Mat distCoeffs(4,1,cv::DataType<float>::type);
+    distCoeffs.at<float>(0) = 0;
+    distCoeffs.at<float>(1) = 0;
+    distCoeffs.at<float>(2) = 0;
+    distCoeffs.at<float>(3) = 0;
 
     return distCoeffs;
 }
@@ -250,7 +264,7 @@ std::pair<Mat, Mat> MarkerDetector::getCameraRotationAndTranslation(const std::v
 
     Mat rotation(3,1,cv::DataType<double>::type);
     Mat translation(3,1,cv::DataType<double>::type);
-    cv::solvePnPRansac(objectPoints, corners, getCameraMatrix(), cv::Mat(), rotation, translation);
+    cv::solvePnPRansac(objectPoints, corners, getCameraMatrix(), getDistCoeffs(), rotation, translation);
 
     return std::pair<Mat,Mat>(rotation, translation);
 };

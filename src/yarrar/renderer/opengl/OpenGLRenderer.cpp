@@ -53,8 +53,6 @@ OpenGLRenderer::OpenGLRenderer(int width, int height):
         m_fragmentShaders[def.name] = std::unique_ptr<GLShader>(new GLShader(def, GL_FRAGMENT_SHADER));
     }
 
-    glm::mat4 projection = glm::perspective(2.0f, static_cast<float> (m_screenWidth) / static_cast<float> (m_screenHeight), 0.1f, 10.0f);
-
     for(const auto& def : EFFECTS)
     {
         m_programs[def.name] =
@@ -62,10 +60,6 @@ OpenGLRenderer::OpenGLRenderer(int width, int height):
                                                    m_vertexShaders[def.vertexShader].get(),
                                                    m_fragmentShaders[def.fragmentShader].get(),
                                                    def.perspectiveProjection));
-        if(def.perspectiveProjection)
-        {
-            m_programs[def.name]->setUniformMatrix4fv("projection", glm::value_ptr(projection));
-        }
     }
 
     m_bgModel.reset(new BackgroundModel(m_programs["bg"]));
@@ -109,7 +103,8 @@ void OpenGLRenderer::initializeGLFW()
 
     glfwMakeContextCurrent(m_window);
 
-    std::cout << "GLFW initialized successfully. " << std::endl;
+    std::cout << "GLFW initialized successfully. Resolution: "
+              << m_screenWidth << "x" << m_screenHeight << std::endl;
 }
 
 void OpenGLRenderer::initializeGLEW()
@@ -191,21 +186,38 @@ void OpenGLRenderer::draw(const yarrar::Pose &cameraPose, const cv::Mat& image)
             {
                 viewMatrix.at<float>(row, col) = (float) rotation.at<double>(row, col);
             }
+
             viewMatrix.at<float>(row, 3) = (float) cameraPose.translation.at<double>(row, 0);
         }
         viewMatrix.at<float>(3, 3) = 1.0f;
 
-        cv::Mat openCVToOpenGl = cv::Mat::zeros(4, 4, CV_32F);
-        openCVToOpenGl.at<float>(0, 0) = 1.0f;
-        openCVToOpenGl.at<float>(1, 1) = -1.0f; // Invert the y axis
-        openCVToOpenGl.at<float>(2, 2) = -1.0f; // invert the z axis
-        openCVToOpenGl.at<float>(3, 3) = 1.0f;
-
-        viewMatrix = openCVToOpenGl * viewMatrix;
-        cv::Mat glViewMatrix = cv::Mat::zeros(4, 4, CV_32F);
+        // Invert y and z axes.
+        cv::Mat openCVToOpenGL = cv::Mat::zeros(4, 4, CV_32F);
+        openCVToOpenGL.at<float>(0, 0) = 1.0f;
+        openCVToOpenGL.at<float>(1, 1) = -1.0f;
+        openCVToOpenGL.at<float>(2, 2) = -1.0f;
+        openCVToOpenGL.at<float>(3, 3) = 1.0f;
+        viewMatrix = openCVToOpenGL * viewMatrix;
 
         // OpenCV is row major, OpenGL column major.
+        cv::Mat glViewMatrix = cv::Mat::zeros(4, 4, CV_32F);
         cv::transpose(viewMatrix, glViewMatrix);
+
+        // Calculate projection matrix.
+        float fx = cameraPose.camera.at<float>(0,0);
+        float cx = cameraPose.camera.at<float>(0,2);
+        float fy = cameraPose.camera.at<float>(1,1);
+        float cy = cameraPose.camera.at<float>(1,2);
+        float far = 10.0f;
+        float near = 0.1f;
+
+        glm::mat4 projection;
+        projection[0][0] = fx / cx;
+        projection[1][1] = fy / cy;
+        projection[2][2] = (-1.0f * (far + near) / (far - near));
+        projection[3][2] = (-2.0f * far * near) / (far - near);
+        projection[2][3] = -1;
+        projection[3][3] = 0;
 
         for(const auto& program : m_programs)
         {
@@ -213,6 +225,8 @@ void OpenGLRenderer::draw(const yarrar::Pose &cameraPose, const cv::Mat& image)
             {
                 ScopedUseProgram p_(program.second.get());
                 program.second->setUniformMatrix4fv("camera", (GLfloat *) glViewMatrix.data);
+                // TODO: Projection should only be changed when necessary.
+                program.second->setUniformMatrix4fv("projection", glm::value_ptr(projection));
             }
         }
     }
