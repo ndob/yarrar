@@ -10,8 +10,8 @@ BackgroundModel::BackgroundModel(std::weak_ptr<GLProgram> program) :
     m_program(program),
     m_numVertices(6)
 {
-    glGenVertexArrays(1, &m_vao);
-    glBindVertexArray(m_vao);
+    //glGenVertexArrays(1, &m_vao);
+    //glBindVertexArray(m_vao);
 
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -47,7 +47,7 @@ BackgroundModel::BackgroundModel(std::weak_ptr<GLProgram> program) :
 
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+    //glBindVertexArray(0);
 }
 
 void BackgroundModel::render() const
@@ -59,11 +59,22 @@ void BackgroundModel::render() const
         glBindTexture(GL_TEXTURE_2D, m_texture);
 
         glUniform1i(prog->getUniform("tex"), 0);
-        glBindVertexArray(m_vao);
+
+        glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat),
+                              (const GLvoid *) (3 * sizeof(GLfloat)));
+        //glBindVertexArray(m_vao);
 
         glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
 
-        glBindVertexArray(0);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        //glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
     else

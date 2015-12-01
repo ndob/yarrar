@@ -46,7 +46,7 @@ public:
     {
         assert(m_dataProviders.size() == 1);
         auto image = m_dataProviders[0]->getData();
-        m_detectors.emplace_back(new T(image.cols, image.rows));
+        m_detectors.emplace_back(new T(960, 720));
     }
 
     template<typename T>
@@ -58,6 +58,8 @@ public:
     }
 
     void run() const;
+
+    void runRender() const;
 
 private:
     std::vector<std::unique_ptr<DataProvider>> m_dataProviders;

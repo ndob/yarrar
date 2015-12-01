@@ -27,6 +27,8 @@ MarkerDetector::MarkerDetector(int width, int height):
     m_poseRotation(3,1,cv::DataType<double>::type),
     m_poseTranslation(3,1,cv::DataType<double>::type)
 {
+    assert(m_width > 0);
+    assert(m_height > 0);
 }
 
 Pose MarkerDetector::getPose(const cv::Mat& image)

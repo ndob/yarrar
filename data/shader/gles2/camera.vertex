@@ -1,11 +1,11 @@
-#version 150
+#version 100
 
 uniform mat4 camera;
 uniform mat4 projection;
 
-in vec3 vert;
+attribute vec3 vert;
 
-out vec3 randomColor;
+varying vec3 randomColor;
 
 float rand(vec2 co)
 {
@@ -26,5 +26,6 @@ void main()
     {
         randomColor = vec3(0, 0, 255);
     }
+    randomColor = vec3(rand(vert.xy), rand(vert.yz), rand(vert.xy));
     gl_Position = projection * camera * vec4(vert, 1);
 }

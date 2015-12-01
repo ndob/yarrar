@@ -4,9 +4,6 @@
 #include "BackgroundModel.h"
 #include "CubeModel.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 #define YARRAR_OPENGL_CONTEXT
 
 namespace {
@@ -15,14 +12,14 @@ namespace {
 
     const std::vector<ShaderDef> VERTEX_SHADERS
     {
-       {"camera", "../../data/shader/camera.vertex"},
-       {"simple", "../../data/shader/simple.vertex"}
+       {"camera", "/sdcard/yarrar/shader/camera.vertex"},
+       {"simple", "/sdcard/yarrar/shader/simple.vertex"}
     };
 
     const std::vector<ShaderDef> FRAGMENT_SHADERS
     {
-        {"simple", "../../data/shader/simple.fragment"},
-        {"texture", "../../data/shader/texture.fragment"}
+        {"simple", "/sdcard/yarrar/shader/simple.fragment"},
+        {"texture", "/sdcard/yarrar/shader/texture.fragment"}
     };
 
     const std::vector<EffectDef> EFFECTS
@@ -70,12 +67,13 @@ OpenGLRenderer::OpenGLRenderer(int width, int height):
 
 OpenGLRenderer::~OpenGLRenderer()
 {
-    glfwDestroyWindow(m_window);
-    glfwTerminate();
+    //glfwDestroyWindow(m_window);
+    //glfwTerminate();
 }
 
 void OpenGLRenderer::initializeGLFW()
 {
+    /*
     if(!glfwInit())
     {
         throw std::runtime_error("glfwInit failed");
@@ -105,10 +103,12 @@ void OpenGLRenderer::initializeGLFW()
 
     std::cout << "GLFW initialized successfully. Resolution: "
               << m_screenWidth << "x" << m_screenHeight << std::endl;
+              */
 }
 
 void OpenGLRenderer::initializeGLEW()
 {
+    /*
     if(glewInit() != GLEW_OK)
     {
         throw std::runtime_error("glewInit failed");
@@ -124,6 +124,7 @@ void OpenGLRenderer::initializeGLEW()
     std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
     std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
     std::cout << "OpenGLRenderer: " << glGetString(GL_RENDERER) << std::endl;
+    */
 }
 
 void OpenGLRenderer::render(bool renderBackground, bool renderWorld)
@@ -149,7 +150,7 @@ void OpenGLRenderer::render(bool renderBackground, bool renderWorld)
         m_cubeModel->render();
     }
 
-    glfwSwapBuffers(m_window);
+    //glfwSwapBuffers(m_window);
 }
 
 void OpenGLRenderer::loadImage(const cv::Mat& image)
@@ -161,8 +162,8 @@ void OpenGLRenderer::loadImage(const cv::Mat& image)
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glTexImage2D(GL_TEXTURE_2D,
                  0, // Mip level
@@ -170,7 +171,8 @@ void OpenGLRenderer::loadImage(const cv::Mat& image)
                  flipped.cols, // Width
                  flipped.rows, // Height
                  0, // Border
-                 GL_BGR, // Input format: OpenCV is using BGR.
+                 GL_RGB, // Input format: OpenCV is using BGR. 
+                 // TODO: GLES doesn't have BGR
                  GL_UNSIGNED_BYTE, // Data type
                  flipped.ptr());
 }
@@ -179,7 +181,7 @@ void OpenGLRenderer::draw(const yarrar::Pose &cameraPose, const cv::Mat& image)
 {
     if(cameraPose.valid)
     {
-        glfwPollEvents();
+        //glfwPollEvents();
 
         // Convert rotation from vector to matrix.
         cv::Mat rotation;
@@ -216,8 +218,10 @@ void OpenGLRenderer::draw(const yarrar::Pose &cameraPose, const cv::Mat& image)
         float cy = cameraPose.camera.at<float>(1,2);
         float far = 10.0f;
         float near = 0.1f;
+        
+        float projection[4][4];
+        memset(projection, 0, sizeof(float) * 16);
 
-        glm::mat4 projection;
         projection[0][0] = fx / cx;
         projection[1][1] = fy / cy;
         projection[2][2] = (-1.0f * (far + near) / (far - near));
@@ -232,7 +236,7 @@ void OpenGLRenderer::draw(const yarrar::Pose &cameraPose, const cv::Mat& image)
                 ScopedUseProgram p_(program.second.get());
                 program.second->setUniformMatrix4fv("camera", (GLfloat *) glViewMatrix.data);
                 // TODO: Projection should only be changed when necessary.
-                program.second->setUniformMatrix4fv("projection", glm::value_ptr(projection));
+                program.second->setUniformMatrix4fv("projection", (GLfloat *) projection);
             }
         }
     }

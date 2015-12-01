@@ -13,10 +13,10 @@
 # limitations under the License.
 #
 LOCAL_PATH := $(call my-dir)
-EXTERNAL_OPEN_CV_INCLUDE_PATH := $(LOCAL_PATH)/../../../../../../../external/OpenCV-android-sdk/sdk/native/jni/include/
-EXTERNAL_OPEN_CV_LINKER_PATH := ../../../../../../../external/OpenCV-android-sdk/sdk/native/libs/
-YARRAR_INCLUDE_PATH := $(LOCAL_PATH)/../../../../../../
-YARRAR_SOURCE_PATH := ../../../../../../yarrar/
+EXTERNAL_OPEN_CV_INCLUDE_PATH := $(LOCAL_PATH)/../../../../../../external/OpenCV-android-sdk/sdk/native/jni/include/
+EXTERNAL_OPEN_CV_LINKER_PATH := ../../../../../../external/OpenCV-android-sdk/sdk/native/libs/
+YARRAR_INCLUDE_PATH := $(LOCAL_PATH)/../../../../../../src/
+YARRAR_SOURCE_PATH := ../../../../../../src/yarrar/
 
 $(warning $(EXTERNAL_OPEN_CV_INCLUDE_PATH))
 $(warning $(YARRAR_INCLUDE_PATH))
@@ -35,10 +35,15 @@ LOCAL_MODULE    := yarrar_glue
 LOCAL_SRC_FILES :=  yarrar_glue.cpp \
                     $(YARRAR_SOURCE_PATH)/Pipeline.cpp \
                     $(YARRAR_SOURCE_PATH)/dataprovider/StaticImageDataProvider.cpp \
-                    $(YARRAR_SOURCE_PATH)/detector/MarkerDetector.cpp
+                    $(YARRAR_SOURCE_PATH)/detector/MarkerDetector.cpp \
+                    $(YARRAR_SOURCE_PATH)/renderer/opengl/BackgroundModel.cpp \
+                    $(YARRAR_SOURCE_PATH)/renderer/opengl/CubeModel.cpp \
+                    $(YARRAR_SOURCE_PATH)/renderer/opengl/GLProgram.cpp \
+                    $(YARRAR_SOURCE_PATH)/renderer/opengl/GLShader.cpp \
+                    $(YARRAR_SOURCE_PATH)/renderer/opengl/OpenGLRenderer.cpp
 
 LOCAL_C_INCLUDES := $(EXTERNAL_OPEN_CV_INCLUDE_PATH) $(YARRAR_INCLUDE_PATH) $(YARRAR_INCLUDE_PATH)/yarrar
 LOCAL_STATIC_LIBRARIES := opencv_core
-LOCAL_LDLIBS := -llog
+LOCAL_LDLIBS := -llog -lGLESv2 -ldl
 
 include $(BUILD_SHARED_LIBRARY)

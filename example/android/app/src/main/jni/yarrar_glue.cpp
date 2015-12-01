@@ -4,10 +4,9 @@
 #include "yarrar/Pipeline.h"
 #include "yarrar/dataprovider/StaticImageDataProvider.h"
 #include "yarrar/detector/MarkerDetector.h"
+#include "yarrar/renderer/opengl/OpenGLRenderer.h"
 
 #define APPNAME "Yarrar"
-
-
 
 yarrar::Pipeline* pipe;
 cv::Mat s_image;
@@ -38,31 +37,42 @@ public:
 }
 
 extern "C" {
-jint
-Java_com_github_ndob_yarrarandroidexample_MainActivity_initYarrar(JNIEnv*, jobject)
+jint Java_com_github_ndob_yarrarandroidexample_MainActivity_initYarrar(JNIEnv*, jobject)
 {
     using namespace yarrar;
     pipe = new Pipeline;
     pipe->addDataProvider<AndroidImageProvider>();
     pipe->addDetector<MarkerDetector>();
-    pipe->addRenderer<AndroidDummyRenderer>();
+    pipe->addRenderer<OpenGLRenderer>();
 
     cv::RNG m_rng(1423);
     return m_rng.uniform(0,255);
 }
 
-jint
-Java_com_github_ndob_yarrarandroidexample_MainActivity_run(JNIEnv*, jobject)
+jint Java_com_github_ndob_yarrarandroidexample_MainActivity_run(JNIEnv*, jobject)
 {
-    using namespace yarrar;
     pipe->run();
     return 0;
 }
 
-void
-Java_com_github_ndob_yarrarandroidexample_MainActivity_injectCameraFrame(JNIEnv*, jobject, jlong cameraMatAddr)
+jint Java_com_github_ndob_yarrarandroidexample_MainActivity_runRender(JNIEnv*, jobject)
 {
-    s_image = *(cv::Mat*) cameraMatAddr;
+    pipe->runRender();
+    return 0;
+}
+
+void Java_com_github_ndob_yarrarandroidexample_MainActivity_injectCameraFrame(JNIEnv* env, jobject, jint width, jint height, jbyteArray cameraData)
+{
+    jbyte* buffer = env->GetByteArrayElements(cameraData, nullptr);
+    jsize len = env->GetArrayLength(cameraData);
+
+    cv::Mat yuv(height + (height / 2), width, CV_8UC1, buffer);
+    cv::Mat rgba(height, width, CV_8UC3);
+    cv::cvtColor(yuv, rgba, cv::COLOR_YUV2BGR_NV21);
+
+    s_image = rgba;
+
+    env->ReleaseByteArrayElements(cameraData, buffer, JNI_ABORT);
 }
 
 }

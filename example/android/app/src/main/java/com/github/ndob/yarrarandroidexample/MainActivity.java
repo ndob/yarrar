@@ -1,93 +1,66 @@
 package com.github.ndob.yarrarandroidexample;
 
+import android.hardware.Camera;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.LinearLayout;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.core.Mat;
-import org.opencv.android.OpenCVLoader;
+import java.io.File;
+import java.io.IOException;
 
-public class MainActivity extends ActionBarActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class MainActivity extends ActionBarActivity implements Camera.PreviewCallback {
     private static final String TAG = "YARRAR::AndroidExample";
-    private CameraBridgeViewBase mOpenCvCameraView;
-
-
-    private BaseLoaderCallback  mLoaderCallback = new BaseLoaderCallback(this) {
-        @Override
-        public void onManagerConnected(int status) {
-            switch (status) {
-                case LoaderCallbackInterface.SUCCESS:
-                {
-                    Log.i(TAG, "OpenCV loaded successfully");
-                    System.loadLibrary("yarrar_glue");
-                    mOpenCvCameraView.enableView();
-                    initYarrar();
-                } break;
-                default:
-                {
-                    super.onManagerConnected(status);
-                } break;
-            }
-        }
-    };
-
+    private Camera mCamera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.tutorial2_activity_surface_view);
-        mOpenCvCameraView.setCvCameraViewListener(this);
+
+        LinearLayout layout = (LinearLayout) findViewById(R.id.main_view);
+        layout.addView(new OpenGLSurface(this));
+
+        mCamera = getCameraInstance();
+        mCamera.setDisplayOrientation(90);
+        mCamera.setPreviewCallback(this);
+        mCamera.startPreview();
+
+        System.loadLibrary("yarrar_glue");
+        Log.i(TAG, "Yarrar glue loaded.");
     }
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        if (mOpenCvCameraView != null)
-            mOpenCvCameraView.disableView();
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
-        } else {
-            Log.d(TAG, "OpenCV library found inside package. Using it!");
-            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+    public static Camera getCameraInstance() {
+        Camera c = null;
+        try {
+            c = Camera.open();
+        } catch (Exception e) {
+            Log.i(TAG, "error:" + e.getMessage());
         }
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
-        if (mOpenCvCameraView != null)
-            mOpenCvCameraView.disableView();
-    }
-
-
-    @Override
-    public void onCameraViewStarted(int width, int height) {
-
+        return c;
     }
 
     @Override
-    public void onCameraViewStopped() {
-
+    public void onPause() {
+        super.onPause();
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.setPreviewCallback(null);
+            mCamera.release();
+        }
+        mCamera = null;
     }
 
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-        injectCameraFrame(inputFrame.rgba().getNativeObjAddr());
+    @Override
+    public void onPreviewFrame(byte[] data, Camera camera) {
+
+        injectCameraFrame(camera.getParameters().getPreviewSize().width, camera.getParameters().getPreviewSize().height, data);
         run();
-        return inputFrame.rgba();
     }
 
     public native int initYarrar();
     public native int run();
-    public native void injectCameraFrame(long cameraMatAddress);
+    public native int runRender();
+    public native void injectCameraFrame(int width, int height, byte[] cameraData);
+
 }

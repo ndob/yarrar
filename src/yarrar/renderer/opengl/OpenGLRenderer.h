@@ -1,8 +1,12 @@
 #pragma once
 
+/*
 #define GLM_FORCE_RADIANS
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+*/
+#include <GLES2/gl2.h>
+#include <GLES2/gl2ext.h>
 
 #include "Pipeline.h"
 #include "Pose.h"
@@ -52,7 +56,7 @@ private:
     std::map<std::string, std::unique_ptr<GLShader>> m_fragmentShaders;
     std::map<std::string, std::shared_ptr<GLProgram>> m_programs;
 
-    GLFWwindow* m_window;
+    //GLFWwindow* m_window;
     std::unique_ptr<BackgroundModel> m_bgModel;
     std::unique_ptr<CubeModel> m_cubeModel;
     GLuint m_backgroundTex;

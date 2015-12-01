@@ -78,7 +78,7 @@ GLint GLProgram::getUniform(const std::string& name) const
         throw std::runtime_error("uniform name is empty.");
     }
 
-    GLint uniform = glGetUniformLocation(m_object , name.c_str());
+    GLint uniform = glGetUniformLocation(m_object, name.c_str());
 
     if(uniform == -1)
     {
