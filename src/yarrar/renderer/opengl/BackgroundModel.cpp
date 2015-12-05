@@ -10,6 +10,8 @@ BackgroundModel::BackgroundModel(std::weak_ptr<GLProgram> program) :
     m_program(program),
     m_numVertices(6)
 {
+    // GL3 uses vertex arrays, but they are not available in
+    // GLES2.
 #ifdef YARRAR_OPENGL_CONTEXT
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
