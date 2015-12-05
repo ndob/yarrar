@@ -1,6 +1,10 @@
 #include "GLShader.h"
+#include "OpenGLRenderer.h"
 
 #include <fstream>
+#include <stdexcept>
+#include <sstream>
+#include <vector>
 
 namespace yarrar {
 

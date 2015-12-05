@@ -4,22 +4,26 @@
 #include "BackgroundModel.h"
 #include "CubeModel.h"
 
-#define YARRAR_OPENGL_CONTEXT
-
 namespace {
 
     using namespace yarrar;
 
+#ifdef YARRAR_OPENGL_CONTEXT
+    std::string SHADER_PATH = "/home/niki/programming/yarrar/data/shader/gl3/";
+#elif YARRAR_OPENGLES_CONTEXT
+    std::string SHADER_PATH = "/sdcard/yarrar/shader/";
+#endif
+
     const std::vector<ShaderDef> VERTEX_SHADERS
     {
-       {"camera", "/sdcard/yarrar/shader/camera.vertex"},
-       {"simple", "/sdcard/yarrar/shader/simple.vertex"}
+       {"camera", SHADER_PATH + "camera.vertex"},
+       {"simple", SHADER_PATH + "simple.vertex"}
     };
 
     const std::vector<ShaderDef> FRAGMENT_SHADERS
     {
-        {"simple", "/sdcard/yarrar/shader/simple.fragment"},
-        {"texture", "/sdcard/yarrar/shader/texture.fragment"}
+        {"simple", SHADER_PATH + "simple.fragment"},
+        {"texture", SHADER_PATH + "texture.fragment"}
     };
 
     const std::vector<EffectDef> EFFECTS
@@ -33,13 +37,9 @@ namespace {
 namespace yarrar {
 
 OpenGLRenderer::OpenGLRenderer(int width, int height):
-    m_backgroundTex(0),
-    m_screenWidth(width),
-    m_screenHeight(height)
+    m_context(new GLContext(width, height)),
+    m_backgroundTex(0)
 {
-    initializeGLFW();
-    initializeGLEW();
-
     for(const auto& def : VERTEX_SHADERS)
     {
         m_vertexShaders[def.name] = std::unique_ptr<GLShader>(new GLShader(def, GL_VERTEX_SHADER));
@@ -67,64 +67,6 @@ OpenGLRenderer::OpenGLRenderer(int width, int height):
 
 OpenGLRenderer::~OpenGLRenderer()
 {
-    //glfwDestroyWindow(m_window);
-    //glfwTerminate();
-}
-
-void OpenGLRenderer::initializeGLFW()
-{
-    /*
-    if(!glfwInit())
-    {
-        throw std::runtime_error("glfwInit failed");
-    }
-
-#if defined(YARRAR_OPENGL_CONTEXT)
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-#elif defined(YARRAR_OPENGL_ES_CONTEXT)
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-#endif
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    glfwWindowHint(GLFW_DECORATED, GL_TRUE);
-
-    m_window = glfwCreateWindow(m_screenWidth, m_screenHeight, "yarrarr", nullptr, nullptr);
-    if(!m_window)
-    {
-        throw std::runtime_error("glfwCreateWindow failed");
-    }
-
-    glfwMakeContextCurrent(m_window);
-
-    std::cout << "GLFW initialized successfully. Resolution: "
-              << m_screenWidth << "x" << m_screenHeight << std::endl;
-              */
-}
-
-void OpenGLRenderer::initializeGLEW()
-{
-    /*
-    if(glewInit() != GLEW_OK)
-    {
-        throw std::runtime_error("glewInit failed");
-    }
-
-    if(!GLEW_VERSION_3_2)
-    {
-        throw std::runtime_error("OpenGL 3.2 required, but not found.");
-    }
-
-    std::cout << "GLEW initialized successfully with params:" << std::endl;
-    std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-    std::cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
-    std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
-    std::cout << "OpenGLRenderer: " << glGetString(GL_RENDERER) << std::endl;
-    */
 }
 
 void OpenGLRenderer::render(bool renderBackground, bool renderWorld)
@@ -150,7 +92,7 @@ void OpenGLRenderer::render(bool renderBackground, bool renderWorld)
         m_cubeModel->render();
     }
 
-    //glfwSwapBuffers(m_window);
+    m_context->swapBuffers();
 }
 
 void OpenGLRenderer::loadImage(const cv::Mat& image)
@@ -171,8 +113,12 @@ void OpenGLRenderer::loadImage(const cv::Mat& image)
                  flipped.cols, // Width
                  flipped.rows, // Height
                  0, // Border
-                 GL_RGB, // Input format: OpenCV is using BGR. 
+#ifdef YARRAR_OPENGL_CONTEXT
+                 GL_BGR, // Input format: OpenCV is using BGR.
+#elif YARRAR_OPENGLES_CONTEXT
+                 GL_RGB, // Input format: OpenCV is using BGR.
                  // TODO: GLES doesn't have BGR
+#endif
                  GL_UNSIGNED_BYTE, // Data type
                  flipped.ptr());
 }

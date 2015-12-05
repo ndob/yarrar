@@ -23,6 +23,8 @@ set(SOURCE_FILES
         yarrar/dataprovider/StaticImageDataProvider.cpp
         yarrar/dataprovider/StaticImageDataProvider.h
         yarrar/renderer/dummy/DummyRenderer.h
-        yarrar/renderer/opencv/OpenCVRenderer.h)
+        yarrar/renderer/opencv/OpenCVRenderer.h
+        yarrar/renderer/opengl/GLContext.cpp
+        yarrar/renderer/opengl/GLContext.h)
 
 add_library(libyarrar ${SOURCE_FILES})

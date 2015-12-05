@@ -1,9 +1,6 @@
 #pragma once
 
-#include "OpenGLRenderer.h"
-
-#include <GLES2/gl2.h>
-#include <GLES2/gl2ext.h>
+#include "GLContext.h"
 
 namespace yarrar {
 

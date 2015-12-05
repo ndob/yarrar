@@ -10,8 +10,10 @@ BackgroundModel::BackgroundModel(std::weak_ptr<GLProgram> program) :
     m_program(program),
     m_numVertices(6)
 {
-    //glGenVertexArrays(1, &m_vao);
-    //glBindVertexArray(m_vao);
+#ifdef YARRAR_OPENGL_CONTEXT
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
+#endif
 
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -47,7 +49,9 @@ BackgroundModel::BackgroundModel(std::weak_ptr<GLProgram> program) :
 
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //glBindVertexArray(0);
+#ifdef YARRAR_OPENGL_CONTEXT
+    glBindVertexArray(0);
+#endif
 }
 
 void BackgroundModel::render() const
@@ -59,7 +63,9 @@ void BackgroundModel::render() const
         glBindTexture(GL_TEXTURE_2D, m_texture);
 
         glUniform1i(prog->getUniform("tex"), 0);
-
+#ifdef YARRAR_OPENGL_CONTEXT
+        glBindVertexArray(m_vao);
+#elif YARRAR_OPENGLES_CONTEXT
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
@@ -67,14 +73,17 @@ void BackgroundModel::render() const
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat),
                               (const GLvoid *) (3 * sizeof(GLfloat)));
-        //glBindVertexArray(m_vao);
+#endif
 
         glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
 
+#ifdef YARRAR_OPENGL_CONTEXT
+        glBindVertexArray(0);
+#elif YARRAR_OPENGLES_CONTEXT
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        //glBindVertexArray(0);
+#endif
         glBindTexture(GL_TEXTURE_2D, 0);
     }
     else

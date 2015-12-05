@@ -1,6 +1,9 @@
 #include "GLProgram.h"
 #include "GLShader.h"
 
+#include <stdexcept>
+#include <vector>
+
 namespace yarrar
 {
 
