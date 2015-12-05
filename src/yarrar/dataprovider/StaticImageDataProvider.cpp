@@ -17,6 +17,14 @@ cv::Mat StaticImageDataProvider::getData()
     return m_cachedImage;
 }
 
+Dimensions StaticImageDataProvider::getDimensions()
+{
+    return {
+        m_cachedImage.cols,
+        m_cachedImage.rows
+    };
+}
+
 }
 
 

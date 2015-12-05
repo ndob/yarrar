@@ -27,4 +27,5 @@ set(SOURCE_FILES
         yarrar/renderer/opengl/GLContext.cpp
         yarrar/renderer/opengl/GLContext.h)
 
+add_definitions(-DYARRAR_OPENGL_CONTEXT)
 add_library(libyarrar ${SOURCE_FILES})

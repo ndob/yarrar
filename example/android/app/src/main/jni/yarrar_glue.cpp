@@ -21,6 +21,13 @@ public:
     {
         return s_image;
     }
+
+    Dimensions getDimensions()
+    {
+        return {
+            960, 720
+        };
+    }
 };
 
 class AndroidDummyRenderer : public Renderer

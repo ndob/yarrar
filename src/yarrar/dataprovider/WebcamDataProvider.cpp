@@ -20,6 +20,15 @@ cv::Mat WebcamDataProvider::getData()
     return ret;
 }
 
+Dimensions WebcamDataProvider::getDimensions()
+{
+    const auto& data = getData();
+    return {
+        data.cols,
+        data.rows
+    };
+}
+
 }
 
 

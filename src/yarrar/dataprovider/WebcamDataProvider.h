@@ -12,6 +12,7 @@ class WebcamDataProvider: public DataProvider
 public:
     WebcamDataProvider();
     cv::Mat getData() override;
+    Dimensions getDimensions() override;
 
 private:
     cv::VideoCapture m_videoCapture;

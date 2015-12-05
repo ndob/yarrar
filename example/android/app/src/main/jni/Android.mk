@@ -40,10 +40,12 @@ LOCAL_SRC_FILES :=  yarrar_glue.cpp \
                     $(YARRAR_SOURCE_PATH)/renderer/opengl/CubeModel.cpp \
                     $(YARRAR_SOURCE_PATH)/renderer/opengl/GLProgram.cpp \
                     $(YARRAR_SOURCE_PATH)/renderer/opengl/GLShader.cpp \
+                    $(YARRAR_SOURCE_PATH)/renderer/opengl/GLContext.cpp \
                     $(YARRAR_SOURCE_PATH)/renderer/opengl/OpenGLRenderer.cpp
 
 LOCAL_C_INCLUDES := $(EXTERNAL_OPEN_CV_INCLUDE_PATH) $(YARRAR_INCLUDE_PATH) $(YARRAR_INCLUDE_PATH)/yarrar
 LOCAL_STATIC_LIBRARIES := opencv_core
 LOCAL_LDLIBS := -llog -lGLESv2 -ldl
+LOCAL_CFLAGS := -DYARRAR_OPENGLES_CONTEXT
 
 include $(BUILD_SHARED_LIBRARY)

@@ -7,11 +7,18 @@
 
 namespace yarrar {
 
+struct Dimensions
+{
+    int width;
+    int height;
+};
+
 class DataProvider
 {
 public:
     virtual ~DataProvider() {};
     virtual cv::Mat getData() = 0;
+    virtual Dimensions getDimensions() = 0;
 };
 
 class Detector
@@ -45,16 +52,16 @@ public:
     void addDetector()
     {
         assert(m_dataProviders.size() == 1);
-        auto image = m_dataProviders[0]->getData();
-        m_detectors.emplace_back(new T(960, 720));
+        auto dim = m_dataProviders[0]->getDimensions();
+        m_detectors.emplace_back(new T(dim.width, dim.height));
     }
 
     template<typename T>
     void addRenderer()
     {
         assert(m_dataProviders.size() == 1);
-        auto image = m_dataProviders[0]->getData();
-        m_renderers.emplace_back(new T(image.cols, image.rows));
+        auto dim = m_dataProviders[0]->getDimensions();
+        m_renderers.emplace_back(new T(dim.width, dim.height));
     }
 
     void run() const;

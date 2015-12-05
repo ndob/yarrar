@@ -9,7 +9,7 @@ namespace {
     using namespace yarrar;
 
 #ifdef YARRAR_OPENGL_CONTEXT
-    std::string SHADER_PATH = "/home/niki/programming/yarrar/data/shader/gl3/";
+    std::string SHADER_PATH = "../../data/shader/gl3/";
 #elif YARRAR_OPENGLES_CONTEXT
     std::string SHADER_PATH = "/sdcard/yarrar/shader/";
 #endif
@@ -127,8 +127,6 @@ void OpenGLRenderer::draw(const yarrar::Pose &cameraPose, const cv::Mat& image)
 {
     if(cameraPose.valid)
     {
-        //glfwPollEvents();
-
         // Convert rotation from vector to matrix.
         cv::Mat rotation;
         cv::Rodrigues(cameraPose.rotation, rotation);

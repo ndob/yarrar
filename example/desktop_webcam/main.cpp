@@ -11,17 +11,18 @@ int main(int argc, char** argv)
     using namespace yarrar;
 
     Pipeline p;
-    //p.addDataProvider<WebcamDataProvider>();
-    p.addDataProvider<StaticImageDataProvider>("../../data/img/marker.jpg");
+    p.addDataProvider<WebcamDataProvider>();
+    //p.addDataProvider<StaticImageDataProvider>("/home/niki/programming/yarrar/data/img/marker.jpg");
     p.addDetector<MarkerDetector>();
-    p.addRenderer<DummyRenderer>();
+    //p.addRenderer<DummyRenderer>();
     //p.addRenderer<OpenCVRenderer>();
     p.addRenderer<OpenGLRenderer>();
 
-    //while(true)
+    while(true)
     {
         p.run();
-        std::getchar();
+        p.runRender();
+        //std::getchar();
     }
 }
 

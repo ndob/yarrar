@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 
-import java.io.File;
-import java.io.IOException;
-
 public class MainActivity extends ActionBarActivity implements Camera.PreviewCallback {
     private static final String TAG = "YARRAR::AndroidExample";
     private Camera mCamera;

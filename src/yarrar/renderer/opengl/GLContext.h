@@ -1,14 +1,11 @@
 #pragma once
 
-#define YARRAR_OPENGL_CONTEXT
-
 #ifdef YARRAR_OPENGL_CONTEXT
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #elif YARRAR_OPENGLES_CONTEXT
 #include <GLES2/gl2.h>
 #endif
-
 
 namespace yarrar {
 

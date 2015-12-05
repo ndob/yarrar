@@ -12,6 +12,7 @@ class StaticImageDataProvider: public DataProvider
 public:
     StaticImageDataProvider(const std::string& imagePath);
     cv::Mat getData() override;
+    Dimensions getDimensions() override;
 
 private:
     std::string m_imagePath;
