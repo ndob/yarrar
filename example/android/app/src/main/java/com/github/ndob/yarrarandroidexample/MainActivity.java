@@ -19,7 +19,6 @@ public class MainActivity extends ActionBarActivity implements Camera.PreviewCal
         layout.addView(new OpenGLSurface(this));
 
         mCamera = getCameraInstance();
-        mCamera.setDisplayOrientation(90);
         mCamera.setPreviewCallback(this);
         mCamera.startPreview();
 

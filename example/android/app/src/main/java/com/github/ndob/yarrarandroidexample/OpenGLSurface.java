@@ -21,10 +21,12 @@ public class OpenGLSurface extends GLSurfaceView {
             mMain.initYarrar();
         }
 
+        @Override
         public void onDrawFrame(GL10 unused) {
             mMain.run();
         }
 
+        @Override
         public void onSurfaceChanged(GL10 unused, int width, int height) {
 
         }
