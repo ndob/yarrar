@@ -66,8 +66,6 @@ public:
 
     void run() const;
 
-    void runRender() const;
-
 private:
     std::vector<std::unique_ptr<DataProvider>> m_dataProviders;
     std::vector<std::unique_ptr<Detector>> m_detectors;

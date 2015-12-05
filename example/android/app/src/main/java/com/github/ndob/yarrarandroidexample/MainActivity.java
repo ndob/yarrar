@@ -50,14 +50,11 @@ public class MainActivity extends ActionBarActivity implements Camera.PreviewCal
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-
         injectCameraFrame(camera.getParameters().getPreviewSize().width, camera.getParameters().getPreviewSize().height, data);
-        run();
     }
 
-    public native int initYarrar();
-    public native int run();
-    public native int runRender();
-    public native void injectCameraFrame(int width, int height, byte[] cameraData);
+    public native void initYarrar();
+    public native void run();
+    private native void injectCameraFrame(int width, int height, byte[] cameraData);
 
 }
