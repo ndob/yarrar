@@ -12,9 +12,15 @@ public:
         cv::namedWindow("OpenCVRenderer", 1);
     };
 
-    void draw(const yarrar::Pose& cameraPose, const cv::Mat& rawData) override
+    void loadModel(const Model& model) override
     {
-        cv::imshow("OpenCVRenderer", rawData);
+    }
+
+    void draw(const Pose& cameraPose,
+              const Scene& scene,
+              const cv::Mat& backgroundImage) override
+    {
+        cv::imshow("OpenCVRenderer", backgroundImage);
         cv::waitKey(30);
     }
 };

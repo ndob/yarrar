@@ -10,7 +10,14 @@ class DummyRenderer : public Renderer
 {
 public:
     DummyRenderer(int width, int height) {};
-    void draw(const yarrar::Pose& cameraPose, const cv::Mat& rawData) override
+
+    void loadModel(const Model& model) override
+    {
+    }
+
+    void draw(const Pose& cameraPose,
+              const Scene& scene,
+              const cv::Mat& backgroundImage) override
     {
         std::cout << "[DUMMY] translation: " << cameraPose.translation << std::endl;
         std::cout << "[DUMMY] rotation: " << cameraPose.rotation << std::endl;

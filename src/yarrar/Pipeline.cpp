@@ -11,7 +11,16 @@ void Pipeline::run() const
     auto pose = m_detectors[0]->getPose(rawData);
     for(const auto& renderer : m_renderers)
     {
-        renderer->draw(pose, rawData);
+        renderer->draw(pose, m_scene, rawData);
+    }
+}
+
+void Pipeline::addModel(const Model& model)
+{
+    m_scene.addModel(model);
+    for(const auto& renderer : m_renderers)
+    {
+        renderer->loadModel(model);
     }
 }
 

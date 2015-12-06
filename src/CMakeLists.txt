@@ -18,14 +18,17 @@ set(SOURCE_FILES
         yarrar/renderer/opengl/GLModel.h
         yarrar/renderer/opengl/BackgroundModel.cpp
         yarrar/renderer/opengl/BackgroundModel.h
-        yarrar/renderer/opengl/CubeModel.cpp
-        yarrar/renderer/opengl/CubeModel.h
+        yarrar/renderer/opengl/SceneModel.cpp
+        yarrar/renderer/opengl/SceneModel.h
         yarrar/dataprovider/StaticImageDataProvider.cpp
         yarrar/dataprovider/StaticImageDataProvider.h
         yarrar/renderer/dummy/DummyRenderer.h
         yarrar/renderer/opencv/OpenCVRenderer.h
         yarrar/renderer/opengl/GLContext.cpp
-        yarrar/renderer/opengl/GLContext.h)
+        yarrar/renderer/opengl/GLContext.h
+        yarrar/Scene.cpp
+        yarrar/Scene.h
+        yarrar/Util.h)
 
 add_definitions(-DYARRAR_OPENGL_CONTEXT)
 add_library(libyarrar ${SOURCE_FILES})

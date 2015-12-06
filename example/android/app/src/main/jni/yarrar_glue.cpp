@@ -41,7 +41,14 @@ class AndroidDummyRenderer : public Renderer
 {
 public:
     AndroidDummyRenderer(int width, int height) {};
-    void draw(const yarrar::Pose& cameraPose, const cv::Mat& rawData) override
+
+    void loadModel(const Model& model) override
+    {
+    }
+
+    void draw(const Pose& cameraPose,
+              const Scene& scene,
+              const cv::Mat& backgroundImage) override
     {
         __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "[DUMMY] id: %d", cameraPose.coordinateSystemId);
         __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "[DUMMY] valid: %d", (int) cameraPose.valid);
@@ -58,6 +65,61 @@ void Java_com_github_ndob_yarrarandroidexample_MainActivity_initYarrar(JNIEnv*, 
     s_pipe->addDataProvider<AndroidImageProvider>();
     s_pipe->addDetector<MarkerDetector>();
     s_pipe->addRenderer<OpenGLRenderer>();
+
+    Model cube;
+    cube.name = "cube";
+    cube.translation = {0.0f, 0.0f, 0.0f};
+    cube.vertices = {
+        // bottom
+        -1.0f,  -1.0f,  0.0f,
+        1.0f,   -1.0f,  0.0f,
+        -1.0f,  -1.0f,  2.0f,
+        1.0f,   -1.0f,  0.0f,
+        1.0f,   -1.0f,  2.0f,
+        -1.0f,  -1.0f,  2.0f,
+
+        // top
+        -1.0f,  1.0f,   0.0f,
+        -1.0f,  1.0f,   2.0f,
+        1.0f,   1.0f,   0.0f,
+        1.0f,   1.0f,   0.0f,
+        -1.0f,  1.0f,   2.0f,
+        1.0f,   1.0f,   2.0f,
+
+        // front
+        -1.0f,  -1.0f,  2.0f,
+        1.0f,   -1.0f,  2.0f,
+        -1.0f,  1.0f,   2.0f,
+        1.0f,   -1.0f,  2.0f,
+        1.0f,   1.0f,   2.0f,
+        -1.0f,  1.0f,   2.0f,
+
+        // back
+        -1.0f,  -1.0f,  0.0f,
+        -1.0f,  1.0f,   0.0f,
+        1.0f,   -1.0f,  0.0f,
+        1.0f,   -1.0f,  0.0f,
+        -1.0f,  1.0f,   0.0f,
+        1.0f,   1.0f,   0.0f,
+
+        // left
+        -1.0f,  -1.0f,  2.0f,
+        -1.0f,  1.0f,   0.0f,
+        -1.0f,  -1.0f,  0.0f,
+        -1.0f,  -1.0f,  2.0f,
+        -1.0f,  1.0f,   2.0f,
+        -1.0f,  1.0f,   0.0f,
+
+        // right
+        1.0f,   -1.0f,  2.0f,
+        1.0f,   -1.0f,  0.0f,
+        1.0f,   1.0f,   0.0f,
+        1.0f,   -1.0f,  2.0f,
+        1.0f,   1.0f,   0.0f,
+        1.0f,   1.0f,   2.0
+    };
+
+    s_pipe->addModel(cube);
 }
 
 void Java_com_github_ndob_yarrarandroidexample_MainActivity_run(JNIEnv*, jobject)

@@ -12,7 +12,7 @@ namespace yarrar {
 class GLShader;
 class GLProgram;
 class BackgroundModel;
-class CubeModel;
+class SceneModel;
 
 struct EffectDef
 {
@@ -38,9 +38,13 @@ public:
     OpenGLRenderer(const OpenGLRenderer&&) = delete;
     OpenGLRenderer operator=(const OpenGLRenderer&&) = delete;
 
-    void draw(const Pose& cameraPose, const cv::Mat& image) override;
+    void loadModel(const Model& model);
+
+    void draw(const Pose& cameraPose,
+              const Scene& scene,
+              const cv::Mat& backgroundImage) override;
 private:
-    void render(bool renderBackground, bool renderWorld);
+    void render(const Scene& scene, bool renderBackground, bool renderWorld);
     void loadImage(const cv::Mat& image);
 
     std::map<std::string, std::unique_ptr<GLShader>> m_vertexShaders;
@@ -49,7 +53,7 @@ private:
 
     std::unique_ptr<GLContext> m_context;
     std::unique_ptr<BackgroundModel> m_bgModel;
-    std::unique_ptr<CubeModel> m_cubeModel;
+    std::map<std::string, std::unique_ptr<SceneModel>> m_sceneModels;
     GLuint m_backgroundTex;
 };
 

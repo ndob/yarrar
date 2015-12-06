@@ -2,7 +2,7 @@
 #include "GLProgram.h"
 #include "GLShader.h"
 #include "BackgroundModel.h"
-#include "CubeModel.h"
+#include "SceneModel.h"
 
 namespace {
 
@@ -28,8 +28,8 @@ namespace {
 
     const std::vector<EffectDef> EFFECTS
     {
-        {"cube", "camera", "simple", true},
-        {"bg", "simple", "texture", false}
+        {"bg", "simple", "texture", false},
+        {"sceneModel", "camera", "simple", true}
     };
 
 }
@@ -60,8 +60,6 @@ OpenGLRenderer::OpenGLRenderer(int width, int height):
     }
 
     m_bgModel.reset(new BackgroundModel(m_programs["bg"]));
-    m_cubeModel.reset(new CubeModel(m_programs["cube"]));
-
     glGenTextures(1, &m_backgroundTex);
 }
 
@@ -69,7 +67,7 @@ OpenGLRenderer::~OpenGLRenderer()
 {
 }
 
-void OpenGLRenderer::render(bool renderBackground, bool renderWorld)
+void OpenGLRenderer::render(const Scene& scene, bool renderBackground, bool renderWorld)
 {
     // Clear screen.
     glClearColor(0, 0, 0, 1);
@@ -89,7 +87,15 @@ void OpenGLRenderer::render(bool renderBackground, bool renderWorld)
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
 
-        m_cubeModel->render();
+        const auto& models = scene.getModels();
+        for(const auto& model : models)
+        {
+            auto glModel = m_sceneModels.find(model.name);
+            if(glModel != m_sceneModels.end())
+            {
+                glModel->second->render(model.translation);
+            }
+        }
     }
 
     m_context->swapBuffers();
@@ -123,7 +129,14 @@ void OpenGLRenderer::loadImage(const cv::Mat& image)
                  flipped.ptr());
 }
 
-void OpenGLRenderer::draw(const yarrar::Pose &cameraPose, const cv::Mat& image)
+void OpenGLRenderer::loadModel(const Model &model)
+{
+    m_sceneModels[model.name] = std::unique_ptr<SceneModel>(new SceneModel(m_programs["sceneModel"], model.vertices));
+}
+
+void OpenGLRenderer::draw(const Pose& cameraPose,
+                          const Scene& scene,
+                          const cv::Mat& backgroundImage)
 {
     if(cameraPose.valid)
     {
@@ -178,16 +191,16 @@ void OpenGLRenderer::draw(const yarrar::Pose &cameraPose, const cv::Mat& image)
             if(program.second->getUsePerspectiveProjection())
             {
                 ScopedUseProgram p_(program.second.get());
-                program.second->setUniformMatrix4fv("camera", (GLfloat *) glViewMatrix.data);
+                program.second->setUniformMatrix4fv("camera", (GLfloat*) glViewMatrix.data);
                 // TODO: Projection should only be changed when necessary.
-                program.second->setUniformMatrix4fv("projection", (GLfloat *) projection);
+                program.second->setUniformMatrix4fv("projection", (GLfloat*) projection);
             }
         }
     }
 
     // Load fresh background camera image.
-    loadImage(image);
-    render(true, cameraPose.valid);
+    loadImage(backgroundImage);
+    render(scene, true, cameraPose.valid);
 }
 
 }

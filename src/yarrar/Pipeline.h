@@ -1,9 +1,11 @@
 #pragma once
 
+#include "Pose.h"
+#include "Scene.h"
+
 #include <memory>
 #include <vector>
 #include <opencv2/core/mat.hpp>
-#include "Pose.h"
 
 namespace yarrar {
 
@@ -32,7 +34,10 @@ class Renderer
 {
 public:
     virtual ~Renderer() {};
-    virtual void draw(const Pose& cameraPose, const cv::Mat& rawData) = 0;
+    virtual void loadModel(const Model& model) = 0;
+    virtual void draw(const Pose& cameraPose,
+                      const Scene& scene,
+                      const cv::Mat& backgroundImage) = 0;
 };
 
 class Pipeline
@@ -64,12 +69,15 @@ public:
         m_renderers.emplace_back(new T(dim.width, dim.height));
     }
 
+    void addModel(const Model& model);
+
     void run() const;
 
 private:
     std::vector<std::unique_ptr<DataProvider>> m_dataProviders;
     std::vector<std::unique_ptr<Detector>> m_detectors;
     std::vector<std::unique_ptr<Renderer>> m_renderers;
+    Scene m_scene;
 };
 
 }

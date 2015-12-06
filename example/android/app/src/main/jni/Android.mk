@@ -34,10 +34,11 @@ include $(CLEAR_VARS)
 LOCAL_MODULE    := yarrar_glue
 LOCAL_SRC_FILES :=  yarrar_glue.cpp \
                     $(YARRAR_SOURCE_PATH)/Pipeline.cpp \
+                    $(YARRAR_SOURCE_PATH)/Scene.cpp \
                     $(YARRAR_SOURCE_PATH)/dataprovider/StaticImageDataProvider.cpp \
                     $(YARRAR_SOURCE_PATH)/detector/MarkerDetector.cpp \
                     $(YARRAR_SOURCE_PATH)/renderer/opengl/BackgroundModel.cpp \
-                    $(YARRAR_SOURCE_PATH)/renderer/opengl/CubeModel.cpp \
+                    $(YARRAR_SOURCE_PATH)/renderer/opengl/SceneModel.cpp \
                     $(YARRAR_SOURCE_PATH)/renderer/opengl/GLProgram.cpp \
                     $(YARRAR_SOURCE_PATH)/renderer/opengl/GLShader.cpp \
                     $(YARRAR_SOURCE_PATH)/renderer/opengl/GLContext.cpp \

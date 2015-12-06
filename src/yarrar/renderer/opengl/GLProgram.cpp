@@ -21,6 +21,7 @@ GLProgram::GLProgram(GLShader* vertexShader,
     m_object = glCreateProgram();
     if(m_object == 0)
     {
+
         throw std::runtime_error("glCreateProgram failed");
     }
 
@@ -53,7 +54,6 @@ GLProgram::GLProgram(GLShader* vertexShader,
 
 void GLProgram::setUniformMatrix4fv(const std::string& name, GLfloat *data)
 {
-    ScopedUseProgram _p(this);
     glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, data);
 }
 
