@@ -15,7 +15,6 @@ set(SOURCE_FILES
         yarrar/renderer/opengl/GLProgram.h
         yarrar/renderer/opengl/GLShader.cpp
         yarrar/renderer/opengl/GLShader.h
-        yarrar/renderer/opengl/GLModel.h
         yarrar/renderer/opengl/BackgroundModel.cpp
         yarrar/renderer/opengl/BackgroundModel.h
         yarrar/renderer/opengl/SceneModel.cpp
