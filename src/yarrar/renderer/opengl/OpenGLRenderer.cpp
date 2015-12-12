@@ -101,11 +101,13 @@ void OpenGLRenderer::render(const Scene& scene, bool renderBackground, bool rend
     m_context->swapBuffers();
 }
 
-void OpenGLRenderer::loadImage(const cv::Mat& image)
+void OpenGLRenderer::loadImage(const cv::Mat& imageBgr)
 {
-    // OpenCV stores images flipped in in comparison to OpenGL.
-    cv::Mat flipped;
-    cv::flip(image, flipped, 0);
+    // OpenCV stores images in BGR and flipped in comparison to OpenGL.
+    cv::Mat flipped, imageRgb;
+    cv::flip(imageBgr, flipped, 0);
+    cv::cvtColor(flipped, imageRgb, CV_BGR2RGB);
+
     glBindTexture(GL_TEXTURE_2D, m_backgroundTex);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -116,17 +118,12 @@ void OpenGLRenderer::loadImage(const cv::Mat& image)
     glTexImage2D(GL_TEXTURE_2D,
                  0, // Mip level
                  GL_RGB,
-                 flipped.cols, // Width
-                 flipped.rows, // Height
+                 imageRgb.cols, // Width
+                 imageRgb.rows, // Height
                  0, // Border
-#ifdef YARRAR_OPENGL_CONTEXT
-                 GL_BGR, // Input format: OpenCV is using BGR.
-#elif YARRAR_OPENGLES_CONTEXT
-                 GL_RGB, // Input format: OpenCV is using BGR.
-                 // TODO: GLES doesn't have BGR
-#endif
+                 GL_RGB,
                  GL_UNSIGNED_BYTE, // Data type
-                 flipped.ptr());
+                 imageRgb.ptr());
 }
 
 void OpenGLRenderer::loadModel(const Model &model)
