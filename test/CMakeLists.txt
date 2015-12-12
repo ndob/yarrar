@@ -6,11 +6,10 @@ include_directories(
     "${PROJECT_SOURCE_DIR}/external/catch/"
     )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(SOURCE_FILES TestMain.cpp TestMarkerDetector.cpp)
 
 add_executable(testrunner ${SOURCE_FILES})
-target_link_libraries(testrunner libyarrar ${OpenCV_LIBS})
+target_link_libraries(testrunner yarrar ${OpenCV_LIBS})
 
 add_test(
     NAME TestMarkerDetector 
