@@ -1,8 +1,3 @@
-include_directories(yarrar "${PROJECT_SOURCE_DIR}/external/OpenCV-android-sdk/sdk/native/jni/include/")
-
-
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(SOURCE_FILES
         yarrar/detector/MarkerDetector.cpp
         yarrar/detector/MarkerDetector.h
@@ -31,6 +26,14 @@ set(SOURCE_FILES
         yarrar/Scene.h
         yarrar/Util.h)
 
-add_definitions(-DYARRAR_OPENGLES_CONTEXT)
 add_library(yarrar ${SOURCE_FILES})
-target_link_libraries(yarrar ${OpenCV_LIBS} GLESv2)
+
+if(ANDROID)
+        add_definitions(-DYARRAR_OPENGLES_CONTEXT)
+        include_directories(yarrar "${PROJECT_SOURCE_DIR}/external/OpenCV-android-sdk/sdk/native/jni/include/")
+        target_link_libraries(yarrar ${OpenCV_LIBS} GLESv2)
+else()
+        add_definitions(-DYARRAR_OPENGL_CONTEXT)
+        include_directories(yarrar)
+        target_link_libraries(yarrar ${OpenCV_LIBS})
+endif()
