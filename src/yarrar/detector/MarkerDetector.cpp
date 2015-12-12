@@ -3,7 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include <array>
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <vector>
 
 namespace {
@@ -12,7 +12,22 @@ const cv::Scalar RED = cv::Scalar(0, 0, 255);
 const cv::Scalar GREEN = cv::Scalar(0, 255, 0);
 const cv::Scalar BLUE = cv::Scalar(255, 0, 0);
 const bool PNP_USE_EXTRINSIC_GUESS = true;
+const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
 const uint64 RANDOM_SEED = 12345;
+
+std::pair<int,int> getScaledDown(int width, int height)
+{
+    if(width <= PREFERRED_TRACKING_RESOLUTION_WIDTH)
+    {
+        std::pair<int, int> (width, height);
+    }
+    float aspect = static_cast<float> (width) / static_cast<float> (height);
+
+    return std::pair<int, int> (
+        PREFERRED_TRACKING_RESOLUTION_WIDTH, 
+        std::floor(PREFERRED_TRACKING_RESOLUTION_WIDTH / aspect)
+    );
+};
 
 }
 
@@ -21,27 +36,42 @@ namespace yarrar {
 using namespace cv;
 
 MarkerDetector::MarkerDetector(int width, int height):
-    m_width(width),
-    m_height(height),
     m_rng(RANDOM_SEED),
     m_poseRotation(3,1,cv::DataType<double>::type),
     m_poseTranslation(3,1,cv::DataType<double>::type)
 {
-    assert(m_width > 0);
-    assert(m_height > 0);
+    assert(width > 0);
+    assert(height > 0);
+
+    auto scaled = getScaledDown(width, height);
+    m_trackingResolution.width = scaled.first;
+    m_trackingResolution.height = scaled.second;
 }
 
 Pose MarkerDetector::getPose(const cv::Mat& image)
 {
+    Mat binary;
+    {
+        Mat resizedColored, gray;
+        // Downscale and convert to gray scale.
+        resize(image, resizedColored, m_trackingResolution);
+        cvtColor(resizedColored, gray, CV_BGR2GRAY);
+
+        // Mark areas that are between totally black (0) and gray(255/2)
+        // with black, others with white. Tracking and id-detection
+        // is done with this Mat.
+        inRange(gray, 0, 255/2, binary);
+    }
+
     Pose ret;
     ret.valid = false;
-    auto markers = findMarkers(image);
+    auto markers = findMarkers(binary);
 
     if(markers.size() > 0)
     {
         for(const auto& marker : markers)
         {
-            int id = parseId(marker.inner, image);
+            int id = parseId(marker.inner, binary);
             estimatePnP(marker.outer);
             ret = {
                 m_poseRotation,
@@ -61,10 +91,8 @@ Pose MarkerDetector::getPose(const cv::Mat& image)
     return ret;
 }
 
-std::vector<Marker> MarkerDetector::findMarkers(const Mat& image)
+std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
 {
-    Mat detected;
-    Mat gray;
     std::vector<std::vector<Point>> foundContours;
     std::vector<std::vector<Point2f>> validRectangles;
     std::vector<int> validHierarchyIndices;
@@ -72,17 +100,15 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& image)
     // Hierarchy is stored as an array with values:
     // [Next, Previous, First_Child, Parent]
     // -1 corresponds to no value.
+    static const int NO_VALUE = -1;
+    static const size_t HIERARCHY_NEXT = 0;
+    static const size_t HIERARCHY_PREVIOUS = 1;
+    static const size_t HIERARCHY_FIRST_CHILD = 2;
+    static const size_t HIERARCHY_PARENT = 3;
     std::vector<cv::Vec4i> hierarchy;
 
-    // Convert original to gray scale.
-    cvtColor(image, gray, CV_BGR2GRAY);
-
-    // Mark areas that are between totally black (0) and gray(255/2)
-    // with black, others with white.
-    inRange(gray, 0, 255/2, detected);
-
     // Find contours for the areas detected in previous step.
-    findContours(detected, foundContours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE);
+    findContours(binaryImage, foundContours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE);
 
     int hierarchyIdx = -1;
     for(const auto& contour : foundContours)
@@ -111,18 +137,26 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& image)
 
     // Search for valid markers.
     std::vector<Marker> ret;
+    std::vector<int> usedIndices;
     for(int i = 0; i < validRectangles.size(); ++i)
     {
+        // Do not try to find markers inside of already used inner/outer rectangles.
+        if(contains(usedIndices, validHierarchyIndices[i])) continue;
+
+        // Prevent full marker nesting. 
+        // ie. The whole marker inside some previous inner rectangle.
+        if(contains(usedIndices, hierarchy[validHierarchyIndices[i]][HIERARCHY_PARENT])) continue;
+
         double outerPerimeterLength = arcLength(validRectangles[i], true);
         double greatestInnerPerimeterLength = 0.0;
-        int greatestIndex = -1;
+        int greatestIndex = NO_VALUE;
 
         // Get OpenCV hierarchy-value for this contour.
         auto outerHier = hierarchy[validHierarchyIndices[i]];
-        int childIdx = outerHier[2];
+        int childIdx = outerHier[HIERARCHY_FIRST_CHILD];
 
         // Find the largest rectangle contour inside current outer contour.
-        while(childIdx != -1)
+        while(childIdx != NO_VALUE)
         {
             // Check if this child is a valid rectangle contour.
             for(int j = 0; j < validHierarchyIndices.size(); ++j)
@@ -141,17 +175,19 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& image)
                 }
             }
             // Check next child, if available.
-            childIdx = hierarchy[childIdx][0];
+            childIdx = hierarchy[childIdx][HIERARCHY_NEXT];
         }
 
         // If child rectangle was found, add a marker.
-        if(greatestIndex != -1)
+        if(greatestIndex != NO_VALUE)
         {
             Marker m = {
                 validRectangles[greatestIndex],
                 validRectangles[i]
             };
             ret.push_back(m);
+            usedIndices.push_back(validHierarchyIndices[greatestIndex]);
+            usedIndices.push_back(validHierarchyIndices[i]);
         }
     }
 
@@ -177,9 +213,6 @@ int MarkerDetector::parseId(const std::vector<Point2f>& imagePoints, const Mat& 
 
     // Select only the part of the image, which contains marker id.
     Mat subImage(rectified, cv::Rect(0, 0, imageSize, imageSize));
-    cvtColor(subImage, subImage, CV_BGR2GRAY);
-    Mat binary;
-    inRange(subImage, 0, 255/2, binary);
 
     // Works by dividing the image to 8x8 matrix (byte per line).
     // Then check if a cell is either black (1) or white (0).
@@ -194,7 +227,7 @@ int MarkerDetector::parseId(const std::vector<Point2f>& imagePoints, const Mat& 
         {
             const int col = start + i * stepSize;
             const int row = start + j * stepSize;
-            const bool isBlack = binary.at<uchar>(col, row) > 0;
+            const bool isBlack = subImage.at<uchar>(col, row) > 0;
             field[i][j] = isBlack;
         }
     }
@@ -222,8 +255,8 @@ Mat MarkerDetector::getCameraMatrix()
     const float horizFOVDegrees = 50.0f;
     const float horizFOVRadians = horizFOVDegrees / 2.0f * (static_cast<float>(M_PI) / 180.0f);
 
-    const float cx = static_cast<float> (m_width) / 2.0f;
-    const float cy = static_cast<float> (m_height) / 2.0f;
+    const float cx = static_cast<float> (m_trackingResolution.width) / 2.0f;
+    const float cy = static_cast<float> (m_trackingResolution.height) / 2.0f;
     const float fx = cx / std::tan(horizFOVRadians);
     const float fy = fx;
 

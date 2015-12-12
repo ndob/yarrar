@@ -29,8 +29,7 @@ private:
     void drawAxes(const cv::Mat& image, const cv::Mat& rvec, const cv::Mat& tvec);
     void drawPolygon(const std::vector<cv::Point2f>& vertices, const cv::Mat& image);
 
-    int m_width;
-    int m_height;
+    cv::Size m_trackingResolution;
     cv::RNG m_rng;
     cv::Mat m_poseRotation;
     cv::Mat m_poseTranslation;
