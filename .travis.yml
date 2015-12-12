@@ -43,4 +43,4 @@ script:
   - g++ --version
   - gcc --version
   - make
-  - make test
+  - make test ARGS="-V"
