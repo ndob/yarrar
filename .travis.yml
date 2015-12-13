@@ -37,7 +37,7 @@ install:
   - chmod a+x android-ndk-r10e-linux-x86_64.bin
   - ./android-ndk-r10e-linux-x86_64.bin > /dev/null
   - wget http://downloads.sourceforge.net/project/opencvlibrary/opencv-android/3.0.0/OpenCV-3.0.0-android-sdk-1.zip
-  - unzip OpenCV-3.0.0-android-sdk-1.zip > /dev/null
+  - unzip -o OpenCV-3.0.0-android-sdk-1.zip > /dev/null
 
 before_script:
   - cd $TRAVIS_BUILD_DIR
