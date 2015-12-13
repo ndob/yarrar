@@ -32,6 +32,12 @@ install:
   - cmake .. -DBUILD_SHARED_LIBS=ON 
   - make
   - sudo make install
+  - cd $TRAVIS_BUILD_DIR/external
+  - wget http://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin
+  - chmod a+x android-ndk-r10e-linux-x86_64.bin
+  - ./android-ndk-r10e-linux-x86_64.bin > /dev/null
+  - wget http://downloads.sourceforge.net/project/opencvlibrary/opencv-android/3.0.0/OpenCV-3.0.0-android-sdk-1.zip
+  - unzip -o OpenCV-3.0.0-android-sdk-1.zip > /dev/null
 
 before_script:
   - cd $TRAVIS_BUILD_DIR
@@ -44,3 +50,9 @@ script:
   - gcc --version
   - make
   - make test ARGS="-V"
+  - cd $TRAVIS_BUILD_DIR
+  - mkdir android_build
+  - cd android_build
+  - export ANDROID_NDK_ROOT=$TRAVIS_BUILD_DIR/external/android-ndk-r10e
+  - cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/android.toolchain.cmake -DANDROID_NDK=$ANDROID_NDK_ROOT -DCMAKE_BUILD_TYPE=Release -DANDROID_ABI="armeabi-v7a with NEON" -DBUILD_SHARED_LIBS=ON ..
+  - make
