@@ -24,16 +24,28 @@ set(SOURCE_FILES
         yarrar/renderer/opengl/GLContext.h
         yarrar/Scene.cpp
         yarrar/Scene.h
+        yarrar/UnityNativePlugin.cpp
         yarrar/Util.h)
 
-add_library(yarrar ${SOURCE_FILES})
+add_library(yarrar SHARED ${SOURCE_FILES})
 
 if(ANDROID)
-        add_definitions(-DYARRAR_OPENGLES_CONTEXT)
-        include_directories(yarrar "${PROJECT_SOURCE_DIR}/external/OpenCV-android-sdk/sdk/native/jni/include/")
-        target_link_libraries(yarrar ${OpenCV_LIBS} GLESv2)
+    add_definitions(-DYARRAR_OPENGLES_CONTEXT)
+    include_directories(yarrar "${PROJECT_SOURCE_DIR}/external/OpenCV-android-sdk/sdk/native/jni/include/")
+    target_link_libraries(yarrar ${OpenCV_LIBS} GLESv2)
 else()
-        add_definitions(-DYARRAR_OPENGL_CONTEXT)
+    add_definitions(-DYARRAR_OPENGL_CONTEXT)
+    if(MSVC)
+        include_directories(
+            yarrar 
+            "${PROJECT_SOURCE_DIR}/external/opencv/build/include" 
+            "${PROJECT_SOURCE_DIR}/external/glfw/include"
+            "${PROJECT_SOURCE_DIR}/external/glew/include"
+        )
+        target_link_libraries(yarrar opengl32 glfw "${PROJECT_SOURCE_DIR}/external/glew/lib/Release/Win32/glew32.lib" ${OpenCV_LIBS})
+    else()
         include_directories(yarrar)
         target_link_libraries(yarrar ${OpenCV_LIBS})
+    endif()
+
 endif()

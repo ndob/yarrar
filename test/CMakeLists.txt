@@ -4,7 +4,9 @@ include_directories(
     "${PROJECT_SOURCE_DIR}/src" 
     "${PROJECT_SOURCE_DIR}/src/yarrar"
     "${PROJECT_SOURCE_DIR}/external/catch/"
-    )
+    "${PROJECT_SOURCE_DIR}/external/opencv/build/include"
+    "${PROJECT_SOURCE_DIR}/external/glfw/include"
+    "${PROJECT_SOURCE_DIR}/external/glew/include")
 
 set(SOURCE_FILES TestMain.cpp TestMarkerDetector.cpp)
 
