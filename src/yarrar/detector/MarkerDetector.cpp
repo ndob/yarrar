@@ -57,10 +57,11 @@ Pose MarkerDetector::getPose(const cv::Mat& image)
         resize(image, resizedColored, m_trackingResolution);
         cvtColor(resizedColored, gray, CV_BGR2GRAY);
 
-        // Mark areas that are between totally black (0) and gray(255/2)
-        // with black, others with white. Tracking and id-detection
-        // is done with this Mat.
-        inRange(gray, 0, 255/2, binary);
+        // Mark areas that are between totally black (0) and gray 
+        // treshold (100) with black, others with white. Tracking 
+        // and id-detection is done with this Mat.
+        // TODO: Treshold should be configurable.
+        inRange(gray, 0, 100, binary);
     }
 
     Pose ret;
