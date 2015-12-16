@@ -24,7 +24,7 @@ TEST_CASE("Pose is detected correctly", "[marker_detector]")
 
     REQUIRE(pose.rotation.at<double>(0) == Approx(2.5418).epsilon(EPSILON));
     REQUIRE(pose.rotation.at<double>(1) == Approx(-0.2277).epsilon(EPSILON));
-    REQUIRE(pose.rotation.at<double>(2) == Approx(0.1797).epsilon(EPSILON));
+    REQUIRE(pose.rotation.at<double>(2) == Approx(0.2011).epsilon(EPSILON));
 
     REQUIRE(pose.translation.at<double>(0) == Approx(1.0704).epsilon(EPSILON));
     REQUIRE(pose.translation.at<double>(1) == Approx(-0.3123).epsilon(EPSILON));
