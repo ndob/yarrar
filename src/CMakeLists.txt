@@ -26,7 +26,7 @@ set(SOURCE_FILES
         yarrar/Scene.h
         yarrar/Util.h)
 
-add_library(yarrar ${SOURCE_FILES})
+add_library(yarrar SHARED ${SOURCE_FILES})
 
 if(ANDROID)
         add_definitions(-DYARRAR_OPENGLES_CONTEXT)
@@ -35,5 +35,5 @@ if(ANDROID)
 else()
         add_definitions(-DYARRAR_OPENGL_CONTEXT)
         include_directories(yarrar)
-        target_link_libraries(yarrar ${OpenCV_LIBS})
+        target_link_libraries(yarrar ${OpenCV_LIBS} GL GLEW glfw)
 endif()
