@@ -9,3 +9,5 @@ cd ../platform/android
 # gradle should be version > 2.2
 gradle wrapper
 ./gradlew assembleRelease
+mkdir -p ../../example/android/app/libs/
+cp yarrar/build/outputs/aar/yarrar-release.aar ../../example/android/app/libs/yarrar.aar

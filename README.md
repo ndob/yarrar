@@ -18,3 +18,7 @@ yarrar.aar (Android Java library):
 cd platform/android
 ./build_aar.sh
 ```
+
+Example-app:
+1. First build AAR (gets automatically copied to example/android/app/libs)
+2. Build with gradle or Android studio
