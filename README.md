@@ -4,11 +4,17 @@
 ## Building
 
 ### Android
+libyarrar:
 ```shell
 export ANDROID_NDK_ROOT=[path-to-ndk]
 mkdir android_build
 cd android_build
-cmake -DCMAKE_TOOLCHAIN_FILE=../external/android-cmake/android.toolchain.cmake -DANDROID_NDK=$ANDROID_NDK_ROOT -DCMAKE_BUILD_TYPE=Release -DANDROID_ABI="armeabi-v7a with NEON" -DBUILD_SHARED_LIBS=ON ..
+cmake -DCMAKE_TOOLCHAIN_FILE=../external/android-cmake/android.toolchain.cmake -DANDROID_NDK=$ANDROID_NDK_ROOT -DCMAKE_BUILD_TYPE=Release -DANDROID_ABI="armeabi-v7a with NEON" ..
 make
 ```
 
+yarrar.aar (Android Java library):
+```shell
+cd platform/android
+./build_aar.sh
+```
