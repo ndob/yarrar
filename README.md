@@ -12,3 +12,5 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/android/android.toolchain.cmake -DANDROID_
 make
 ```
 
+### Unity
+cmake .. -DUNITY_PLUGIN=ON

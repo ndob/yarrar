@@ -1,4 +1,15 @@
-set(SOURCE_FILES
+if(UNITY_PLUGIN)
+
+    set(SOURCE_FILES
+        yarrar/detector/MarkerDetector.cpp
+        yarrar/detector/MarkerDetector.h
+        yarrar/Pose.h
+        unity/UnityNativePlugin.cpp
+        yarrar/Util.h)
+
+else()
+
+    set(SOURCE_FILES
         yarrar/detector/MarkerDetector.cpp
         yarrar/detector/MarkerDetector.h
         yarrar/Pose.h
@@ -24,8 +35,9 @@ set(SOURCE_FILES
         yarrar/renderer/opengl/GLContext.h
         yarrar/Scene.cpp
         yarrar/Scene.h
-        yarrar/UnityNativePlugin.cpp
         yarrar/Util.h)
+
+endif()
 
 add_library(yarrar SHARED ${SOURCE_FILES})
 
