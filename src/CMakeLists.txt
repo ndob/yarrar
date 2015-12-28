@@ -1,14 +1,16 @@
-if(UNITY_PLUGIN)
+if(MSVC)
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+endif()
 
+
+if(UNITY_PLUGIN)
     set(SOURCE_FILES
         yarrar/detector/MarkerDetector.cpp
         yarrar/detector/MarkerDetector.h
         yarrar/Pose.h
-        unity/UnityNativePlugin.cpp
-        yarrar/Util.h)
-
+        yarrar/Util.h
+        unity/UnityNativePlugin.cpp)
 else()
-
     set(SOURCE_FILES
         yarrar/detector/MarkerDetector.cpp
         yarrar/detector/MarkerDetector.h
@@ -36,7 +38,6 @@ else()
         yarrar/Scene.cpp
         yarrar/Scene.h
         yarrar/Util.h)
-
 endif()
 
 add_library(yarrar SHARED ${SOURCE_FILES})
@@ -45,6 +46,10 @@ if(ANDROID)
     add_definitions(-DYARRAR_OPENGLES_CONTEXT)
     include_directories(yarrar "${PROJECT_SOURCE_DIR}/external/OpenCV-android-sdk/sdk/native/jni/include/")
     target_link_libraries(yarrar ${OpenCV_LIBS} GLESv2)
+elseif(UNITY_PLUGIN)
+    add_definitions(-DYARRAR_OPENGL_CONTEXT)
+    include_directories(yarrar "${PROJECT_SOURCE_DIR}/external/opencv/build/include")
+    target_link_libraries(yarrar ${OpenCV_LIBS})
 else()
     add_definitions(-DYARRAR_OPENGL_CONTEXT)
     if(MSVC)
@@ -54,7 +59,11 @@ else()
             "${PROJECT_SOURCE_DIR}/external/glfw/include"
             "${PROJECT_SOURCE_DIR}/external/glew/include"
         )
-        target_link_libraries(yarrar opengl32 glfw "${PROJECT_SOURCE_DIR}/external/glew/lib/Release/Win32/glew32.lib" ${OpenCV_LIBS})
+        target_link_libraries(
+            yarrar opengl32 
+            "${PROJECT_SOURCE_DIR}/external/glfw/lib-vc2015/glfw3.lib"
+            "${PROJECT_SOURCE_DIR}/external/glew/lib/Release/x64/glew32.lib"
+            ${OpenCV_LIBS})
     else()
         include_directories(yarrar)
         target_link_libraries(yarrar ${OpenCV_LIBS})
