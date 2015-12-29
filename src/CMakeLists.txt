@@ -66,7 +66,7 @@ else()
             ${OpenCV_LIBS})
     else()
         include_directories(yarrar)
-        target_link_libraries(yarrar ${OpenCV_LIBS})
+        target_link_libraries(yarrar ${OpenCV_LIBS} GL GLEW glfw)
     endif()
 
 endif()
