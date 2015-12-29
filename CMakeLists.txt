@@ -33,10 +33,12 @@ find_package(OpenCV REQUIRED)
 
 add_subdirectory(src)
 
-if(BUILD_EXAMPLES)
-    add_subdirectory(example/desktop_webcam)
-endif()
+if(NOT UNITY_PLUGIN)
+    if(BUILD_EXAMPLES)
+        add_subdirectory(example/desktop_webcam)
+    endif()
 
-if(BUILD_TESTS)
-    add_subdirectory(test)
+    if(BUILD_TESTS)
+        add_subdirectory(test)
+    endif()
 endif()
