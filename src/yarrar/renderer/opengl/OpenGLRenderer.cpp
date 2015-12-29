@@ -9,7 +9,11 @@ namespace {
     using namespace yarrar;
 
 #ifdef YARRAR_OPENGL_CONTEXT
+#ifdef _MSC_VER
+    std::string SHADER_PATH = "../../../data/shader/gl3/";
+#else
     std::string SHADER_PATH = "../../data/shader/gl3/";
+#endif
 #elif YARRAR_OPENGLES_CONTEXT
     std::string SHADER_PATH = "/sdcard/yarrar/shader/";
 #endif

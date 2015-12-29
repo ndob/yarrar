@@ -22,3 +22,6 @@ cd platform/android
 Example-app:
 1. First build AAR (gets automatically copied to example/android/app/libs)
 2. Build with gradle or Android studio
+
+### Unity (windows)
+cmake .. -DUNITY_PLUGIN=ON

@@ -1,0 +1,2 @@
+1. Build yarrar.dll and copy it to this directory.
+2. Copy opencv_world310.dll to this directory.
