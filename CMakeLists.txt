@@ -25,6 +25,7 @@ endif()
 if(ANDROID)
     set("OpenCV_DIR" "${PROJECT_SOURCE_DIR}/external/opencv/sources")
 elseif(MSVC)
+    include("${PROJECT_SOURCE_DIR}/cmake/windows/PowerShellDownloadDependencies.cmake")
     set("OpenCV_DIR" "${PROJECT_SOURCE_DIR}/external/opencv/build")
 endif()
 
