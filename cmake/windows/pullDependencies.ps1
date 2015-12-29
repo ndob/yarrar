@@ -65,10 +65,10 @@ function Prepare-Zipped-Dependency($name, $zippedFile)
         $shell.Namespace($tmpExtractPath).CopyHere($item, $ReplaceFilesWithoutAsking)
     }
 
-    # Remove old files
     if (Test-Path $destination)
     {
-       Remove-Item $destination -Recurse -Force
+       Write-Host File already extracted. Using cached: $destination
+       return
     }
 
     # If there is only one directory that has been extracted -> remove the excess subdir
@@ -98,6 +98,13 @@ function Download-And-Prepare-Self-Extracting-Dependency($url, $name)
 {
     $outputFilename = "_tmp_download_" + $name + ".exe"
     Download-Dependency -Url $url -Output $outputFilename
+
+    $destination = $externalDirectory + $name
+    if (Test-Path $destination)
+    {
+       Write-Host File already extracted. Using cached: $destination
+       return
+    }
 
     $command = $externalDirectory + $outputFilename + " -y -gm2"
     Invoke-Expression $command 
