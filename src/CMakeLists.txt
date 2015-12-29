@@ -33,7 +33,7 @@ if(ANDROID)
 endif()
 
 
-add_library(yarrar SHARED ${SOURCE_FILES})
+add_library(yarrar ${SOURCE_FILES})
 
 if(ANDROID)
     add_definitions(-DYARRAR_OPENGLES_CONTEXT)
