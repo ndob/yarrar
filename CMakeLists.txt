@@ -24,7 +24,7 @@ else()
 endif()
 
 if(ANDROID)
-    set("OpenCV_DIR" "${PROJECT_SOURCE_DIR}/external/opencv/sources")
+    set("OpenCV_DIR" "${PROJECT_SOURCE_DIR}/external/OpenCV-android-sdk/sdk/native/jni/")
 elseif(MSVC)
     include("${PROJECT_SOURCE_DIR}/cmake/windows/PowerShellDownloadDependencies.cmake")
     set("OpenCV_DIR" "${PROJECT_SOURCE_DIR}/external/opencv/build")
@@ -34,7 +34,7 @@ find_package(OpenCV REQUIRED)
 
 add_subdirectory(src)
 
-if(NOT UNITY_PLUGIN)
+if(NOT UNITY_PLUGIN AND NOT ANDROID)
     if(BUILD_EXAMPLES)
         add_subdirectory(example/desktop_webcam)
     endif()
