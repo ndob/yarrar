@@ -72,7 +72,8 @@ Pose MarkerDetector::getPose(const cv::Mat& image)
     {
         for(const auto& marker : markers)
         {
-            int id = parseId(marker.inner, binary);
+            Mat rectified = getRectifiedInnerImage(marker.inner, binary);
+            int id = parseId(rectified);
             estimatePnP(marker.outer);
             ret = {
                 m_poseRotation,
@@ -195,7 +196,7 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
     return ret;
 }
 
-int MarkerDetector::parseId(const std::vector<Point2f>& imagePoints, const Mat& image)
+cv::Mat MarkerDetector::getRectifiedInnerImage(const std::vector<cv::Point2f>& imagePoints, const cv::Mat& image)
 {
     // Size for image that will be parsed.
     const int imageSize = 100;
@@ -207,7 +208,7 @@ int MarkerDetector::parseId(const std::vector<Point2f>& imagePoints, const Mat& 
     corners.push_back(Point2f(imageSize,0));
 
     // Find perspective transform for image points.
-    Mat transform = findHomography(imagePoints, corners, CV_RANSAC );
+    Mat transform = findHomography(imagePoints, corners, CV_RANSAC);
 
     cv::Mat rectified(image.size(), image.type());
     cv::warpPerspective(image, rectified, transform, image.size());
@@ -215,10 +216,18 @@ int MarkerDetector::parseId(const std::vector<Point2f>& imagePoints, const Mat& 
     // Select only the part of the image, which contains marker id.
     Mat subImage(rectified, cv::Rect(0, 0, imageSize, imageSize));
 
+    return subImage;
+}
+
+
+int MarkerDetector::parseId(const Mat& image)
+{
+    assert(image.cols == image.rows && "Id parser expects square image");
+
     // Works by dividing the image to 8x8 matrix (byte per line).
     // Then check if a cell is either black (1) or white (0).
     const int dimension = 8;
-    const int stepSize = imageSize / dimension;
+    const int stepSize = image.cols / dimension;
     const int start = stepSize / 2;
     std::array<std::array<bool, 8>, 8> field;
 
@@ -228,7 +237,7 @@ int MarkerDetector::parseId(const std::vector<Point2f>& imagePoints, const Mat& 
         {
             const int col = start + i * stepSize;
             const int row = start + j * stepSize;
-            const bool isBlack = subImage.at<uchar>(col, row) > 0;
+            const bool isBlack = image.at<uchar>(col, row) > 0;
             field[i][j] = isBlack;
         }
     }
