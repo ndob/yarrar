@@ -40,6 +40,7 @@ install:
   - unzip -o OpenCV-3.0.0-android-sdk-1.zip > /dev/null
 
 before_script:
+  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
   - cd $TRAVIS_BUILD_DIR
   - mkdir build
   - cd build
