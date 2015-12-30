@@ -1,6 +1,6 @@
 #include "yarrar/dataprovider/StaticImageDataProvider.h"
-#include "yarrar/detector/MarkerDetector.h"
-#include "yarrar/Pose.h"
+#include "yarrar/tracker/marker/MarkerTracker.h"
+#include "yarrar/tracker/marker/YarrarMarkerParser.h"
 
 #include "Util.h"
 
@@ -14,7 +14,7 @@ TEST_CASE("Pose is detected correctly", "[marker_detector]")
 
     StaticImageDataProvider provider("data/img/marker.jpg");
     auto dim = provider.getDimensions();
-    MarkerDetector detector(dim.width, dim.height);
+    MarkerTracker<YarrarMarkerParser> detector(dim.width, dim.height);
     auto pose = detector.getPose(provider.getData());
 
     const double EPSILON = 0.01;

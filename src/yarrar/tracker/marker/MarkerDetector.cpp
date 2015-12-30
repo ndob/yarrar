@@ -42,55 +42,14 @@ MarkerDetector::MarkerDetector(int width, int height):
 {
     assert(width > 0);
     assert(height > 0);
-
     auto scaled = getScaledDown(width, height);
     m_trackingResolution.width = scaled.first;
     m_trackingResolution.height = scaled.second;
 }
 
-Pose MarkerDetector::getPose(const cv::Mat& image)
+cv::Size MarkerDetector::getTrackingResolution()
 {
-    Mat binary;
-    {
-        Mat resizedColored, gray;
-        // Downscale and convert to gray scale.
-        resize(image, resizedColored, m_trackingResolution);
-        cvtColor(resizedColored, gray, CV_BGR2GRAY);
-
-        // Mark areas that are between totally black (0) and gray 
-        // treshold (100) with black, others with white. Tracking 
-        // and id-detection is done with this Mat.
-        // TODO: Treshold should be configurable.
-        inRange(gray, 0, 100, binary);
-    }
-
-    Pose ret;
-    ret.valid = false;
-    auto markers = findMarkers(binary);
-
-    if(markers.size() > 0)
-    {
-        for(const auto& marker : markers)
-        {
-            Mat rectified = getRectifiedInnerImage(marker.inner, binary);
-            int id = parseId(rectified);
-            estimatePnP(marker.outer);
-            ret = {
-                m_poseRotation,
-                m_poseTranslation,
-                getCameraMatrix(),
-                id,
-                true
-            };
-
-            // Debugging
-            drawPolygon(marker.inner, image);
-            drawPolygon(marker.outer, image);
-            drawAxes(image, m_poseRotation, m_poseTranslation);
-        }
-    }
-
-    return ret;
+    return m_trackingResolution;
 }
 
 std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
@@ -219,43 +178,17 @@ cv::Mat MarkerDetector::getRectifiedInnerImage(const std::vector<cv::Point2f>& i
     return subImage;
 }
 
-
-int MarkerDetector::parseId(const Mat& image)
+Pose MarkerDetector::getPose(const std::vector<cv::Point2f>& contour)
 {
-    assert(image.cols == image.rows && "Id parser expects square image");
+    estimatePnP(contour);
 
-    // Works by dividing the image to 8x8 matrix (byte per line).
-    // Then check if a cell is either black (1) or white (0).
-    const int dimension = 8;
-    const int stepSize = image.cols / dimension;
-    const int start = stepSize / 2;
-    std::array<std::array<bool, 8>, 8> field;
-
-    for(int i = 0; i < dimension; ++i)
-    {
-        for(int j = 0; j < dimension; ++j)
-        {
-            const int col = start + i * stepSize;
-            const int row = start + j * stepSize;
-            const bool isBlack = image.at<uchar>(col, row) > 0;
-            field[i][j] = isBlack;
-        }
-    }
-
-    // TODO: Determine orientation from field.
-
-    // TODO: A real parser. This is only for testing.
-    // Final id is fourth line as binary converted to integer.
-    unsigned char id = 0;
-    for(int i = 0; i < field[3].size(); ++i)
-    {
-        if(field[3][i])
-        {
-            id = id | (unsigned char) (1 << (7 - i));
-        }
-    }
-
-    return id;
+    return {
+        m_poseRotation,
+        m_poseTranslation,
+        getCameraMatrix(),
+        -1,
+        true
+    };
 }
 
 Mat MarkerDetector::getCameraMatrix()

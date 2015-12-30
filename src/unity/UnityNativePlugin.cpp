@@ -1,4 +1,5 @@
-#include "detector/MarkerDetector.h"
+#include "tracker/marker/MarkerTracker.h"
+#include "tracker/marker/YarrarMarkerParser.h"
 
 #include <opencv2/opencv.hpp>
 
@@ -94,7 +95,7 @@ extern "C"
         cv::cvtColor(argb, bgr, CV_RGBA2BGR);
         cv::flip(bgr, flipped, 0);
 
-        yarrar::MarkerDetector detector(width, height);
+        yarrar::MarkerTracker<yarrar::YarrarMarkerParser> detector(width, height);
         auto pose = detector.getPose(flipped);
 
         storePoseToReturnBuffer(pose);

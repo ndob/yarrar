@@ -4,15 +4,19 @@ endif()
 
 if(UNITY_PLUGIN)
     set(SOURCE_FILES
-        yarrar/detector/MarkerDetector.cpp
-        yarrar/detector/MarkerDetector.h
+        yarrar/tracker/marker/MarkerDetector.cpp
+        yarrar/tracker/marker/MarkerDetector.h
+        yarrar/tracker/marker/YarrarMarkerParser.cpp
+        yarrar/tracker/marker/YarrarMarkerParser.h
         yarrar/Pose.h
         yarrar/Util.h
         unity/UnityNativePlugin.cpp)
 else()
     set(SOURCE_FILES
-        yarrar/detector/MarkerDetector.cpp
-        yarrar/detector/MarkerDetector.h
+        yarrar/tracker/marker/MarkerDetector.cpp
+        yarrar/tracker/marker/MarkerDetector.h
+        yarrar/tracker/marker/YarrarMarkerParser.cpp
+        yarrar/tracker/marker/YarrarMarkerParser.h
         yarrar/Pose.h
         yarrar/renderer/opengl/OpenGLRenderer.cpp
         yarrar/renderer/opengl/OpenGLRenderer.h

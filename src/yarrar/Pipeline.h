@@ -23,10 +23,10 @@ public:
     virtual Dimensions getDimensions() = 0;
 };
 
-class Detector
+class Tracker
 {
 public:
-    virtual ~Detector() {};
+    virtual ~Tracker() {};
     virtual Pose getPose(const cv::Mat& rawData) = 0;
 };
 
@@ -54,11 +54,11 @@ public:
     }
 
     template<typename T>
-    void addDetector()
+    void addTracker()
     {
         assert(m_dataProviders.size() == 1);
         auto dim = m_dataProviders[0]->getDimensions();
-        m_detectors.emplace_back(new T(dim.width, dim.height));
+        m_trackers.emplace_back(new T(dim.width, dim.height));
     }
 
     template<typename T>
@@ -75,7 +75,7 @@ public:
 
 private:
     std::vector<std::unique_ptr<DataProvider>> m_dataProviders;
-    std::vector<std::unique_ptr<Detector>> m_detectors;
+    std::vector<std::unique_ptr<Tracker>> m_trackers;
     std::vector<std::unique_ptr<Renderer>> m_renderers;
     Scene m_scene;
 };
