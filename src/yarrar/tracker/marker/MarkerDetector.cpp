@@ -24,10 +24,10 @@ std::pair<int,int> getScaledDown(int width, int height)
     float aspect = static_cast<float> (width) / static_cast<float> (height);
 
     return std::pair<int, int> (
-        PREFERRED_TRACKING_RESOLUTION_WIDTH, 
+        PREFERRED_TRACKING_RESOLUTION_WIDTH,
         std::floor(PREFERRED_TRACKING_RESOLUTION_WIDTH / aspect)
     );
-};
+}
 
 }
 
@@ -99,7 +99,7 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
     // Search for valid markers.
     std::vector<Marker> ret;
     std::vector<int> usedIndices;
-    for(int i = 0; i < validRectangles.size(); ++i)
+    for(size_t i = 0; i < validRectangles.size(); ++i)
     {
         // Do not try to find markers inside of already used inner/outer rectangles.
         if(contains(usedIndices, validHierarchyIndices[i])) continue;
@@ -246,7 +246,7 @@ void MarkerDetector::estimatePnP(const std::vector<Point2f>& corners)
 
     cv::solvePnPRansac(objectPoints, corners, getCameraMatrix(), getDistCoeffs(),
                        m_poseRotation, m_poseTranslation, PNP_USE_EXTRINSIC_GUESS);
-};
+}
 
 void MarkerDetector::drawAxes(const Mat& image, const Mat& rvec, const Mat& tvec)
 {

@@ -14,7 +14,7 @@ int getId(const DataField& field)
     // TODO: A real parser. This is only for testing.
     // Final id is fourth line as binary converted to integer.
     unsigned char id = 0;
-    for(int i = 0; i < field[3].size(); ++i)
+    for(size_t i = 0; i < field[3].size(); ++i)
     {
         if(field[3][i])
         {
@@ -47,9 +47,9 @@ void print(const DataField& field)
 {
     std::cout << "\n\n\n\n";
 
-    for(auto f : field)
+    for(const auto& f : field)
     {
-        for(auto f2 : f)
+        for(const auto& f2 : f)
         {
             if(f2)
                 std::cout << "x";
