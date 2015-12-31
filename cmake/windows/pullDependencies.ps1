@@ -55,6 +55,12 @@ function Prepare-Zipped-Dependency($name, $zippedFile)
     $shell = New-Object -com Shell.Application
     $zip = $shell.Namespace($input)
 
+    if (Test-Path $destination)
+    {
+       Write-Host File already extracted. Using cached: $destination
+       return
+    }
+
     if (-Not(Test-Path $tmpExtractPath))
     {
         mkdir $tmpExtractPath
@@ -63,12 +69,6 @@ function Prepare-Zipped-Dependency($name, $zippedFile)
     foreach($item in $zip.items())
     {
         $shell.Namespace($tmpExtractPath).CopyHere($item, $ReplaceFilesWithoutAsking)
-    }
-
-    if (Test-Path $destination)
-    {
-       Write-Host File already extracted. Using cached: $destination
-       return
     }
 
     # If there is only one directory that has been extracted -> remove the excess subdir
