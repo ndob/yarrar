@@ -3,12 +3,19 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
-using SimpleJSON;
 
 public class WebcamTexture : MonoBehaviour 
 {
     [DllImport ("yarrar")]
     private static extern IntPtr getPose(IntPtr pixelBuffer, int width, int height);    
+
+    private struct Pose
+    {
+        public bool valid;
+        public float[] rotation;
+        public float[] translation;
+        public float[] camera;
+    }
 
     private WebCamTexture m_webcamTexture;
     public RawImage rawimage;
@@ -38,34 +45,29 @@ public class WebcamTexture : MonoBehaviour
         }
 
         var jsonString = Marshal.PtrToStringAnsi(poseDataStringPtr);
-        var poseData = JSON.Parse(jsonString);
+        var pose = JsonUtility.FromJson<Pose>(jsonString);
 
-        bool valid = poseData["valid"].AsInt != 0 ? true : false;
-        m_cube.SetActive(valid);
+        m_cube.SetActive(pose.valid);
 
-        if(valid)
+        if(pose.valid)
         {
             var camera = m_camera.GetComponent<Camera>();
-            var translation = poseData["translation"].AsArray;
-            var rotationMtx = poseData["rotation"].AsArray;
-            var cameraMatrix = poseData["camera"].AsArray;
 
             Matrix4x4 viewMatrix = Matrix4x4.identity;
             // Rotation
-            viewMatrix.m00 = rotationMtx[0].AsFloat;
-            viewMatrix.m01 = rotationMtx[1].AsFloat;
-            viewMatrix.m02 = rotationMtx[2].AsFloat;
-            viewMatrix.m10 = rotationMtx[3].AsFloat;
-            viewMatrix.m11 = rotationMtx[4].AsFloat;
-            viewMatrix.m12 = rotationMtx[5].AsFloat;
-            viewMatrix.m20 = rotationMtx[6].AsFloat;
-            viewMatrix.m21 = rotationMtx[7].AsFloat;
-            viewMatrix.m22 = rotationMtx[8].AsFloat;
-
+            viewMatrix.m00 = pose.rotation[0];
+            viewMatrix.m01 = pose.rotation[1];
+            viewMatrix.m02 = pose.rotation[2];
+            viewMatrix.m10 = pose.rotation[3];
+            viewMatrix.m11 = pose.rotation[4];
+            viewMatrix.m12 = pose.rotation[5];
+            viewMatrix.m20 = pose.rotation[6];
+            viewMatrix.m21 = pose.rotation[7];
+            viewMatrix.m22 = pose.rotation[8];
             // Translation
-            viewMatrix.m03 = translation[0].AsFloat;
-            viewMatrix.m13 = translation[1].AsFloat;
-            viewMatrix.m23 = translation[2].AsFloat;
+            viewMatrix.m03 = pose.translation[0];
+            viewMatrix.m13 = pose.translation[1];
+            viewMatrix.m23 = pose.translation[2];
 
             // Invert y and z (stored as inverted in OpenCV).
             Matrix4x4 conversionMatrix = Matrix4x4.identity;
@@ -76,10 +78,10 @@ public class WebcamTexture : MonoBehaviour
 
             camera.worldToCameraMatrix = conversionMatrix * viewMatrix;
 
-            float fx = cameraMatrix[0].AsFloat;
-            float cx = cameraMatrix[2].AsFloat;
-            float fy = cameraMatrix[4].AsFloat;
-            float cy = cameraMatrix[5].AsFloat;
+            float fx = pose.camera[0];
+            float cx = pose.camera[2];
+            float fy = pose.camera[4];
+            float cy = pose.camera[5];
             float far = 10.0f;
             float near = 0.1f;
 
