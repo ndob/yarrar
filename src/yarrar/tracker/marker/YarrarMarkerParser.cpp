@@ -79,23 +79,17 @@ MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
     switch(rot)
     {
         case Rotation90::DEG_90:
-            std::cout << "rotation 90" << std::endl;
             rotate(field, field, Rotation90::DEG_270);
             break;
         case Rotation90::DEG_180:
-            std::cout << "rotation 180" << std::endl;
             rotate(field, field, Rotation90::DEG_180);
             break;
         case Rotation90::DEG_270:
-            std::cout << "rotation 270" << std::endl;
             rotate(field, field, Rotation90::DEG_90);
             break;
         case Rotation90::DEG_0:
-            std::cout << "rotation 0" << std::endl;
             break;
     }
-
-
 
     return {
         getId(field),
