@@ -45,9 +45,9 @@ public:
         {
             for(const auto& marker : markers)
             {
-                ret = m_detector.getPose(marker.outer);
+                ret = m_detector.getPose(marker.outerContour);
 
-                Mat rectified = m_detector.getRectifiedInnerImage(marker.inner, binary);
+                Mat rectified = m_detector.getRectifiedInnerImage(marker.innerContour, binary);
                 MarkerValue value = m_parser.getData(rectified);
                 ret.coordinateSystemId = value.id;
 
@@ -85,8 +85,8 @@ public:
                 }
 
 #if defined(DEBUG_DRAWING)
-                m_detector.drawPolygon(marker.inner, image);
-                m_detector.drawPolygon(marker.outer, image);
+                m_detector.drawPolygon(marker.innerContour, image);
+                m_detector.drawPolygon(marker.outerContour, image);
                 m_detector.drawAxes(image, ret.rotation, ret.translation);
 #endif
             }

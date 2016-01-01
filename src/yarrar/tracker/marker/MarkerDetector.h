@@ -9,8 +9,8 @@ namespace yarrar
 
 struct Marker
 {
-    std::vector<cv::Point2f> inner;
-    std::vector<cv::Point2f> outer;
+    std::vector<cv::Point2f> innerContour;
+    std::vector<cv::Point2f> outerContour;
 };
 
 class MarkerDetector
