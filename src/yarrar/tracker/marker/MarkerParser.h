@@ -1,15 +1,15 @@
 #pragma once
 
+#include "Types.h"
+
 #include <opencv2/opencv.hpp>
 
 namespace yarrar {
 
-enum class MarkerRotation { DEG_0, DEG_90, DEG_180, DEG_270 };
-
 struct MarkerValue
 {
     int id;
-    MarkerRotation zRotation;
+    Rotation90 zRotation;
 };
 
 class MarkerParser

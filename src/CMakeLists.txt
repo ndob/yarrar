@@ -42,7 +42,8 @@ else()
         yarrar/Scene.cpp
         yarrar/Scene.h
         yarrar/Util.h
-        yarrar/Util.cpp)
+        yarrar/Util.cpp
+        yarrar/Types.h)
 
     if(ANDROID)
         set(SOURCE_FILES

@@ -3,6 +3,7 @@
 #include "Pipeline.h"
 #include "MarkerDetector.h"
 #include "Util.h"
+#include "Types.h"
 
 #define DEBUG_DRAWING 1
 
@@ -54,21 +55,21 @@ public:
                 ret.coordinateSystemId = value.id;
 
                 // Check if marker data indicates that the marker is rotated around z-axis.
-                if(value.zRotation != MarkerRotation::DEG_0)
+                if(value.zRotation != Rotation90::DEG_0)
                 {
                     double alpha;
                     switch(value.zRotation)
                     {
-                        case MarkerRotation::DEG_0:
+                        case Rotation90::DEG_0:
                             alpha = 0;
                             break;
-                        case MarkerRotation::DEG_90:
+                        case Rotation90::DEG_90:
                             alpha = M_PI_2;
                             break;
-                        case MarkerRotation::DEG_180:
+                        case Rotation90::DEG_180:
                             alpha = M_PI;
                             break;
-                        case MarkerRotation::DEG_270:
+                        case Rotation90::DEG_270:
                             alpha = M_PI + M_PI_2;
                             break;
                     }

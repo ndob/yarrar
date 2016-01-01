@@ -25,10 +25,10 @@ int getId(const DataField& field)
     return id;
 }
 
-MarkerRotation getZRotation(const DataField& field)
+Rotation90 getZRotation(const DataField& field)
 {
-    // TODO: Determine orientation from field.
-    return MarkerRotation::DEG_0;
+
+    return Rotation90::DEG_0;
 }
 
 
