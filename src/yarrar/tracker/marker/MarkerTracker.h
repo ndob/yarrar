@@ -64,13 +64,13 @@ public:
                             alpha = 0;
                             break;
                         case Rotation90::DEG_90:
-                            alpha = M_PI_2;
+                            alpha = -M_PI_2;
                             break;
                         case Rotation90::DEG_180:
-                            alpha = M_PI;
+                            alpha = -M_PI;
                             break;
                         case Rotation90::DEG_270:
-                            alpha = M_PI + M_PI_2;
+                            alpha = -M_PI - M_PI_2;
                             break;
                     }
 
