@@ -8,6 +8,15 @@
 
 namespace {
 
+enum Hierarchy
+{
+    HIERARCHY_NO_VALUE = -1,
+    HIERARCHY_NEXT = 0,
+    HIERARCHY_PREVIOUS = 1,
+    HIERARCHY_FIRST_CHILD = 2,
+    HIERARCHY_PARENT = 3
+};
+
 const cv::Scalar RED = cv::Scalar(0, 0, 255);
 const cv::Scalar GREEN = cv::Scalar(0, 255, 0);
 const cv::Scalar BLUE = cv::Scalar(255, 0, 0);
@@ -61,11 +70,6 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
     // Hierarchy is stored as an array with values:
     // [Next, Previous, First_Child, Parent]
     // -1 corresponds to no value.
-    static const int NO_VALUE = -1;
-    static const size_t HIERARCHY_NEXT = 0;
-    static const size_t HIERARCHY_PREVIOUS = 1;
-    static const size_t HIERARCHY_FIRST_CHILD = 2;
-    static const size_t HIERARCHY_PARENT = 3;
     std::vector<cv::Vec4i> hierarchy;
 
     // Find contours for the areas detected in previous step.
@@ -106,21 +110,26 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
 
         // Prevent full marker nesting. 
         // ie. The whole marker inside some previous inner rectangle.
-        if(contains(usedIndices, hierarchy[validHierarchyIndices[i]][HIERARCHY_PARENT])) continue;
+        if(contains(usedIndices,
+                    hierarchy[validHierarchyIndices[i]][HIERARCHY_PARENT]))
+        {
+            continue;
+        }
 
+        bool foundInnerRectangle = false;
         double outerPerimeterLength = arcLength(validRectangles[i], true);
         double greatestInnerPerimeterLength = 0.0;
-        int greatestIndex = NO_VALUE;
+        size_t greatestIndex = 0;
 
         // Get OpenCV hierarchy-value for this contour.
         auto outerHier = hierarchy[validHierarchyIndices[i]];
         int childIdx = outerHier[HIERARCHY_FIRST_CHILD];
 
         // Find the largest rectangle contour inside current outer contour.
-        while(childIdx != NO_VALUE)
+        while(childIdx != HIERARCHY_NO_VALUE)
         {
             // Check if this child is a valid rectangle contour.
-            for(int j = 0; j < validHierarchyIndices.size(); ++j)
+            for(size_t j = 0; j < validHierarchyIndices.size(); ++j)
             {
                 if(validHierarchyIndices[j] == childIdx)
                 {
@@ -132,6 +141,7 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
                     {
                         greatestInnerPerimeterLength = innerPerimeterLength;
                         greatestIndex = j;
+                        foundInnerRectangle = true;
                     }
                 }
             }
@@ -140,7 +150,7 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
         }
 
         // If child rectangle was found, add a marker.
-        if(greatestIndex != NO_VALUE)
+        if(foundInnerRectangle)
         {
             Marker m = {
                 validRectangles[greatestIndex],
