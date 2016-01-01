@@ -2,6 +2,7 @@
 
 #include "Pipeline.h"
 #include "MarkerDetector.h"
+#include "Util.h"
 
 #define DEBUG_DRAWING 1
 
@@ -11,8 +12,9 @@ template <typename ParserType>
 class MarkerTracker: public Tracker
 {
 public:
-    MarkerTracker(int width, int height):
-        m_detector(width, height)
+    MarkerTracker(const cv::Size& trackingResolution):
+        m_trackingResolution(trackingResolution),
+        m_detector(trackingResolution)
     {
         static_assert(std::is_base_of<MarkerParser, ParserType>::value, "ParserType must derive from MarkerParser.");
     }
@@ -25,7 +27,7 @@ public:
         {
             Mat resizedColored, gray;
             // Downscale and convert to gray scale.
-            resize(image, resizedColored, m_detector.getTrackingResolution());
+            resize(image, resizedColored, m_trackingResolution);
             cvtColor(resizedColored, gray, CV_BGR2GRAY);
 
             // Mark areas that are between totally black (0) and gray
@@ -70,7 +72,7 @@ public:
                     }
 
                     // Construct rotation matrix (z-axis).
-                    Mat Rz = (Mat_<double>(3, 3) <<
+                    const Mat Rz = (Mat_<double>(3, 3) <<
                         std::cos(alpha), -std::sin(alpha), 0.0,
                         std::sin(alpha),  std::cos(alpha), 0.0,
                         0.0, 0.0, 1.0);
@@ -95,6 +97,7 @@ public:
 
 private:
 
+    cv::Size m_trackingResolution;
     MarkerDetector m_detector;
     ParserType m_parser;
 };

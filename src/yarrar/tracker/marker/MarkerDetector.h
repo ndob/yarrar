@@ -16,9 +16,8 @@ struct Marker
 class MarkerDetector
 {
 public:
-    MarkerDetector(int width, int height);
+    MarkerDetector(const cv::Size& trackingResolution);
 
-    cv::Size getTrackingResolution();
     std::vector<Marker> findMarkers(const cv::Mat& image);
     cv::Mat getRectifiedInnerImage(const std::vector<cv::Point2f>& imagePoints, const cv::Mat& image);
     Pose getPose(const std::vector<cv::Point2f>& contour);

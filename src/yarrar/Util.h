@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <opencv2/core/types.hpp>
 
 namespace yarrar {
 
@@ -17,5 +18,10 @@ bool contains(const Container& c, const Value& v)
 {
     return std::find(std::begin(c), std::end(c), v) != std::end(c);
 }
+
+
+cv::Size getScaledDownResolution(const int width,
+                                 const int height,
+                                 const int preferredWidth);
 
 }

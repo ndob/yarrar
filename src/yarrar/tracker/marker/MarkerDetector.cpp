@@ -21,22 +21,7 @@ const cv::Scalar RED = cv::Scalar(0, 0, 255);
 const cv::Scalar GREEN = cv::Scalar(0, 255, 0);
 const cv::Scalar BLUE = cv::Scalar(255, 0, 0);
 const bool PNP_USE_EXTRINSIC_GUESS = true;
-const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
 const uint64 RANDOM_SEED = 12345;
-
-std::pair<int,int> getScaledDown(int width, int height)
-{
-    if(width <= PREFERRED_TRACKING_RESOLUTION_WIDTH)
-    {
-        std::pair<int, int> (width, height);
-    }
-    float aspect = static_cast<float> (width) / static_cast<float> (height);
-
-    return std::pair<int, int> (
-        PREFERRED_TRACKING_RESOLUTION_WIDTH,
-        std::floor(PREFERRED_TRACKING_RESOLUTION_WIDTH / aspect)
-    );
-}
 
 }
 
@@ -44,21 +29,14 @@ namespace yarrar {
 
 using namespace cv;
 
-MarkerDetector::MarkerDetector(int width, int height):
+MarkerDetector::MarkerDetector(const cv::Size& trackingResolution):
+    m_trackingResolution(trackingResolution),
     m_rng(RANDOM_SEED),
     m_poseRotation(3,1,cv::DataType<double>::type),
     m_poseTranslation(3,1,cv::DataType<double>::type)
 {
-    assert(width > 0);
-    assert(height > 0);
-    auto scaled = getScaledDown(width, height);
-    m_trackingResolution.width = scaled.first;
-    m_trackingResolution.height = scaled.second;
-}
-
-cv::Size MarkerDetector::getTrackingResolution()
-{
-    return m_trackingResolution;
+    assert(m_trackingResolution.width > 0);
+    assert(m_trackingResolution.height > 0);
 }
 
 std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)

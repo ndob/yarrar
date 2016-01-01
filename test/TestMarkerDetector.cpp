@@ -2,19 +2,21 @@
 #include "yarrar/tracker/marker/MarkerTracker.h"
 #include "yarrar/tracker/marker/YarrarMarkerParser.h"
 
-#include "Util.h"
+#include "yarrar/Util.h"
 
 #include "catch.hpp"
 
 namespace yarrar_test {
 
-TEST_CASE("Pose is detected correctly", "[marker_detector]")
+TEST_CASE("Pose is detected correctly", "[marker_tracker]")
 {
     using namespace yarrar;
 
+    const int TRACKING_RESOLUTION = 320;
+
     StaticImageDataProvider provider("data/img/marker.jpg");
     auto dim = provider.getDimensions();
-    MarkerTracker<YarrarMarkerParser> detector(dim.width, dim.height);
+    MarkerTracker<YarrarMarkerParser> detector(getScaledDownResolution(dim.width, dim.height, TRACKING_RESOLUTION));
     auto pose = detector.getPose(provider.getData());
 
     const double EPSILON = 0.01;

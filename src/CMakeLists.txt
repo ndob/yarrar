@@ -10,6 +10,7 @@ if(UNITY_PLUGIN)
         yarrar/tracker/marker/YarrarMarkerParser.h
         yarrar/Pose.h
         yarrar/Util.h
+        yarrar/Util.cpp
         unity/UnityNativePlugin.cpp)
 else()
     set(SOURCE_FILES
@@ -40,7 +41,8 @@ else()
         yarrar/renderer/opengl/GLContext.h
         yarrar/Scene.cpp
         yarrar/Scene.h
-        yarrar/Util.h)
+        yarrar/Util.h
+        yarrar/Util.cpp)
 
     if(ANDROID)
         set(SOURCE_FILES

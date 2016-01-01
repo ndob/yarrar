@@ -7,6 +7,12 @@
 #include <vector>
 #include <opencv2/core/mat.hpp>
 
+namespace {
+
+const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
+
+}
+
 namespace yarrar {
 
 struct Dimensions
@@ -58,7 +64,10 @@ public:
     {
         assert(m_dataProviders.size() == 1);
         auto dim = m_dataProviders[0]->getDimensions();
-        m_trackers.emplace_back(new T(dim.width, dim.height));
+        cv::Size trackingRes = getScaledDownResolution(dim.width,
+                                                       dim.height,
+                                                       PREFERRED_TRACKING_RESOLUTION_WIDTH);
+        m_trackers.emplace_back(new T(trackingRes));
     }
 
     template<typename T>
