@@ -27,6 +27,13 @@ int getId(const DataField& field)
 
 Rotation90 getZRotation(const DataField& field)
 {
+    // The rectangle in upper left corner is used to
+    // indicate the rotation.
+
+    if(field[1][1]) return Rotation90::DEG_0;
+    else if(field[1][6]) return Rotation90::DEG_90;
+    else if(field[6][6]) return Rotation90::DEG_180;
+    else if(field[6][1]) return Rotation90::DEG_270;
 
     return Rotation90::DEG_0;
 }

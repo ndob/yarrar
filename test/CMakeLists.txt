@@ -11,6 +11,7 @@ include_directories(
 set(SOURCE_FILES
         TestMain.cpp
         TestMarkerDetector.cpp
+        TestYarrarMarkerParser.cpp
         TestUtil.cpp)
 
 add_executable(testrunner ${SOURCE_FILES})

@@ -147,16 +147,15 @@ cv::Mat MarkerDetector::getRectifiedInnerImage(const std::vector<cv::Point2f>& i
 {
     // Size for image that will be parsed.
     const int imageSize = 100;
-
     std::vector<Point2f> corners;
+
+    corners.push_back(Point2f(imageSize,0));
     corners.push_back(Point2f(imageSize,imageSize));
     corners.push_back(Point2f(0,imageSize));
     corners.push_back(Point2f(0,0));
-    corners.push_back(Point2f(imageSize,0));
 
     // Find perspective transform for image points.
     Mat transform = findHomography(imagePoints, corners, CV_RANSAC);
-
     cv::Mat rectified(image.size(), image.type());
     cv::warpPerspective(image, rectified, transform, image.size());
 
