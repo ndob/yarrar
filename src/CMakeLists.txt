@@ -8,7 +8,7 @@ if(UNITY_PLUGIN)
         yarrar/tracker/marker/MarkerDetector.h
         yarrar/tracker/marker/YarrarMarkerParser.cpp
         yarrar/tracker/marker/YarrarMarkerParser.h
-        yarrar/Pose.h
+        yarrar/Types.h
         yarrar/Util.h
         yarrar/Util.cpp
         unity/UnityNativePlugin.cpp)
@@ -18,7 +18,6 @@ else()
         yarrar/tracker/marker/MarkerDetector.h
         yarrar/tracker/marker/YarrarMarkerParser.cpp
         yarrar/tracker/marker/YarrarMarkerParser.h
-        yarrar/Pose.h
         yarrar/renderer/opengl/OpenGLRenderer.cpp
         yarrar/renderer/opengl/OpenGLRenderer.h
         yarrar/Pipeline.cpp

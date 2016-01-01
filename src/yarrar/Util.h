@@ -8,13 +8,6 @@
 
 namespace yarrar {
 
-struct Vector3
-{
-    float x;
-    float y;
-    float z;
-};
-
 template<typename Container, typename Value>
 bool contains(const Container& c, const Value& v) 
 {

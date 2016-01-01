@@ -1,6 +1,5 @@
 #include "SceneModel.h"
 #include "GLProgram.h"
-#include <iostream>
 
 namespace yarrar
 {

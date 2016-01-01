@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Pipeline.h"
-#include "Pose.h"
+#include "Types.h"
 #include "MarkerParser.h"
 
 namespace yarrar

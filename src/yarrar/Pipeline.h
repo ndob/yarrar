@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Pose.h"
+#include "Types.h"
+#include "Util.h"
 #include "Scene.h"
 
 #include <memory>
@@ -14,12 +15,6 @@ const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
 }
 
 namespace yarrar {
-
-struct Dimensions
-{
-    int width;
-    int height;
-};
 
 class DataProvider
 {

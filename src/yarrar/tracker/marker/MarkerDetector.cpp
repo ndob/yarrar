@@ -1,4 +1,5 @@
 #include "MarkerDetector.h"
+#include "Util.h"
 
 #include <opencv2/opencv.hpp>
 #include <array>

@@ -2,7 +2,7 @@
 
 #include "GLContext.h"
 #include "Pipeline.h"
-#include "Pose.h"
+#include "Types.h"
 
 #include <string>
 #include <map>
