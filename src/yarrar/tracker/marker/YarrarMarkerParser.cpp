@@ -1,70 +1,42 @@
 #include "YarrarMarkerParser.h"
+#include "Util.h"
 
-#include <array>
 #include <cassert>
-
-typedef std::array<std::array<bool, 8>, 8> DataField;
+#include <cstdint>
 
 namespace {
 
 using namespace yarrar;
 
-int getId(const DataField& field)
+const int FIELD_SIZE = 8;
+
+int getId(const cv::Mat& field)
 {
     // TODO: A real parser. This is only for testing.
     // Final id is fourth line as binary converted to integer.
-    unsigned char id = 0;
-    for(size_t i = 0; i < field[3].size(); ++i)
+    int id = 0;
+    for(int i = 0; i < FIELD_SIZE; ++i)
     {
-        if(field[3][i])
+        if(field.at<uint8_t>(3, i) == 1)
         {
-            id = id | (unsigned char) (1 << (7 - i));
+            id = id | (uint8_t) (1 << (7 - i));
         }
     }
 
     return id;
 }
 
-Rotation90 getZRotation(const DataField& field)
+Rotation90 getZRotation(const cv::Mat& field)
 {
     // The rectangle in upper left corner is used to
     // indicate the rotation.
 
-    if(field[1][1]) return Rotation90::DEG_0;
-    else if(field[1][6]) return Rotation90::DEG_90;
-    else if(field[6][6]) return Rotation90::DEG_180;
-    else if(field[6][1]) return Rotation90::DEG_270;
+    if(field.at<uchar>(1, 1) == 1) return Rotation90::DEG_0;
+    else if(field.at<int8_t>(1, 6) == 1) return Rotation90::DEG_90;
+    else if(field.at<int8_t>(6, 6) == 1) return Rotation90::DEG_180;
+    else if(field.at<int8_t>(6, 1) == 1) return Rotation90::DEG_270;
 
     return Rotation90::DEG_0;
-}
-
-
-/*
-Example print:
-oooooooo
-oooxoxxo
-ooxooxoo
-oxxxxooo
-oxxoxxoo
-oxoxxoxo
-ooooxxoo
-oooooooo
-*/
-void print(const DataField& field)
-{
-    std::cout << "\n\n\n\n";
-
-    for(const auto& f : field)
-    {
-        for(const auto& f2 : f)
-        {
-            if(f2)
-                std::cout << "x";
-            else
-                std::cout << "o";
-        }
-        std::cout << "\n";
-    }
 }
 
 }
@@ -80,10 +52,12 @@ MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
 
     // Works by dividing the image to 8x8 matrix (byte per line).
     // Then check if a cell is either black (1) or white (0).
-    const int dimension = 8;
+    const int dimension = FIELD_SIZE;
     const int stepSize = image.cols / dimension;
     const int start = stepSize / 2;
-    DataField field;
+    //DataField field;
+
+    cv::Mat field = cv::Mat::zeros(dimension, dimension, CV_8S);
 
     for(int i = 0; i < dimension; ++i)
     {
@@ -91,14 +65,41 @@ MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
         {
             const int col = start + i * stepSize;
             const int row = start + j * stepSize;
-            const bool isBlack = binary.at<uchar>(col, row) > 0;
-            field[i][j] = isBlack;
+            const bool isBlack = binary.at<uint8_t>(col, row) > 0;
+            field.at<int8_t>(i, j) = isBlack ? 1 : 0;
         }
     }
 
+    // Get current rotation.
+    Rotation90 rot = getZRotation(field);
+
+    // Rotate the field, so that it's in default (DEG_0)
+    // rotation. This way id parsing doesn't
+    // have to care about rotations.
+    switch(rot)
+    {
+        case Rotation90::DEG_90:
+            std::cout << "rotation 90" << std::endl;
+            rotate(field, field, Rotation90::DEG_270);
+            break;
+        case Rotation90::DEG_180:
+            std::cout << "rotation 180" << std::endl;
+            rotate(field, field, Rotation90::DEG_180);
+            break;
+        case Rotation90::DEG_270:
+            std::cout << "rotation 270" << std::endl;
+            rotate(field, field, Rotation90::DEG_90);
+            break;
+        case Rotation90::DEG_0:
+            std::cout << "rotation 0" << std::endl;
+            break;
+    }
+
+
+
     return {
         getId(field),
-        getZRotation(field)
+        rot
     };
 }
 
