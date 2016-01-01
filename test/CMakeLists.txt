@@ -10,6 +10,7 @@ include_directories(
 
 set(SOURCE_FILES
         TestMain.cpp
+        TestMarkerTracker.cpp
         TestMarkerDetector.cpp
         TestYarrarMarkerParser.cpp
         TestUtil.cpp)
