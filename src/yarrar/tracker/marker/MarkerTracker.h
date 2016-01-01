@@ -23,9 +23,9 @@ public:
     {
         using namespace cv;
 
-        Mat binary;
+        Mat binary, gray;
         {
-            Mat resizedColored, gray;
+            Mat resizedColored;
             // Downscale and convert to gray scale.
             resize(image, resizedColored, m_trackingResolution);
             cvtColor(resizedColored, gray, CV_BGR2GRAY);
@@ -39,6 +39,8 @@ public:
 
         Pose ret;
         ret.valid = false;
+
+        // TODO: Find markers modifies the binary image, so it should probably be copied.
         auto markers = m_detector.findMarkers(binary);
 
         if(markers.size() > 0)
@@ -46,9 +48,9 @@ public:
             for(const auto& marker : markers)
             {
                 ret = m_detector.getPose(marker.outerContour);
-
-                Mat rectified = m_detector.getRectifiedInnerImage(marker.innerContour, binary);
+                Mat rectified = m_detector.getRectifiedInnerImage(marker.innerContour, gray);
                 MarkerValue value = m_parser.getData(rectified);
+
                 ret.coordinateSystemId = value.id;
 
                 // Check if marker data indicates that the marker is rotated around z-axis.

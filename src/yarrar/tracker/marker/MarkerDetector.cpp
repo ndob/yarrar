@@ -50,7 +50,7 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
     // -1 corresponds to no value.
     std::vector<cv::Vec4i> hierarchy;
 
-    // Find contours for the areas detected in previous step.
+    // Find contours of possible markers.
     findContours(binaryImage, foundContours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE);
 
     int hierarchyIdx = -1;

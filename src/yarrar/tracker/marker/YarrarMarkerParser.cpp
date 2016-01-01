@@ -68,6 +68,9 @@ MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
 {
     assert(image.cols == image.rows && "Id parser expects square image");
 
+    cv::Mat binary;
+    cv::inRange(image, 0, 100, binary);
+
     // Works by dividing the image to 8x8 matrix (byte per line).
     // Then check if a cell is either black (1) or white (0).
     const int dimension = 8;
@@ -81,7 +84,7 @@ MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
         {
             const int col = start + i * stepSize;
             const int row = start + j * stepSize;
-            const bool isBlack = image.at<uchar>(col, row) > 0;
+            const bool isBlack = binary.at<uchar>(col, row) > 0;
             field[i][j] = isBlack;
         }
     }
