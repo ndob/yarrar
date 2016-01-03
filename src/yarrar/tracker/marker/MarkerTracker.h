@@ -38,7 +38,8 @@ public:
             inRange(gray, 0, 100, binary);
         }
 
-        // TODO: Find markers modifies the binary image, so it should probably be copied.
+        // TODO: Find markers modifies the binary image,
+        // so it should probably be copied.
         auto markers = m_detector.findMarkers(binary);
 
         for(const auto& marker : markers)
