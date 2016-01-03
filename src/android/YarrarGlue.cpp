@@ -57,6 +57,7 @@ void Java_com_ndob_yarrar_YarrarActivity_injectCameraFrame(JNIEnv* env, jobject,
     cv::Mat yuv(height + (height / 2), width, CV_8UC1, buffer);
     cv::Mat rgb(height, width, CV_8UC3);
     cv::cvtColor(yuv, rgb, cv::COLOR_YUV2BGR_NV21);
+    yarrar::rotate(rgb, rgb, yarrar::Rotation90::DEG_90);
     yarrar::AndroidImageProvider::injectCameraFrame(rgb);
 
     env->ReleaseByteArrayElements(cameraData, buffer, JNI_ABORT);
