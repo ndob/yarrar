@@ -8,13 +8,18 @@ include_directories(
     "${PROJECT_SOURCE_DIR}/external/glfw/include"
     "${PROJECT_SOURCE_DIR}/external/glew/include")
 
-set(SOURCE_FILES TestMain.cpp TestMarkerDetector.cpp)
+set(SOURCE_FILES
+        TestMain.cpp
+        TestMarkerTracker.cpp
+        TestMarkerDetector.cpp
+        TestYarrarMarkerParser.cpp
+        TestUtil.cpp)
 
 add_executable(testrunner ${SOURCE_FILES})
 target_link_libraries(testrunner yarrar ${OpenCV_LIBS})
 
 add_test(
-    NAME TestMarkerDetector 
+    NAME TestRunner
     COMMAND ${CMAKE_BINARY_DIR}/build/bin/testrunner
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 

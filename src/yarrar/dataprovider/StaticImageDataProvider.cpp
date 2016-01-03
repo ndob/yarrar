@@ -1,7 +1,3 @@
-//
-// Created by niki on 11/15/15.
-//
-
 #include "StaticImageDataProvider.h"
 
 namespace yarrar {

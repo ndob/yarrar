@@ -1,5 +1,6 @@
 #include "yarrar/Pipeline.h"
-#include "yarrar/detector/MarkerDetector.h"
+#include "yarrar/tracker/marker/MarkerTracker.h"
+#include "yarrar/tracker/marker/YarrarMarkerParser.h"
 #include "yarrar/renderer/opengl/OpenGLRenderer.h"
 
 #include <jni.h>
@@ -15,7 +16,6 @@ cv::Mat s_image;
 std::mutex s_imageMutex; 
 
 }
-
 
 namespace yarrar {
 
@@ -37,33 +37,16 @@ public:
     }
 };
 
-class AndroidDummyRenderer : public Renderer
-{
-public:
-    AndroidDummyRenderer(int width, int height) {};
-
-    void loadModel(const Model& model) override
-    {
-    }
-
-    void draw(const Pose& cameraPose,
-              const Scene& scene,
-              const cv::Mat& backgroundImage) override
-    {
-        __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "[DUMMY] id: %d", cameraPose.coordinateSystemId);
-        __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "[DUMMY] valid: %d", (int) cameraPose.valid);
-    }
-};
-
 }
 
 extern "C" {
+
 void Java_com_ndob_yarrar_YarrarActivity_initYarrar(JNIEnv*, jobject)
 {
     using namespace yarrar;
     s_pipe = new Pipeline;
     s_pipe->addDataProvider<AndroidImageProvider>();
-    s_pipe->addDetector<MarkerDetector>();
+    s_pipe->addTracker<MarkerTracker<YarrarMarkerParser>>();
     s_pipe->addRenderer<OpenGLRenderer>();
 }
 
@@ -93,7 +76,6 @@ void Java_com_ndob_yarrar_YarrarActivity_run(JNIEnv*, jobject)
 void Java_com_ndob_yarrar_YarrarActivity_injectCameraFrame(JNIEnv* env, jobject, jint width, jint height, jbyteArray cameraData)
 {
     jbyte* buffer = env->GetByteArrayElements(cameraData, nullptr);
-    jsize len = env->GetArrayLength(cameraData);
 
     cv::Mat yuv(height + (height / 2), width, CV_8UC1, buffer);
     cv::Mat rgba(height, width, CV_8UC3);

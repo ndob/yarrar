@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Pose.h"
+#include "Types.h"
+#include "Util.h"
 #include "Scene.h"
 
 #include <memory>
@@ -8,12 +9,6 @@
 #include <opencv2/core/mat.hpp>
 
 namespace yarrar {
-
-struct Dimensions
-{
-    int width;
-    int height;
-};
 
 class DataProvider
 {
@@ -23,11 +18,11 @@ public:
     virtual Dimensions getDimensions() = 0;
 };
 
-class Detector
+class Tracker
 {
 public:
-    virtual ~Detector() {};
-    virtual Pose getPose(const cv::Mat& rawData) = 0;
+    virtual ~Tracker() {};
+    virtual void getPoses(const cv::Mat& rawData, std::vector<Pose>& output) = 0;
 };
 
 class Renderer
@@ -35,7 +30,7 @@ class Renderer
 public:
     virtual ~Renderer() {};
     virtual void loadModel(const Model& model) = 0;
-    virtual void draw(const Pose& cameraPose,
+    virtual void draw(const std::vector<Pose>& cameraPoses,
                       const Scene& scene,
                       const cv::Mat& backgroundImage) = 0;
 };
@@ -54,11 +49,14 @@ public:
     }
 
     template<typename T>
-    void addDetector()
+    void addTracker()
     {
         assert(m_dataProviders.size() == 1);
         auto dim = m_dataProviders[0]->getDimensions();
-        m_detectors.emplace_back(new T(dim.width, dim.height));
+        cv::Size trackingRes = getScaledDownResolution(dim.width,
+                                                       dim.height,
+                                                       PREFERRED_TRACKING_RESOLUTION_WIDTH);
+        m_trackers.emplace_back(new T(trackingRes));
     }
 
     template<typename T>
@@ -74,8 +72,10 @@ public:
     void run() const;
 
 private:
+    static const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
+
     std::vector<std::unique_ptr<DataProvider>> m_dataProviders;
-    std::vector<std::unique_ptr<Detector>> m_detectors;
+    std::vector<std::unique_ptr<Tracker>> m_trackers;
     std::vector<std::unique_ptr<Renderer>> m_renderers;
     Scene m_scene;
 };

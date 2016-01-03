@@ -15,14 +15,18 @@ public:
     {
     }
 
-    void draw(const Pose& cameraPose,
+    void draw(const std::vector<Pose>& cameraPoses,
               const Scene& scene,
               const cv::Mat& backgroundImage) override
     {
-        std::cout << "[DUMMY] translation: " << cameraPose.translation << std::endl;
-        std::cout << "[DUMMY] rotation: " << cameraPose.rotation << std::endl;
-        std::cout << "[DUMMY] id:" << cameraPose.coordinateSystemId << std::endl;
-        std::cout << "[DUMMY] valid:" << cameraPose.valid << std::endl;
+        for(const auto& pose : cameraPoses)
+        {
+            std::cout << "[DUMMY] New camera pose" << std::endl;
+            std::cout << "[DUMMY] translation: " << pose.translation << std::endl;
+            std::cout << "[DUMMY] rotation: " << pose.rotation << std::endl;
+            std::cout << "[DUMMY] id:" << pose.coordinateSystemId << std::endl;
+            std::cout << "[DUMMY] valid:" << pose.valid << std::endl;
+        }
     }
 };
 

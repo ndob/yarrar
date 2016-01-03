@@ -4,16 +4,20 @@ endif()
 
 if(UNITY_PLUGIN)
     set(SOURCE_FILES
-        yarrar/detector/MarkerDetector.cpp
-        yarrar/detector/MarkerDetector.h
-        yarrar/Pose.h
+        yarrar/tracker/marker/MarkerDetector.cpp
+        yarrar/tracker/marker/MarkerDetector.h
+        yarrar/tracker/marker/YarrarMarkerParser.cpp
+        yarrar/tracker/marker/YarrarMarkerParser.h
+        yarrar/Types.h
         yarrar/Util.h
+        yarrar/Util.cpp
         unity/UnityNativePlugin.cpp)
 else()
     set(SOURCE_FILES
-        yarrar/detector/MarkerDetector.cpp
-        yarrar/detector/MarkerDetector.h
-        yarrar/Pose.h
+        yarrar/tracker/marker/MarkerDetector.cpp
+        yarrar/tracker/marker/MarkerDetector.h
+        yarrar/tracker/marker/YarrarMarkerParser.cpp
+        yarrar/tracker/marker/YarrarMarkerParser.h
         yarrar/renderer/opengl/OpenGLRenderer.cpp
         yarrar/renderer/opengl/OpenGLRenderer.h
         yarrar/Pipeline.cpp
@@ -36,7 +40,9 @@ else()
         yarrar/renderer/opengl/GLContext.h
         yarrar/Scene.cpp
         yarrar/Scene.h
-        yarrar/Util.h)
+        yarrar/Util.h
+        yarrar/Util.cpp
+        yarrar/Types.h)
 
     if(ANDROID)
         set(SOURCE_FILES

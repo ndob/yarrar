@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GLContext.h"
-#include "Util.h"
+#include "Types.h"
 
 #include <memory>
 #include <vector>

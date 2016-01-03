@@ -1,9 +1,12 @@
-#include "detector/MarkerDetector.h"
+#include "tracker/marker/MarkerTracker.h"
+#include "tracker/marker/YarrarMarkerParser.h"
+#include "Util.h"
 
 #include <opencv2/opencv.hpp>
 
 #include <string>
 #include <sstream>
+#include <vector>
 
 #if _MSC_VER
 #define EXPORT_API __declspec(dllexport)
@@ -13,71 +16,67 @@
 
 namespace {
 
+const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
 std::string returnStringBuffer;
 
 void storePoseToReturnBuffer(const yarrar::Pose& pose)
 {
     std::ostringstream ss;
     ss << "{ \"valid\": ";
-    ss << pose.valid ? "true" : "false";
+    ss << "true";
 
-    if (pose.valid)
+    cv::Mat rotationMatrix;
+    cv::Rodrigues(pose.rotation, rotationMatrix);
+
+    ss << ",";
+    ss << "\"rotation\": [";
+    for (int i = 0; i < 3; ++i)
     {
-        cv::Mat rotationMatrix;
-        cv::Rodrigues(pose.rotation, rotationMatrix);
-        
-        ss << ",";
-        ss << "\"rotation\": [";
-        for (int i = 0; i < 3; ++i)
+        for (int j = 0; j < 3; ++j)
         {
-            for (int j = 0; j < 3; ++j)
-            {
-                ss << rotationMatrix.at<double>(i, j);
-                if (j != 2)
-                {
-                    ss << ",";
-                }
-            }
-            if (i != 2)
+            ss << rotationMatrix.at<double>(i, j);
+            if (j != 2)
             {
                 ss << ",";
             }
         }
-        ss << "]";
-
-        ss << ",";
-        ss << "\"translation\": [";
-        for (int i = 0; i < 3; ++i)
+        if (i != 2)
         {
-            ss << pose.translation.at<double>(i);
-            if (i != 2)
-            {
-                ss << ",";
-            }
+            ss << ",";
         }
-        ss << "]";
-
-        ss << ",";
-        ss << "\"camera\": [";
-        for (int i = 0; i < 3; ++i)
-        {
-            for (int j = 0; j < 3; ++j)
-            {
-                ss << pose.camera.at<float>(i, j);
-                if (j != 2)
-                {
-                    ss << ",";
-                }
-            }
-            if (i != 2)
-            {
-                ss << ",";
-            }
-        }
-        ss << "]";
-
     }
+    ss << "]";
 
+    ss << ",";
+    ss << "\"translation\": [";
+    for (int i = 0; i < 3; ++i)
+    {
+        ss << pose.translation.at<double>(i);
+        if (i != 2)
+        {
+            ss << ",";
+        }
+    }
+    ss << "]";
+
+    ss << ",";
+    ss << "\"camera\": [";
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            ss << pose.camera.at<float>(i, j);
+            if (j != 2)
+            {
+                ss << ",";
+            }
+        }
+        if (i != 2)
+        {
+            ss << ",";
+        }
+    }
+    ss << "]";
     ss << "}";
 
     returnStringBuffer = ss.str();
@@ -94,10 +93,12 @@ extern "C"
         cv::cvtColor(argb, bgr, CV_RGBA2BGR);
         cv::flip(bgr, flipped, 0);
 
-        yarrar::MarkerDetector detector(width, height);
-        auto pose = detector.getPose(flipped);
+        cv::Size trackingRes = yarrar::getScaledDownResolution(width, height, PREFERRED_TRACKING_RESOLUTION_WIDTH);
+        yarrar::MarkerTracker<yarrar::YarrarMarkerParser> detector(trackingRes);
+        std::vector<yarrar::Pose> poses;
+        detector.getPoses(flipped, poses);
 
-        storePoseToReturnBuffer(pose);
+        if(poses.size() > 0) storePoseToReturnBuffer(poses[0]);
         return returnStringBuffer.c_str();
     }
 }
