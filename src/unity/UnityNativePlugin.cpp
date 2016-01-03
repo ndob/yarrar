@@ -3,6 +3,7 @@
 #include "Util.h"
 
 #include <opencv2/opencv.hpp>
+#include <json11.hpp>
 
 #include <string>
 #include <sstream>
@@ -16,7 +17,6 @@
 
 namespace {
 
-const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
 std::string returnStringBuffer;
 
 void storePoseToReturnBuffer(const yarrar::Pose& pose)
@@ -93,10 +93,15 @@ extern "C"
         cv::cvtColor(argb, bgr, CV_RGBA2BGR);
         cv::flip(bgr, flipped, 0);
 
-        cv::Size trackingRes = yarrar::getScaledDownResolution(width, height, PREFERRED_TRACKING_RESOLUTION_WIDTH);
-        yarrar::MarkerTracker<yarrar::YarrarMarkerParser> detector(trackingRes);
+        // TODO: This should be initialized only when configuration changes.
+        json11::Json markerTrackerConf = json11::Json::object{
+            { "parser", "yarrar_parser" },
+            { "tracking_resolution_width", 320 }
+        };
+
+        yarrar::MarkerTracker tracker(width, height, markerTrackerConf);
         std::vector<yarrar::Pose> poses;
-        detector.getPoses(flipped, poses);
+        tracker.getPoses(flipped, poses);
 
         if(poses.size() > 0) storePoseToReturnBuffer(poses[0]);
         return returnStringBuffer.c_str();
