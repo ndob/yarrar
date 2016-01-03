@@ -21,65 +21,43 @@ std::string returnStringBuffer;
 
 void storePoseToReturnBuffer(const yarrar::Pose& pose)
 {
-    std::ostringstream ss;
-    ss << "{ \"valid\": ";
-    ss << "true";
+    std::vector<double> rotationMatrix;
+    rotationMatrix.reserve(9);
+    std::vector<double> translationMatrix;
+    translationMatrix.reserve(3);
+    std::vector<double> cameraMatrix;
+    cameraMatrix.reserve(9);
 
-    cv::Mat rotationMatrix;
+    cv::Mat rotationMtx;
     cv::Rodrigues(pose.rotation, rotationMatrix);
-
-    ss << ",";
-    ss << "\"rotation\": [";
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 3; ++j)
         {
-            ss << rotationMatrix.at<double>(i, j);
-            if (j != 2)
-            {
-                ss << ",";
-            }
-        }
-        if (i != 2)
-        {
-            ss << ",";
+            rotationMatrix.push_back(rotationMtx.at<double>(i, j));
         }
     }
-    ss << "]";
 
-    ss << ",";
-    ss << "\"translation\": [";
     for (int i = 0; i < 3; ++i)
     {
-        ss << pose.translation.at<double>(i);
-        if (i != 2)
-        {
-            ss << ",";
-        }
+        translationMatrix.push_back(pose.translation.at<double>(i));
     }
-    ss << "]";
 
-    ss << ",";
-    ss << "\"camera\": [";
     for (int i = 0; i < 3; ++i)
     {
         for (int j = 0; j < 3; ++j)
         {
-            ss << pose.camera.at<float>(i, j);
-            if (j != 2)
-            {
-                ss << ",";
-            }
-        }
-        if (i != 2)
-        {
-            ss << ",";
+            cameraMatrix.push_back(pose.camera.at<float>(i, j));
         }
     }
-    ss << "]";
-    ss << "}";
 
-    returnStringBuffer = ss.str();
+    json11::Json poseJson = json11::Json::object{
+        {"valid", true },
+        {"rotation", rotationMatrix},
+        {"translation", translationMatrix},
+        {"camera", cameraMatrix}
+    };
+    poseJson.dump(returnStringBuffer);
 }
 
 }
