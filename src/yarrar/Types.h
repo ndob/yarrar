@@ -17,7 +17,6 @@ struct Pose
     cv::Mat translation;
     cv::Mat camera;
     int coordinateSystemId;
-    bool valid;
 };
 
 struct Dimensions

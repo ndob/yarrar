@@ -92,6 +92,7 @@ MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
     }
 
     return {
+        true, // TODO: Validation
         getId(field),
         rot
     };

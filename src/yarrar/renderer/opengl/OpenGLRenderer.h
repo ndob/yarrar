@@ -40,11 +40,14 @@ public:
 
     void loadModel(const Model& model);
 
-    void draw(const Pose& cameraPose,
+    void draw(const std::vector<Pose>& cameraPoses,
               const Scene& scene,
               const cv::Mat& backgroundImage) override;
 private:
-    void render(const Scene& scene, bool renderBackground, bool renderWorld);
+    void drawCoordinateSystem(const Pose& cameraPose,
+              const Scene& scene,
+              const cv::Mat& backgroundImage);
+    void render(const Scene& scene);
     void loadImage(const cv::Mat& image);
 
     std::map<std::string, std::unique_ptr<GLShader>> m_vertexShaders;

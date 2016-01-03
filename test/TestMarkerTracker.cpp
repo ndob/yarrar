@@ -17,11 +17,14 @@ TEST_CASE("Pose is detected correctly", "[marker_tracker]")
     StaticImageDataProvider provider("data/img/marker.jpg");
     auto dim = provider.getDimensions();
     MarkerTracker<YarrarMarkerParser> tracker(getScaledDownResolution(dim.width, dim.height, TRACKING_RESOLUTION));
-    auto pose = tracker.getPose(provider.getData());
 
+    std::vector<Pose> poses;
+    tracker.getPoses(provider.getData(), poses);
+    REQUIRE(poses.size() == 1);
+
+    auto pose = poses.at(0);
     const double EPSILON = 0.01;
 
-    REQUIRE(pose.valid);
     REQUIRE(pose.coordinateSystemId == 30);
 
     REQUIRE(pose.rotation.at<double>(0) == Approx(2.5418).epsilon(EPSILON));

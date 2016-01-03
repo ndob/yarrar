@@ -28,7 +28,7 @@ class Tracker
 {
 public:
     virtual ~Tracker() {};
-    virtual Pose getPose(const cv::Mat& rawData) = 0;
+    virtual void getPoses(const cv::Mat& rawData, std::vector<Pose>& output) = 0;
 };
 
 class Renderer
@@ -36,7 +36,7 @@ class Renderer
 public:
     virtual ~Renderer() {};
     virtual void loadModel(const Model& model) = 0;
-    virtual void draw(const Pose& cameraPose,
+    virtual void draw(const std::vector<Pose>& cameraPoses,
                       const Scene& scene,
                       const cv::Mat& backgroundImage) = 0;
 };

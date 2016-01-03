@@ -8,6 +8,7 @@ namespace yarrar {
 
 struct MarkerValue
 {
+    bool valid;
     int id;
     Rotation90 zRotation;
 };

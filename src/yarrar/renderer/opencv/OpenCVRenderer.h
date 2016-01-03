@@ -16,7 +16,7 @@ public:
     {
     }
 
-    void draw(const Pose& cameraPose,
+    void draw(const std::vector<Pose>& cameraPoses,
               const Scene& scene,
               const cv::Mat& backgroundImage) override
     {

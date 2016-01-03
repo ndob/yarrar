@@ -71,38 +71,17 @@ OpenGLRenderer::~OpenGLRenderer()
 {
 }
 
-void OpenGLRenderer::render(const Scene& scene, bool renderBackground, bool renderWorld)
+void OpenGLRenderer::render(const Scene& scene)
 {
-    // Clear screen.
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    if(renderBackground)
+    const auto& models = scene.getModels();
+    for(const auto& model : models)
     {
-        // Disable depth buffering for background rendering.
-        glDisable(GL_DEPTH_TEST);
-        m_bgModel->setTexture(m_backgroundTex);
-        m_bgModel->render();
-    }
-
-    if(renderWorld)
-    {
-        // Depth buffering back on for 3D models.
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
-
-        const auto& models = scene.getModels();
-        for(const auto& model : models)
+        auto glModel = m_sceneModels.find(model.name);
+        if(glModel != m_sceneModels.end())
         {
-            auto glModel = m_sceneModels.find(model.name);
-            if(glModel != m_sceneModels.end())
-            {
-                glModel->second->render(model.translation);
-            }
+            glModel->second->render(model.translation);
         }
     }
-
-    m_context->swapBuffers();
 }
 
 void OpenGLRenderer::loadImage(const cv::Mat& imageBgr)
@@ -135,73 +114,96 @@ void OpenGLRenderer::loadModel(const Model &model)
     m_sceneModels[model.name] = std::unique_ptr<SceneModel>(new SceneModel(m_programs["sceneModel"], model.vertices));
 }
 
-void OpenGLRenderer::draw(const Pose& cameraPose,
+void OpenGLRenderer::draw(const std::vector<Pose>& cameraPoses,
                           const Scene& scene,
                           const cv::Mat& backgroundImage)
 {
-    if(cameraPose.valid)
+    // Load fresh background camera image.
+    loadImage(backgroundImage);
+
+    // Clear screen.
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Disable depth buffering for background rendering.
+    glDisable(GL_DEPTH_TEST);
+    m_bgModel->setTexture(m_backgroundTex);
+    m_bgModel->render();
+
+    // Depth buffering back on for 3D models.
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    for(const auto& pose : cameraPoses)
     {
-        // Convert rotation from vector to matrix.
-        cv::Mat rotation;
-        cv::Rodrigues(cameraPose.rotation, rotation);
+        drawCoordinateSystem(pose, scene, backgroundImage);
+    }
 
-        cv::Mat viewMatrix(cv::Mat::zeros(4, 4, CV_32F));
-        for(int row = 0; row < 3; ++row)
+    m_context->swapBuffers();
+}
+
+void OpenGLRenderer::drawCoordinateSystem(const Pose& cameraPose,
+                  const Scene& scene,
+                  const cv::Mat& backgroundImage)
+{
+    // Convert rotation from vector to matrix.
+    cv::Mat rotation;
+    cv::Rodrigues(cameraPose.rotation, rotation);
+
+    cv::Mat viewMatrix(cv::Mat::zeros(4, 4, CV_32F));
+    for(int row = 0; row < 3; ++row)
+    {
+        for(int col = 0; col < 3; ++col)
         {
-            for(int col = 0; col < 3; ++col)
-            {
-                viewMatrix.at<float>(row, col) = (float) rotation.at<double>(row, col);
-            }
-
-            viewMatrix.at<float>(row, 3) = (float) cameraPose.translation.at<double>(row, 0);
+            viewMatrix.at<float>(row, col) = (float) rotation.at<double>(row, col);
         }
-        viewMatrix.at<float>(3, 3) = 1.0f;
 
-        // Invert y and z axes.
-        cv::Mat openCVToOpenGL = cv::Mat::zeros(4, 4, CV_32F);
-        openCVToOpenGL.at<float>(0, 0) = 1.0f;
-        openCVToOpenGL.at<float>(1, 1) = -1.0f;
-        openCVToOpenGL.at<float>(2, 2) = -1.0f;
-        openCVToOpenGL.at<float>(3, 3) = 1.0f;
-        viewMatrix = openCVToOpenGL * viewMatrix;
+        viewMatrix.at<float>(row, 3) = (float) cameraPose.translation.at<double>(row, 0);
+    }
+    viewMatrix.at<float>(3, 3) = 1.0f;
 
-        // OpenCV is row major, OpenGL column major.
-        cv::Mat glViewMatrix = cv::Mat::zeros(4, 4, CV_32F);
-        cv::transpose(viewMatrix, glViewMatrix);
+    // Invert y and z axes.
+    cv::Mat openCVToOpenGL = cv::Mat::zeros(4, 4, CV_32F);
+    openCVToOpenGL.at<float>(0, 0) = 1.0f;
+    openCVToOpenGL.at<float>(1, 1) = -1.0f;
+    openCVToOpenGL.at<float>(2, 2) = -1.0f;
+    openCVToOpenGL.at<float>(3, 3) = 1.0f;
+    viewMatrix = openCVToOpenGL * viewMatrix;
 
-        // Calculate projection matrix.
-        float fx = cameraPose.camera.at<float>(0,0);
-        float cx = cameraPose.camera.at<float>(0,2);
-        float fy = cameraPose.camera.at<float>(1,1);
-        float cy = cameraPose.camera.at<float>(1,2);
-        float far = 10.0f;
-        float near = 0.1f;
-        
-        float projection[4][4];
-        memset(projection, 0, sizeof(float) * 16);
+    // OpenCV is row major, OpenGL column major.
+    cv::Mat glViewMatrix = cv::Mat::zeros(4, 4, CV_32F);
+    cv::transpose(viewMatrix, glViewMatrix);
 
-        projection[0][0] = fx / cx;
-        projection[1][1] = fy / cy;
-        projection[2][2] = (-1.0f * (far + near) / (far - near));
-        projection[3][2] = (-2.0f * far * near) / (far - near);
-        projection[2][3] = -1;
-        projection[3][3] = 0;
+    // Calculate projection matrix.
+    float fx = cameraPose.camera.at<float>(0,0);
+    float cx = cameraPose.camera.at<float>(0,2);
+    float fy = cameraPose.camera.at<float>(1,1);
+    float cy = cameraPose.camera.at<float>(1,2);
+    float far = 10.0f;
+    float near = 0.1f;
 
-        for(const auto& program : m_programs)
+    float projection[4][4];
+    memset(projection, 0, sizeof(float) * 16);
+
+    projection[0][0] = fx / cx;
+    projection[1][1] = fy / cy;
+    projection[2][2] = (-1.0f * (far + near) / (far - near));
+    projection[3][2] = (-2.0f * far * near) / (far - near);
+    projection[2][3] = -1;
+    projection[3][3] = 0;
+
+    for(const auto& program : m_programs)
+    {
+        if(program.second->getUsePerspectiveProjection())
         {
-            if(program.second->getUsePerspectiveProjection())
-            {
-                ScopedUseProgram p_(program.second.get());
-                program.second->setUniformMatrix4fv("camera", (GLfloat*) glViewMatrix.data);
-                // TODO: Projection should only be changed when necessary.
-                program.second->setUniformMatrix4fv("projection", (GLfloat*) projection);
-            }
+            ScopedUseProgram p_(program.second.get());
+            program.second->setUniformMatrix4fv("camera", (GLfloat*) glViewMatrix.data);
+            // TODO: Projection should only be changed when necessary.
+            program.second->setUniformMatrix4fv("projection", (GLfloat*) projection);
         }
     }
 
-    // Load fresh background camera image.
-    loadImage(backgroundImage);
-    render(scene, true, cameraPose.valid);
+    render(scene);
 }
 
 }

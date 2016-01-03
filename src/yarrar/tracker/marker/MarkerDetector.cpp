@@ -21,7 +21,10 @@ enum Hierarchy
 const cv::Scalar RED = cv::Scalar(0, 0, 255);
 const cv::Scalar GREEN = cv::Scalar(0, 255, 0);
 const cv::Scalar BLUE = cv::Scalar(255, 0, 0);
-const bool PNP_USE_EXTRINSIC_GUESS = true;
+
+// FIXME: To use extrinsic guess with multiple poses,
+// a history buffer needs to be implemented.
+const bool PNP_USE_EXTRINSIC_GUESS = false;
 const uint64 RANDOM_SEED = 12345;
 
 }
@@ -174,8 +177,7 @@ Pose MarkerDetector::getPose(const std::vector<cv::Point2f>& contour)
         m_poseRotation,
         m_poseTranslation,
         getCameraMatrix(),
-        -1,
-        true
+        -1
     };
 }
 
