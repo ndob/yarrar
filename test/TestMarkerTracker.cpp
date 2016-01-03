@@ -1,9 +1,9 @@
 #include "yarrar/dataprovider/StaticImageDataProvider.h"
 #include "yarrar/tracker/marker/MarkerTracker.h"
-#include "yarrar/tracker/marker/YarrarMarkerParser.h"
 
 #include "yarrar/Util.h"
 
+#include <json11.hpp>
 #include <catch.hpp>
 
 namespace yarrar_test {
@@ -11,12 +11,20 @@ namespace yarrar_test {
 TEST_CASE("Pose is detected correctly", "[marker_tracker]")
 {
     using namespace yarrar;
+    using namespace json11;
 
-    const int TRACKING_RESOLUTION = 320;
+    Json staticImageConf = Json::object{
+        { "image_path", "data/img/marker.jpg" }
+    };
+    StaticImageDataProvider provider(staticImageConf);
 
-    StaticImageDataProvider provider("data/img/marker.jpg");
     auto dim = provider.getDimensions();
-    MarkerTracker<YarrarMarkerParser> tracker(getScaledDownResolution(dim.width, dim.height, TRACKING_RESOLUTION));
+
+    Json markerTrackerConf = Json::object{
+        { "parser", "yarrar_parser" },
+        { "tracking_resolution_width", 320 }
+    };
+    MarkerTracker tracker(dim.width, dim.height, markerTrackerConf);
 
     std::vector<Pose> poses;
     tracker.getPoses(provider.getData(), poses);

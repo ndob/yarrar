@@ -2,9 +2,10 @@
 
 #include "Types.h"
 
+#include <opencv2/core/types.hpp>
+#include <json11.hpp>
 #include <algorithm>
 #include <iterator>
-#include <opencv2/core/types.hpp>
 
 namespace yarrar {
 
@@ -14,11 +15,27 @@ bool contains(const Container& c, const Value& v)
     return std::find(std::begin(c), std::end(c), v) != std::end(c);
 }
 
+template<typename... Args>
+std::string format(const std::string& format, Args... args)
+{
+    int neededSize = std::snprintf(nullptr, 0, format.c_str(), args...);
+
+    // If there was an error return the original string.
+    if(neededSize <= 0)
+        return format;
+
+    neededSize += 1;
+    std::vector<char> buf(static_cast<size_t> (neededSize));
+    std::snprintf(&buf.front(), static_cast<size_t> (neededSize), format.c_str(), args...);
+    return std::string(&buf.front());
+}
 
 cv::Size getScaledDownResolution(const int width,
                                  const int height,
                                  const int preferredWidth);
 
 void rotate(const cv::Mat& src, cv::Mat& dst, const yarrar::Rotation90& rotation);
+
+json11::Json loadJson(const std::string& filePath);
 
 }

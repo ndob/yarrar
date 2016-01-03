@@ -10,9 +10,10 @@ namespace yarrar
 class WebcamDataProvider: public DataProvider
 {
 public:
-    WebcamDataProvider();
+    WebcamDataProvider(const json11::Json& config);
     cv::Mat getData() override;
     Dimensions getDimensions() override;
+    DatatypeFlags provides() override;
 
 private:
     cv::VideoCapture m_videoCapture;

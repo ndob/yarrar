@@ -27,5 +27,12 @@ struct Dimensions
 
 enum class Rotation90 { DEG_0, DEG_90, DEG_180, DEG_270 };
 
+enum DatatypeFlags
+{
+    EMPTY = 0x0,
+    RGB_CAMERA_FLAG = 0x1,
+    DEPTH_CAMERA_FLAG = 0x2
+};
+
 }
 

@@ -31,7 +31,7 @@ struct ShaderDef
 class OpenGLRenderer: public Renderer
 {
 public:
-    OpenGLRenderer(int width, int height);
+    OpenGLRenderer(int width, int height, const json11::Json& config);
     ~OpenGLRenderer();
     OpenGLRenderer(const OpenGLRenderer&) = delete;
     OpenGLRenderer operator=(const OpenGLRenderer&) = delete;

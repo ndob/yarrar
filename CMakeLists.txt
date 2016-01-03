@@ -32,6 +32,7 @@ endif()
 
 find_package(OpenCV REQUIRED)
 
+add_subdirectory(external/json11)
 add_subdirectory(src)
 
 if(NOT UNITY_PLUGIN AND NOT ANDROID)

@@ -10,12 +10,12 @@ namespace yarrar
 class StaticImageDataProvider: public DataProvider
 {
 public:
-    StaticImageDataProvider(const std::string& imagePath);
+    StaticImageDataProvider(const json11::Json& config);
     cv::Mat getData() override;
     Dimensions getDimensions() override;
+    DatatypeFlags provides() override;
 
 private:
-    std::string m_imagePath;
     cv::Mat m_cachedImage;
 };
 

@@ -1,6 +1,7 @@
 #include "Util.h"
 
 #include <opencv2/core.hpp>
+#include <fstream>
 
 namespace yarrar {
 
@@ -46,6 +47,30 @@ void rotate(const cv::Mat& src, cv::Mat& dst, const yarrar::Rotation90& rotation
             if(src.data != dst.data) src.copyTo(dst);
             break;
     }
+}
+
+json11::Json loadJson(const std::string& filePath)
+{
+    std::ifstream file;
+    file.open(filePath, std::ios::in | std::ios::binary);
+    if(!file.is_open())
+    {
+        throw std::runtime_error(std::string("loadJson: failed to open file: ") + filePath);
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    std::string jsonStr = buffer.str();
+
+    std::string err;
+    json11::Json ret = json11::Json::parse(jsonStr, err);
+
+    if(!err.empty())
+    {
+        throw std::runtime_error(std::string("loadJson: parse error: ") + err);
+    }
+
+    return ret.object_items();
 }
 
 }

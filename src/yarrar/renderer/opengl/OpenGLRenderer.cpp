@@ -40,7 +40,8 @@ namespace {
 
 namespace yarrar {
 
-OpenGLRenderer::OpenGLRenderer(int width, int height):
+OpenGLRenderer::OpenGLRenderer(int width, int height, const json11::Json& config):
+    Renderer(config),
     m_context(new GLContext(width, height)),
     m_backgroundTex(0)
 {

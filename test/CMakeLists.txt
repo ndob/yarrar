@@ -6,7 +6,8 @@ include_directories(
     "${PROJECT_SOURCE_DIR}/external/catch/"
     "${PROJECT_SOURCE_DIR}/external/opencv/build/include"
     "${PROJECT_SOURCE_DIR}/external/glfw/include"
-    "${PROJECT_SOURCE_DIR}/external/glew/include")
+    "${PROJECT_SOURCE_DIR}/external/glew/include"
+    "${PROJECT_SOURCE_DIR}/external/json11")
 
 set(SOURCE_FILES
         TestMain.cpp
@@ -16,7 +17,7 @@ set(SOURCE_FILES
         TestUtil.cpp)
 
 add_executable(testrunner ${SOURCE_FILES})
-target_link_libraries(testrunner yarrar ${OpenCV_LIBS})
+target_link_libraries(testrunner yarrar json11 ${OpenCV_LIBS})
 
 add_test(
     NAME TestRunner

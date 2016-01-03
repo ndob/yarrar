@@ -3,7 +3,8 @@
 namespace yarrar
 {
 
-WebcamDataProvider::WebcamDataProvider():
+WebcamDataProvider::WebcamDataProvider(const json11::Json& config):
+    DataProvider(config),
     m_videoCapture(0)
 {
     if(!m_videoCapture.isOpened())
@@ -27,6 +28,11 @@ Dimensions WebcamDataProvider::getDimensions()
         data.cols,
         data.rows
     };
+}
+
+DatatypeFlags WebcamDataProvider::provides()
+{
+    return RGB_CAMERA_FLAG;
 }
 
 }

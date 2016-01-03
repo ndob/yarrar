@@ -1,17 +1,21 @@
 #include "yarrar/Pipeline.h"
-#include "yarrar/dataprovider/WebcamDataProvider.h"
-#include "yarrar/tracker/marker/MarkerTracker.h"
-#include "yarrar/tracker/marker/YarrarMarkerParser.h"
-#include "yarrar/renderer/opengl/OpenGLRenderer.h"
+
 
 int main(int argc, char** argv)
 {
     using namespace yarrar;
 
-    Pipeline p;
-    p.addDataProvider<WebcamDataProvider>();
-    p.addTracker<MarkerTracker<YarrarMarkerParser>>();
-    p.addRenderer<OpenGLRenderer>();
+    std::string configFile = "../../pipeline.json";
+    if(argc != 2)
+    {
+        std::cout << "no pipeline configuration file specified. using default" << std::endl;
+    }
+    else
+    {
+        configFile = argv[1];
+    }
+
+    Pipeline p(configFile);
 
     Model cube;
     cube.name = "cube";
