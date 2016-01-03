@@ -20,8 +20,31 @@ cd platform/android
 ```
 
 Example-app:
-1. First build AAR (gets automatically copied to example/android/app/libs)
-2. Build with gradle or Android studio
+* First build AAR (see previous instructions). It gets automatically copied to example/android/app/libs.
+* Open and build example/android with gradle or Android studio
 
-### Unity (windows)
+### Unity (currently only works in windows)
 cmake .. -DUNITY_PLUGIN=ON
+
+### Windows
+* Create Visual Studio solution with:
+```
+cmake ..
+```
+
+### Linux
+```
+mkdir build
+cd build
+cmake ..
+make
+```
+
+## Running tests
+```
+mkdir build
+cd build
+cmake ..
+make
+make test ARGS="-V"
+```
