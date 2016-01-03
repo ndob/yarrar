@@ -16,8 +16,9 @@ yarrar::Pipeline* s_pipe;
 
 extern "C" {
 
-void Java_com_ndob_yarrar_YarrarActivity_initYarrar(JNIEnv*, jobject)
+void Java_com_ndob_yarrar_YarrarActivity_initYarrar(JNIEnv*, jobject, jint width, jint height)
 {
+    yarrar::AndroidImageProvider::injectCameraSize(static_cast<int> (width), static_cast<int> (height));
     s_pipe = new yarrar::Pipeline(PIPELINE_CONFIG_PATH);
 }
 

@@ -2,6 +2,8 @@
 
 namespace yarrar {
 
+int AndroidImageProvider::s_width = 0;
+int AndroidImageProvider::s_height = 0;
 cv::Mat AndroidImageProvider::s_image;
 std::mutex AndroidImageProvider::s_imageMutex;
 
@@ -18,9 +20,8 @@ cv::Mat AndroidImageProvider::getData()
 
 Dimensions AndroidImageProvider::getDimensions()
 {
-    // TODO: Remove hard coding.
     return {
-        960, 720
+        s_width, s_height
     };
 }
 
@@ -33,6 +34,12 @@ void AndroidImageProvider::injectCameraFrame(const cv::Mat& rgb)
 {
     std::lock_guard<std::mutex> m_(s_imageMutex);
     s_image = rgb;
+}
+
+void AndroidImageProvider::injectCameraSize(const int width, const int height)
+{
+    s_width = width;
+    s_height = height;
 }
 
 }

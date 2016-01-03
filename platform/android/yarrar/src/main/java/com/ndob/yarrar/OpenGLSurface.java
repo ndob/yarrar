@@ -18,13 +18,12 @@ public class OpenGLSurface extends GLSurfaceView {
 
         @Override
         public void onSurfaceCreated(GL10 unused, EGLConfig config) {
-            mMain.initYarrar();
-            mMain.onYarrarInitialized();
+            mMain.onOpenGLSurfaceCreated();
         }
 
         @Override
         public void onDrawFrame(GL10 unused) {
-            mMain.run();
+            mMain.onOpenGLDrawFrame();
         }
 
         @Override
