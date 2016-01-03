@@ -58,8 +58,8 @@ TEST_CASE("Image is rotated correctly", "[util]")
         yarrar::rotate(src, dst, yarrar::Rotation90::DEG_0);
 
         Grid grid{{
-            {RED, GREEN},
-            {BLUE, WHITE}
+            {{RED, GREEN}},
+            {{BLUE, WHITE}}
         }};
 
         validateGrid(dst, grid);
@@ -68,8 +68,8 @@ TEST_CASE("Image is rotated correctly", "[util]")
     {
         yarrar::rotate(src, dst, yarrar::Rotation90::DEG_90);
         Grid grid{{
-            {BLUE, RED},
-            {WHITE, GREEN}
+            {{BLUE, RED}},
+            {{WHITE, GREEN}}
         }};
 
         validateGrid(dst, grid);
@@ -78,8 +78,8 @@ TEST_CASE("Image is rotated correctly", "[util]")
     {
         yarrar::rotate(src, dst, yarrar::Rotation90::DEG_180);
         Grid grid{{
-            {WHITE, BLUE},
-            {GREEN, RED}
+            {{WHITE, BLUE}},
+            {{GREEN, RED}}
         }};
 
         validateGrid(dst, grid);
@@ -88,8 +88,8 @@ TEST_CASE("Image is rotated correctly", "[util]")
     {
         yarrar::rotate(src, dst, yarrar::Rotation90::DEG_270);
         Grid grid{{
-            {GREEN, WHITE},
-            {RED, BLUE}
+            {{GREEN, WHITE}},
+            {{RED, BLUE}}
         }};
 
         validateGrid(dst, grid);
