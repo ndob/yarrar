@@ -5,50 +5,27 @@ endif()
 if(UNITY_PLUGIN)
     set(SOURCE_FILES
         yarrar/tracker/marker/MarkerDetector.cpp
-        yarrar/tracker/marker/MarkerDetector.h
         yarrar/tracker/marker/YarrarMarkerParser.cpp
-        yarrar/tracker/marker/YarrarMarkerParser.h
         yarrar/tracker/marker/MarkerTracker.cpp
-        yarrar/tracker/marker/MarkerTracker.h
-        yarrar/Types.h
-        yarrar/Util.h
         yarrar/Util.cpp
         unity/UnityNativePlugin.cpp)
 else()
     set(SOURCE_FILES
         yarrar/tracker/marker/MarkerDetector.cpp
-        yarrar/tracker/marker/MarkerDetector.h
         yarrar/tracker/marker/YarrarMarkerParser.cpp
-        yarrar/tracker/marker/YarrarMarkerParser.h
         yarrar/tracker/marker/MarkerTracker.cpp
-        yarrar/tracker/marker/MarkerTracker.h
         yarrar/renderer/opengl/OpenGLRenderer.cpp
-        yarrar/renderer/opengl/OpenGLRenderer.h
         yarrar/Pipeline.cpp
-        yarrar/Pipeline.h
         yarrar/dataprovider/WebcamDataProvider.cpp
-        yarrar/dataprovider/WebcamDataProvider.h
         yarrar/renderer/opengl/GLProgram.cpp
-        yarrar/renderer/opengl/GLProgram.h
         yarrar/renderer/opengl/GLShader.cpp
-        yarrar/renderer/opengl/GLShader.h
         yarrar/renderer/opengl/BackgroundModel.cpp
-        yarrar/renderer/opengl/BackgroundModel.h
         yarrar/renderer/opengl/SceneModel.cpp
-        yarrar/renderer/opengl/SceneModel.h
         yarrar/dataprovider/StaticImageDataProvider.cpp
-        yarrar/dataprovider/StaticImageDataProvider.h
         yarrar/dataprovider/AndroidImageProvider.cpp
-        yarrar/dataprovider/AndroidImageProvider.h
-        yarrar/renderer/dummy/DummyRenderer.h
-        yarrar/renderer/opencv/OpenCVRenderer.h
         yarrar/renderer/opengl/GLContext.cpp
-        yarrar/renderer/opengl/GLContext.h
         yarrar/Scene.cpp
-        yarrar/Scene.h
-        yarrar/Util.h
-        yarrar/Util.cpp
-        yarrar/Types.h)
+        yarrar/Util.cpp)
 
     if(ANDROID)
         set(SOURCE_FILES
