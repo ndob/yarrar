@@ -4,6 +4,8 @@
 #include "dataprovider/AndroidImageProvider.h"
 #include "tracker/marker/MarkerTracker.h"
 #include "renderer/opengl/OpenGLRenderer.h"
+#include "renderer/opencv/OpenCVRenderer.h"
+#include "renderer/dummy/DummyRenderer.h"
 
 #include <algorithm>
 
@@ -81,6 +83,14 @@ Pipeline::Pipeline(const std::string& configFile)
         if(type == "opengl")
         {
             addRenderer<OpenGLRenderer>(renderer["config"]);
+        }
+        else if(type == "opencv")
+        {
+            addRenderer<OpenCVRenderer>(renderer["config"]);
+        }
+        else if(type == "dummy")
+        {
+            addRenderer<DummyRenderer>(renderer["config"]);
         }
     }
 

@@ -9,7 +9,9 @@ namespace yarrar {
 class DummyRenderer : public Renderer
 {
 public:
-    DummyRenderer(int width, int height) {};
+    DummyRenderer(int width, int height, const json11::Json& config):
+        Renderer(config)
+    {};
 
     void loadModel(const Model& model) override
     {
@@ -25,7 +27,6 @@ public:
             std::cout << "[DUMMY] translation: " << pose.translation << std::endl;
             std::cout << "[DUMMY] rotation: " << pose.rotation << std::endl;
             std::cout << "[DUMMY] id:" << pose.coordinateSystemId << std::endl;
-            std::cout << "[DUMMY] valid:" << pose.valid << std::endl;
         }
     }
 };

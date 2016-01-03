@@ -7,7 +7,8 @@ namespace yarrar {
 class OpenCVRenderer : public Renderer
 {
 public:
-    OpenCVRenderer(int width, int height)
+    OpenCVRenderer(int width, int height, const json11::Json& config):
+        Renderer(config)
     {
         cv::namedWindow("OpenCVRenderer", 1);
     };
