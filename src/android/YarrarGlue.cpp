@@ -76,7 +76,6 @@ void Java_com_ndob_yarrar_YarrarActivity_run(JNIEnv*, jobject)
 void Java_com_ndob_yarrar_YarrarActivity_injectCameraFrame(JNIEnv* env, jobject, jint width, jint height, jbyteArray cameraData)
 {
     jbyte* buffer = env->GetByteArrayElements(cameraData, nullptr);
-    jsize len = env->GetArrayLength(cameraData);
 
     cv::Mat yuv(height + (height / 2), width, CV_8UC1, buffer);
     cv::Mat rgba(height, width, CV_8UC3);
