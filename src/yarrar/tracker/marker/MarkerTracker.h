@@ -54,12 +54,9 @@ public:
             // Check if marker data indicates that the marker is rotated around z-axis.
             if(value.zRotation != Rotation90::DEG_0)
             {
-                double alpha;
+                double alpha = 0.0;
                 switch(value.zRotation)
                 {
-                    case Rotation90::DEG_0:
-                        alpha = 0;
-                        break;
                     case Rotation90::DEG_90:
                         alpha = -M_PI_2;
                         break;
@@ -68,6 +65,8 @@ public:
                         break;
                     case Rotation90::DEG_270:
                         alpha = -M_PI - M_PI_2;
+                        break;
+                    default:
                         break;
                 }
 
