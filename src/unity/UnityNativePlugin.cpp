@@ -16,6 +16,7 @@
 
 namespace {
 
+const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
 std::string returnStringBuffer;
 
 void storePoseToReturnBuffer(const yarrar::Pose& pose)

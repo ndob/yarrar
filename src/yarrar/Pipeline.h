@@ -8,12 +8,6 @@
 #include <vector>
 #include <opencv2/core/mat.hpp>
 
-namespace {
-
-const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
-
-}
-
 namespace yarrar {
 
 class DataProvider
@@ -78,6 +72,8 @@ public:
     void run() const;
 
 private:
+    static const int PREFERRED_TRACKING_RESOLUTION_WIDTH = 320;
+
     std::vector<std::unique_ptr<DataProvider>> m_dataProviders;
     std::vector<std::unique_ptr<Tracker>> m_trackers;
     std::vector<std::unique_ptr<Renderer>> m_renderers;
