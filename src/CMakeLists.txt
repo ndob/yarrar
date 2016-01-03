@@ -38,6 +38,8 @@ else()
         yarrar/renderer/opengl/SceneModel.h
         yarrar/dataprovider/StaticImageDataProvider.cpp
         yarrar/dataprovider/StaticImageDataProvider.h
+        yarrar/dataprovider/AndroidImageProvider.cpp
+        yarrar/dataprovider/AndroidImageProvider.h
         yarrar/renderer/dummy/DummyRenderer.h
         yarrar/renderer/opencv/OpenCVRenderer.h
         yarrar/renderer/opengl/GLContext.cpp

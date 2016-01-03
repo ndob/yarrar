@@ -6,6 +6,7 @@
 #include <json11.hpp>
 #include <algorithm>
 #include <iterator>
+#include <cstdio>
 
 namespace yarrar {
 
@@ -18,7 +19,7 @@ bool contains(const Container& c, const Value& v)
 template<typename... Args>
 std::string format(const std::string& format, Args... args)
 {
-    int neededSize = std::snprintf(nullptr, 0, format.c_str(), args...);
+    int neededSize = snprintf(nullptr, 0, format.c_str(), args...);
 
     // If there was an error return the original string.
     if(neededSize <= 0)
@@ -26,7 +27,7 @@ std::string format(const std::string& format, Args... args)
 
     neededSize += 1;
     std::vector<char> buf(static_cast<size_t> (neededSize));
-    std::snprintf(&buf.front(), static_cast<size_t> (neededSize), format.c_str(), args...);
+    snprintf(&buf.front(), static_cast<size_t> (neededSize), format.c_str(), args...);
     return std::string(&buf.front());
 }
 
