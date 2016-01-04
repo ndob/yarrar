@@ -25,10 +25,13 @@ std::string format(const std::string& format, Args... args)
     if(neededSize <= 0)
         return format;
 
+    // Accommodate \0
     neededSize += 1;
-    std::vector<char> buf(static_cast<size_t> (neededSize));
+
+    std::string buf;
+    buf.resize(static_cast<size_t> (neededSize));
     snprintf(&buf.front(), static_cast<size_t> (neededSize), format.c_str(), args...);
-    return std::string(&buf.front());
+    return buf;
 }
 
 cv::Size getScaledDownResolution(const int width,
