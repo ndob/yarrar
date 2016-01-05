@@ -30,7 +30,13 @@ else()
     if(ANDROID)
         set(SOURCE_FILES
             ${SOURCE_FILES}
-            android/YarrarGlue.cpp)
+            android/YarrarGlue.cpp
+            android/AndroidServices.cpp
+            yarrar/io/FileSystem_android.cpp)
+    else()
+        set(SOURCE_FILES
+            ${SOURCE_FILES}
+            yarrar/io/FileSystem_std.cpp)
     endif()
 
 endif()
@@ -46,7 +52,7 @@ if(ANDROID)
         "${PROJECT_SOURCE_DIR}/src"
         "${PROJECT_SOURCE_DIR}/external/json11")
 
-    target_link_libraries(yarrar json11 ${OpenCV_LIBS} GLESv2)    
+    target_link_libraries(yarrar json11 ${OpenCV_LIBS} GLESv2 android)
 elseif(UNITY_PLUGIN)
     add_definitions(-DYARRAR_OPENGL_CONTEXT)
 

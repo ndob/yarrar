@@ -1,3 +1,4 @@
+#include "AndroidServices.h"
 #include "yarrar/Pipeline.h"
 #include "yarrar/dataprovider/AndroidImageProvider.h"
 #include "yarrar/tracker/marker/MarkerTracker.h"
