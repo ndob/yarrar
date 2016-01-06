@@ -1,5 +1,7 @@
 #include "AndroidServices.h"
 
+#include <android/log.h>
+
 namespace {
 
 JNIEnv* s_env = nullptr;
@@ -20,6 +22,11 @@ bool initialize(JNIEnv* env, jobject assetManager)
 AAssetManager* getAssetManager()
 {
     return s_assetManager;
+}
+
+void log(const std::string& message)
+{
+    __android_log_print(ANDROID_LOG_VERBOSE, "YARRAR", message.c_str());
 }
 
 }
