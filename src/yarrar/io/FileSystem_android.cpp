@@ -5,10 +5,12 @@
 #include <fstream>
 #include <sstream>
 
+#include <android/log.h>
+
 namespace yarrar {
 namespace filesystem {
 
-void read(const std::string& relativePath, std::string& toBuffer)
+void readFile(const std::string& relativePath, std::string& toBuffer)
 {
     auto assetManager = yarrar::android::getAssetManager();
     AAsset* file = AAssetManager_open(assetManager, relativePath.c_str(), AASSET_MODE_BUFFER);

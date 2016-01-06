@@ -1,9 +1,8 @@
 #include "GLShader.h"
 #include "OpenGLRenderer.h"
+#include "io/FileSystem.h"
 
-#include <fstream>
 #include <stdexcept>
-#include <sstream>
 #include <vector>
 
 namespace yarrar {
@@ -11,23 +10,15 @@ namespace yarrar {
 GLShader::GLShader(const ShaderDef& def, GLenum shaderType):
     m_object(0)
 {
-    std::ifstream file;
-    file.open(def.path.c_str(), std::ios::in | std::ios::binary);
-    if(!file.is_open())
-    {
-        throw std::runtime_error(std::string("Failed to open file: ") + def.path);
-    }
-
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-
     m_object = glCreateShader(shaderType);
     if(m_object == 0)
     {
         throw std::runtime_error("glCreateShader failed");
     }
 
-    std::string code = buffer.str();
+    std::string code;
+    filesystem::readFile(def.path, code);
+
     const GLchar* strings[] = { code.c_str() };
     glShaderSource(m_object, 1, strings, nullptr);
     glCompileShader(m_object);

@@ -1,4 +1,5 @@
 #include "Util.h"
+#include "io/FileSystem.h"
 
 #include <opencv2/core.hpp>
 #include <fstream>
@@ -51,16 +52,8 @@ void rotate(const cv::Mat& src, cv::Mat& dst, const yarrar::Rotation90& rotation
 
 json11::Json loadJson(const std::string& filePath)
 {
-    std::ifstream file;
-    file.open(filePath, std::ios::in | std::ios::binary);
-    if(!file.is_open())
-    {
-        throw std::runtime_error(std::string("loadJson: failed to open file: ") + filePath);
-    }
-
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    std::string jsonStr = buffer.str();
+    std::string jsonStr;
+    filesystem::readFile(filePath, jsonStr);
 
     std::string err;
     json11::Json ret = json11::Json::parse(jsonStr, err);

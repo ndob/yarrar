@@ -14,7 +14,7 @@ bool initialize(JNIEnv* env, jobject assetManager)
 {
     s_env = env;
     s_assetManager = AAssetManager_fromJava(env, assetManager);
-    return true;
+    return s_env != nullptr && s_assetManager != nullptr;
 }
 
 AAssetManager* getAssetManager()

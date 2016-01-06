@@ -5,7 +5,7 @@ int main(int argc, char** argv)
 {
     using namespace yarrar;
 
-    std::string configFile = "../../pipeline.json";
+    std::string configFile = "pipeline.json";
     if(argc != 2)
     {
         std::cout << "no pipeline configuration file specified. using default" << std::endl;

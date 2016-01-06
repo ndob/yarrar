@@ -1,5 +1,6 @@
 package com.ndob.yarrar;
 
+import android.content.res.AssetManager;
 import android.hardware.Camera;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,10 +10,13 @@ import android.widget.LinearLayout;
 public class YarrarActivity extends ActionBarActivity implements Camera.PreviewCallback {
     private static final String TAG = "YarrarActivity";
     private Camera mCamera;
+    private AssetManager mAssetManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAssetManager = getResources().getAssets();
 
         mCamera = getCameraInstance();
         mCamera.setPreviewCallback(this);
@@ -57,7 +61,7 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
 
     public void onOpenGLSurfaceCreated() {
         Camera.Size size = mCamera.getParameters().getPreviewSize();
-        initYarrar(size.width, size.height);
+        initYarrar(size.width, size.height, mAssetManager);
         onYarrarInitialized();
     }
 
@@ -72,7 +76,7 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
     public void onYarrarInitialized() {
     }
 
-    private native void initYarrar(int width, int height);
+    private native void initYarrar(int width, int height, AssetManager assetManager);
     private native void deinitYarrar();
     private native void run();
     private native void injectCameraFrame(int width, int height, byte[] cameraData);

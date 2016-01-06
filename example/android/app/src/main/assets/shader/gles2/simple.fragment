@@ -1,0 +1,8 @@
+#version 100
+
+varying lowp vec3 randomColor;
+
+void main()
+{
+    gl_FragColor = vec4(randomColor, 1);
+}

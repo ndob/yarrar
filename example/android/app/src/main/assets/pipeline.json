@@ -1,0 +1,34 @@
+{
+    "pipeline":
+    {
+        "dataproviders":
+        [
+            {
+                "type": "android_image",
+                "config":
+                {
+                }
+            }
+        ],
+        "trackers":
+        [
+            {
+                "type": "marker",
+                "config":
+                {
+                    "parser": "yarrar_parser",
+                    "tracking_resolution_width": 320
+                }
+            }
+        ],
+        "renderers":
+        [
+            {
+                "type": "opengl",
+                "config": 
+                {
+                }
+            }
+        ]
+    }
+}

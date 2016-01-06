@@ -55,5 +55,5 @@ script:
   - mkdir android_build
   - cd android_build
   - export ANDROID_NDK_ROOT=$TRAVIS_BUILD_DIR/external/android-ndk-r10e
-  - cmake -DCMAKE_TOOLCHAIN_FILE=../external/android-cmake/android.toolchain.cmake -DANDROID_NDK=$ANDROID_NDK_ROOT -DCMAKE_BUILD_TYPE=Release -DANDROID_ABI="armeabi-v7a with NEON" -DBUILD_SHARED_LIBS=ON ..
+  - cmake -DCMAKE_TOOLCHAIN_FILE=../external/android-cmake/android.toolchain.cmake -DANDROID_NDK=$ANDROID_NDK_ROOT -DCMAKE_BUILD_TYPE=Release -DANDROID_ABI="armeabi-v7a with NEON" -DBUILD_SHARED_LIBS=ON -DANDROID_NATIVE_API_LEVEL=9 ..
   - make
