@@ -55,7 +55,7 @@ TEST_CASE("Image is rotated correctly", "[util]")
 
     SECTION("0 degrees")
     {
-        yarrar::rotate(src, dst, yarrar::Rotation90::DEG_0);
+        yarrar::util::rotate(src, dst, yarrar::Rotation90::DEG_0);
 
         Grid grid{{
             {{RED, GREEN}},
@@ -66,7 +66,7 @@ TEST_CASE("Image is rotated correctly", "[util]")
     }
     SECTION("90 degrees")
     {
-        yarrar::rotate(src, dst, yarrar::Rotation90::DEG_90);
+        yarrar::util::rotate(src, dst, yarrar::Rotation90::DEG_90);
         Grid grid{{
             {{BLUE, RED}},
             {{WHITE, GREEN}}
@@ -76,7 +76,7 @@ TEST_CASE("Image is rotated correctly", "[util]")
     }
     SECTION("180 degrees")
     {
-        yarrar::rotate(src, dst, yarrar::Rotation90::DEG_180);
+        yarrar::util::rotate(src, dst, yarrar::Rotation90::DEG_180);
         Grid grid{{
             {{WHITE, BLUE}},
             {{GREEN, RED}}
@@ -86,7 +86,7 @@ TEST_CASE("Image is rotated correctly", "[util]")
     }
     SECTION("270 degrees")
     {
-        yarrar::rotate(src, dst, yarrar::Rotation90::DEG_270);
+        yarrar::util::rotate(src, dst, yarrar::Rotation90::DEG_270);
         Grid grid{{
             {{GREEN, WHITE}},
             {{RED, BLUE}}
