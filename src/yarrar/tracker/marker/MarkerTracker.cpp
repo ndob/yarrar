@@ -21,7 +21,7 @@ MarkerTracker::MarkerTracker(int width, int height, const json11::Json& config):
     }
 
     const int preferredTrackingResolutionWidth = config["tracking_resolution_width"].int_value();
-    m_trackingResolution = getScaledDownResolution(width,
+    m_trackingResolution = util::getScaledDownResolution(width,
                                                    height,
                                                    preferredTrackingResolutionWidth);
 

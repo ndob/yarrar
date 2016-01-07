@@ -88,11 +88,11 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
     for(size_t i = 0; i < validRectangles.size(); ++i)
     {
         // Do not try to find markers inside of already used inner/outer rectangles.
-        if(contains(usedIndices, validHierarchyIndices[i])) continue;
+        if(util::contains(usedIndices, validHierarchyIndices[i])) continue;
 
         // Prevent full marker nesting. 
         // ie. The whole marker inside some previous inner rectangle.
-        if(contains(usedIndices,
+        if(util::contains(usedIndices,
                     hierarchy[validHierarchyIndices[i]][HIERARCHY_PARENT]))
         {
             continue;

@@ -9,6 +9,7 @@
 #include <cstdio>
 
 namespace yarrar {
+namespace util {
 
 template<typename Container, typename Value>
 bool contains(const Container& c, const Value& v) 
@@ -42,4 +43,5 @@ void rotate(const cv::Mat& src, cv::Mat& dst, const yarrar::Rotation90& rotation
 
 json11::Json loadJson(const std::string& filePath);
 
+}
 }

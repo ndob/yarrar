@@ -5,6 +5,7 @@
 #include <fstream>
 
 namespace yarrar {
+namespace util {
 
 cv::Size getScaledDownResolution(const int width,
                                  const int height,
@@ -66,4 +67,5 @@ json11::Json loadJson(const std::string& filePath)
     return ret.object_items();
 }
 
+}
 }

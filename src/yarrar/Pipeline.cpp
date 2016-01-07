@@ -32,7 +32,7 @@ namespace yarrar {
 
 Pipeline::Pipeline(const std::string& configFile)
 {
-    auto config = loadJson(configFile);
+    auto config = util::loadJson(configFile);
 
     std::string err;
     if(!config["pipeline"].has_shape(TOP_LEVEL_SHAPE, err))
@@ -139,7 +139,7 @@ void Pipeline::validate()
 
     if(trackerDependencies != provided)
     {
-        throw std::runtime_error(format("Pipeline: Dependency mismatch. needed %#x, got %#x.", trackerDependencies, provided));
+        throw std::runtime_error(util::format("Pipeline: Dependency mismatch. needed %#x, got %#x.", trackerDependencies, provided));
     }
 
     const auto rgbProviders = std::count_if(m_dataProviders.begin(), m_dataProviders.end(),
