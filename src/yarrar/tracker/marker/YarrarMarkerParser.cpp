@@ -31,10 +31,10 @@ Rotation90 getZRotation(const cv::Mat& field)
     // The rectangle in upper left corner is used to
     // indicate the rotation.
 
-    if(field.at<uchar>(1, 1) == 1) return Rotation90::DEG_0;
-    else if(field.at<int8_t>(1, 6) == 1) return Rotation90::DEG_90;
-    else if(field.at<int8_t>(6, 6) == 1) return Rotation90::DEG_180;
-    else if(field.at<int8_t>(6, 1) == 1) return Rotation90::DEG_270;
+    if(field.at<uint8_t>(1, 1) == 1) return Rotation90::DEG_0;
+    else if(field.at<uint8_t>(1, 6) == 1) return Rotation90::DEG_90;
+    else if(field.at<uint8_t>(6, 6) == 1) return Rotation90::DEG_180;
+    else if(field.at<uint8_t>(6, 1) == 1) return Rotation90::DEG_270;
 
     return Rotation90::DEG_0;
 }
@@ -55,7 +55,6 @@ MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
     const int dimension = FIELD_SIZE;
     const int stepSize = image.cols / dimension;
     const int start = stepSize / 2;
-    //DataField field;
 
     cv::Mat field = cv::Mat::zeros(dimension, dimension, CV_8S);
 
@@ -66,7 +65,7 @@ MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
             const int col = start + i * stepSize;
             const int row = start + j * stepSize;
             const bool isBlack = binary.at<uint8_t>(col, row) > 0;
-            field.at<int8_t>(i, j) = isBlack ? 1 : 0;
+            field.at<uint8_t>(i, j) = isBlack ? 1 : 0;
         }
     }
 
