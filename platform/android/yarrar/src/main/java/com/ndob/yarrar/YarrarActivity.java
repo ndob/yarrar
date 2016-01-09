@@ -1,5 +1,6 @@
 package com.ndob.yarrar;
 
+import android.app.AlertDialog;
 import android.content.res.AssetManager;
 import android.hardware.Camera;
 import android.support.v7.app.ActionBarActivity;
@@ -16,14 +17,19 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mAssetManager = getResources().getAssets();
-
-        mCamera = getCameraInstance();
-        mCamera.setPreviewCallback(this);
-        mCamera.startPreview();
-
         System.loadLibrary("yarrar");
         Log.i(TAG, "Yarrar glue loaded.");
+
+        mAssetManager = getResources().getAssets();
+        mCamera = getCameraInstance();
+        if(mCamera == null)
+        {
+            showError("Can't open camera.");
+            return;
+        }
+
+        mCamera.setPreviewCallback(this);
+        mCamera.startPreview();
     }
 
     @Override
@@ -74,6 +80,14 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
     }
 
     public void onYarrarInitialized() {
+    }
+
+    private void showError(String msg) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Error");
+        alert.setMessage(msg);
+        alert.setPositiveButton("OK", null);
+        alert.show();
     }
 
     private native void initYarrar(int width, int height, AssetManager assetManager);
