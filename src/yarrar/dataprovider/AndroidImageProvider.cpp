@@ -38,8 +38,10 @@ void AndroidImageProvider::injectCameraFrame(const cv::Mat& rgb)
 
 void AndroidImageProvider::injectCameraSize(const int width, const int height)
 {
-    s_width = width;
-    s_height = height;
+    // FIXME: Switch dimensions as a workaround 
+    // for getting portrait orientation to work correctly.
+    s_width = height;
+    s_height = width;
 }
 
 }
