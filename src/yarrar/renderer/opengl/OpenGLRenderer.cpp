@@ -176,7 +176,7 @@ void OpenGLRenderer::drawCoordinateSystem(const Pose& cameraPose,
     float cx = cameraPose.camera.at<float>(0,2);
     float fy = cameraPose.camera.at<float>(1,1);
     float cy = cameraPose.camera.at<float>(1,2);
-    float far = 10.0f;
+    float far = 1000.0f;
     float near = 0.1f;
 
     float projection[4][4];
