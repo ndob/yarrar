@@ -54,4 +54,31 @@ TEST_CASE("Pose is detected correctly", "[marker_tracker]")
     REQUIRE(pose.camera.at<float>(2, 2) == Approx(1.0f).epsilon(EPSILON));
 }
 
+TEST_CASE("Detect multiple poses from same frame", "[marker_tracker]")
+{
+    using namespace yarrar;
+    using namespace json11;
+
+        Json staticImageConf = Json::object{
+        { "image_path", "test/fixture/img/multiple_markers.jpg" }
+    };
+    StaticImageDataProvider provider(staticImageConf);
+
+    auto dim = provider.getDimensions();
+
+    Json markerTrackerConf = Json::object{
+        { "parser", "yarrar_parser" },
+        { "tracking_resolution_width", 320 }
+    };
+    MarkerTracker tracker(dim.width, dim.height, markerTrackerConf);
+
+    std::vector<Pose> poses;
+    tracker.getPoses(provider.getData(), poses);
+    REQUIRE(poses.size() == 4);
+    REQUIRE(poses.at(0).coordinateSystemId == 112);
+    REQUIRE(poses.at(1).coordinateSystemId == 30);
+    REQUIRE(poses.at(2).coordinateSystemId == 26);
+    REQUIRE(poses.at(3).coordinateSystemId == 70);
+}
+
 }
