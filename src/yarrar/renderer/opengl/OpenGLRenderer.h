@@ -7,7 +7,8 @@
 #include <string>
 #include <map>
 
-namespace yarrar {
+namespace yarrar
+{
 
 class GLShader;
 class GLProgram;
@@ -28,7 +29,7 @@ struct ShaderDef
     std::string path;
 };
 
-class OpenGLRenderer: public Renderer
+class OpenGLRenderer : public Renderer
 {
 public:
     OpenGLRenderer(int width, int height, const json11::Json& config);
@@ -41,12 +42,13 @@ public:
     void loadModel(const Model& model);
 
     void draw(const std::vector<Pose>& cameraPoses,
-              const Scene& scene,
-              const cv::Mat& backgroundImage) override;
+        const Scene& scene,
+        const cv::Mat& backgroundImage) override;
+
 private:
     void drawCoordinateSystem(const Pose& cameraPose,
-              const Scene& scene,
-              const cv::Mat& backgroundImage);
+        const Scene& scene,
+        const cv::Mat& backgroundImage);
     void render(const Scene& scene);
     void loadImage(const cv::Mat& image);
 
@@ -59,5 +61,4 @@ private:
     std::map<std::string, std::unique_ptr<SceneModel>> m_sceneModels;
     GLuint m_backgroundTex;
 };
-
 }

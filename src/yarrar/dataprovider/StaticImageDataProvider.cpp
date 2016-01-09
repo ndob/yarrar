@@ -1,17 +1,18 @@
 #include "StaticImageDataProvider.h"
 
-namespace {
+namespace
+{
 
 const json11::Json::shape CONFIG_SHAPE{
-    {"image_path", json11::Json::STRING}
+    { "image_path", json11::Json::STRING }
 };
-
 }
 
-namespace yarrar {
+namespace yarrar
+{
 
-StaticImageDataProvider::StaticImageDataProvider(const json11::Json& config):
-    DataProvider(config)
+StaticImageDataProvider::StaticImageDataProvider(const json11::Json& config)
+    : DataProvider(config)
 {
     std::string err;
     if(!config.has_shape(CONFIG_SHAPE, err))
@@ -44,7 +45,4 @@ DatatypeFlags StaticImageDataProvider::provides()
 {
     return RGB_CAMERA_FLAG;
 }
-
 }
-
-

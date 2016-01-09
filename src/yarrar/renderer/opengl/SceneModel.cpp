@@ -4,14 +4,14 @@
 namespace yarrar
 {
 
-SceneModel::SceneModel(std::weak_ptr<GLProgram> program, const std::vector<float>& vertices):
-    m_vao(0),
-    m_vbo(0),
-    m_program(program),
-    m_numVertices(static_cast<int> (vertices.size() / 3))
+SceneModel::SceneModel(std::weak_ptr<GLProgram> program, const std::vector<float>& vertices)
+    : m_vao(0)
+    , m_vbo(0)
+    , m_program(program)
+    , m_numVertices(static_cast<int>(vertices.size() / 3))
 {
-    // GL3 uses vertex arrays, but they are not available in
-    // GLES2.
+// GL3 uses vertex arrays, but they are not available in
+// GLES2.
 #ifdef YARRAR_OPENGL_CONTEXT
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
@@ -19,7 +19,7 @@ SceneModel::SceneModel(std::weak_ptr<GLProgram> program, const std::vector<float
 
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-    glBufferData(GL_ARRAY_BUFFER, static_cast<int> (vertices.size()) * sizeof(float), &vertices.front(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<int>(vertices.size()) * sizeof(float), &vertices.front(), GL_STATIC_DRAW);
 
     if(auto prog = m_program.lock())
     {
@@ -42,10 +42,10 @@ SceneModel::SceneModel(std::weak_ptr<GLProgram> program, const std::vector<float
 void SceneModel::render(const Vector3& translation) const
 {
     float world[][4] = {
-        {1.0f, 0.0f, 0.0f, 0.0f},
-        {0.0f, 1.0f, 0.0f, 0.0f},
-        {0.0f, 0.0f, 1.0f, 0.0f},
-        {translation.x, translation.y, translation.z, 1.0f}
+        { 1.0f, 0.0f, 0.0f, 0.0f },
+        { 0.0f, 1.0f, 0.0f, 0.0f },
+        { 0.0f, 0.0f, 1.0f, 0.0f },
+        { translation.x, translation.y, translation.z, 1.0f }
     };
 
     if(auto prog = m_program.lock())
@@ -76,5 +76,4 @@ void SceneModel::render(const Vector3& translation) const
         throw std::runtime_error("Program not available.");
     }
 }
-
 }

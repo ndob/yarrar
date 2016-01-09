@@ -4,7 +4,8 @@
 
 #include <opencv2/opencv.hpp>
 
-namespace yarrar {
+namespace yarrar
+{
 
 struct MarkerValue
 {
@@ -16,8 +17,7 @@ struct MarkerValue
 class MarkerParser
 {
 public:
-    virtual ~MarkerParser() {};
+    virtual ~MarkerParser(){};
     virtual MarkerValue getData(const cv::Mat& image) = 0;
 };
-
 }

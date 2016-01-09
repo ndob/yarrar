@@ -1,6 +1,7 @@
 #include "Scene.h"
 
-namespace yarrar {
+namespace yarrar
+{
 
 void Scene::addModel(const Model& model)
 {
@@ -11,5 +12,4 @@ const std::vector<Model>& Scene::getModels() const
 {
     return m_models;
 }
-
 }

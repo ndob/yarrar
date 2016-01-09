@@ -3,11 +3,12 @@
 #include <iostream>
 #include <stdexcept>
 
-namespace yarrar {
+namespace yarrar
+{
 
-GLContext::GLContext(int width, int height):
-    m_screenWidth(width),
-    m_screenHeight(height)
+GLContext::GLContext(int width, int height)
+    : m_screenWidth(width)
+    , m_screenHeight(height)
 {
 #ifdef YARRAR_OPENGL_CONTEXT
     if(!glfwInit())
@@ -35,14 +36,13 @@ GLContext::GLContext(int width, int height):
               << m_screenWidth << "x" << m_screenHeight << std::endl;
 
 
-
     if(glewInit() != GLEW_OK)
     {
         throw std::runtime_error("glewInit failed");
     }
 
 #elif YARRAR_OPENGLES_CONTEXT
-    // EGL initialize
+// EGL initialize
 #endif
 
     std::cout << "OpenGL initialized successfully with params:" << std::endl;
@@ -66,5 +66,4 @@ void GLContext::swapBuffers()
     glfwSwapBuffers(m_window);
 #endif
 }
-
 }

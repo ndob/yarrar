@@ -8,10 +8,10 @@ namespace yarrar
 {
 
 GLProgram::GLProgram(GLShader* vertexShader,
-                     GLShader* fragmentShader,
-                     bool usePerspectiveProjection):
-    m_object(0),
-    m_usePerspectiveProjection(usePerspectiveProjection)
+    GLShader* fragmentShader,
+    bool usePerspectiveProjection)
+    : m_object(0)
+    , m_usePerspectiveProjection(usePerspectiveProjection)
 {
     if(vertexShader == nullptr || fragmentShader == nullptr)
     {
@@ -35,7 +35,7 @@ GLProgram::GLProgram(GLShader* vertexShader,
     // Check for errors in linking.
     GLint status;
     glGetProgramiv(m_object, GL_LINK_STATUS, &status);
-    if (status == GL_FALSE)
+    if(status == GL_FALSE)
     {
         GLint logLength;
         glGetProgramiv(m_object, GL_INFO_LOG_LENGTH, &logLength);
@@ -52,7 +52,7 @@ GLProgram::GLProgram(GLShader* vertexShader,
 }
 
 
-void GLProgram::setUniformMatrix4fv(const std::string& name, GLfloat *data)
+void GLProgram::setUniformMatrix4fv(const std::string& name, GLfloat* data)
 {
     glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, data);
 }
@@ -90,5 +90,4 @@ GLint GLProgram::getUniform(const std::string& name) const
 
     return uniform;
 }
-
 }

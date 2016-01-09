@@ -4,22 +4,22 @@
 
 #include <iostream>
 
-namespace yarrar {
+namespace yarrar
+{
 
 class DummyRenderer : public Renderer
 {
 public:
-    DummyRenderer(int width, int height, const json11::Json& config):
-        Renderer(config)
-    {};
+    DummyRenderer(int width, int height, const json11::Json& config)
+        : Renderer(config){};
 
     void loadModel(const Model& model) override
     {
     }
 
     void draw(const std::vector<Pose>& cameraPoses,
-              const Scene& scene,
-              const cv::Mat& backgroundImage) override
+        const Scene& scene,
+        const cv::Mat& backgroundImage) override
     {
         for(const auto& pose : cameraPoses)
         {
@@ -30,7 +30,4 @@ public:
         }
     }
 };
-
 }
-
-

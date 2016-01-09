@@ -1,18 +1,19 @@
 #include "MarkerTracker.h"
 
-namespace {
+namespace
+{
 
 const json11::Json::shape CONFIG_SHAPE{
-    {"parser",                      json11::Json::STRING},
-    {"tracking_resolution_width",   json11::Json::NUMBER}
+    { "parser", json11::Json::STRING },
+    { "tracking_resolution_width", json11::Json::NUMBER }
 };
-
 }
 
-namespace yarrar {
+namespace yarrar
+{
 
-MarkerTracker::MarkerTracker(int width, int height, const json11::Json& config):
-    Tracker(config)
+MarkerTracker::MarkerTracker(int width, int height, const json11::Json& config)
+    : Tracker(config)
 {
     std::string err;
     if(!config.has_shape(CONFIG_SHAPE, err))
@@ -22,8 +23,8 @@ MarkerTracker::MarkerTracker(int width, int height, const json11::Json& config):
 
     const int preferredTrackingResolutionWidth = config["tracking_resolution_width"].int_value();
     m_trackingResolution = util::getScaledDownResolution(width,
-                                                   height,
-                                                   preferredTrackingResolutionWidth);
+        height,
+        preferredTrackingResolutionWidth);
 
     m_detector.reset(new MarkerDetector(m_trackingResolution));
 
@@ -92,10 +93,9 @@ void MarkerTracker::getPoses(const cv::Mat& image, std::vector<Pose>& output)
             }
 
             // Construct rotation matrix (z-axis).
-            const Mat Rz = (Mat_<double>(3, 3) <<
-                std::cos(alpha), -std::sin(alpha), 0.0,
-                std::sin(alpha),  std::cos(alpha), 0.0,
-               0.0, 0.0, 1.0);
+            const Mat Rz = (Mat_<double>(3, 3) << std::cos(alpha), -std::sin(alpha), 0.0,
+                std::sin(alpha), std::cos(alpha), 0.0,
+                0.0, 0.0, 1.0);
 
             cv::Mat rotationMatrix;
             // Convert pose rotation to matrix.
@@ -113,5 +113,4 @@ void MarkerTracker::getPoses(const cv::Mat& image, std::vector<Pose>& output)
         output.push_back(cameraPose);
     }
 }
-
 }

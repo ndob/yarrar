@@ -45,5 +45,4 @@ public:
         glUseProgram(0);
     }
 };
-
 }

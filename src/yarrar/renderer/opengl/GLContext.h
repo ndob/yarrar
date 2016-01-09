@@ -7,7 +7,8 @@
 #include <GLES2/gl2.h>
 #endif
 
-namespace yarrar {
+namespace yarrar
+{
 
 class GLContext
 {
@@ -25,5 +26,4 @@ private:
     int m_screenWidth;
     int m_screenHeight;
 };
-
 }

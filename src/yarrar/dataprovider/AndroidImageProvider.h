@@ -5,9 +5,10 @@
 #include <json11.hpp>
 #include <mutex>
 
-namespace yarrar {
+namespace yarrar
+{
 
-class AndroidImageProvider: public DataProvider
+class AndroidImageProvider : public DataProvider
 {
 public:
     AndroidImageProvider(const json11::Json& config);
@@ -19,11 +20,9 @@ public:
     static void injectCameraFrame(const cv::Mat& rgb);
 
 private:
-
     static int s_width;
     static int s_height;
     static cv::Mat s_image;
     static std::mutex s_imageMutex;
 };
-
 }

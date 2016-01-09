@@ -7,7 +7,7 @@
 namespace yarrar
 {
 
-class StaticImageDataProvider: public DataProvider
+class StaticImageDataProvider : public DataProvider
 {
 public:
     StaticImageDataProvider(const json11::Json& config);
@@ -18,6 +18,4 @@ public:
 private:
     cv::Mat m_cachedImage;
 };
-
 }
-

@@ -4,42 +4,40 @@
 #include "BackgroundModel.h"
 #include "SceneModel.h"
 
-namespace {
+namespace
+{
 
-    using namespace yarrar;
+using namespace yarrar;
 
 #ifdef YARRAR_OPENGL_CONTEXT
-    std::string SHADER_PATH = "shader/gl3/";
+std::string SHADER_PATH = "shader/gl3/";
 #elif YARRAR_OPENGLES_CONTEXT
-    std::string SHADER_PATH = "shader/gles2/";
+std::string SHADER_PATH = "shader/gles2/";
 #endif
 
-    const std::vector<ShaderDef> VERTEX_SHADERS
-    {
-       {"camera", SHADER_PATH + "camera.vertex"},
-       {"simple", SHADER_PATH + "simple.vertex"}
-    };
+const std::vector<ShaderDef> VERTEX_SHADERS{
+    { "camera", SHADER_PATH + "camera.vertex" },
+    { "simple", SHADER_PATH + "simple.vertex" }
+};
 
-    const std::vector<ShaderDef> FRAGMENT_SHADERS
-    {
-        {"simple", SHADER_PATH + "simple.fragment"},
-        {"texture", SHADER_PATH + "texture.fragment"}
-    };
+const std::vector<ShaderDef> FRAGMENT_SHADERS{
+    { "simple", SHADER_PATH + "simple.fragment" },
+    { "texture", SHADER_PATH + "texture.fragment" }
+};
 
-    const std::vector<EffectDef> EFFECTS
-    {
-        {"bg", "simple", "texture", false},
-        {"sceneModel", "camera", "simple", true}
-    };
-
+const std::vector<EffectDef> EFFECTS{
+    { "bg", "simple", "texture", false },
+    { "sceneModel", "camera", "simple", true }
+};
 }
 
-namespace yarrar {
+namespace yarrar
+{
 
-OpenGLRenderer::OpenGLRenderer(int width, int height, const json11::Json& config):
-    Renderer(config),
-    m_context(new GLContext(width, height)),
-    m_backgroundTex(0)
+OpenGLRenderer::OpenGLRenderer(int width, int height, const json11::Json& config)
+    : Renderer(config)
+    , m_context(new GLContext(width, height))
+    , m_backgroundTex(0)
 {
     for(const auto& def : VERTEX_SHADERS)
     {
@@ -54,10 +52,10 @@ OpenGLRenderer::OpenGLRenderer(int width, int height, const json11::Json& config
     for(const auto& def : EFFECTS)
     {
         m_programs[def.name] =
-                std::shared_ptr<GLProgram>(new GLProgram(
-                                                   m_vertexShaders[def.vertexShader].get(),
-                                                   m_fragmentShaders[def.fragmentShader].get(),
-                                                   def.perspectiveProjection));
+            std::shared_ptr<GLProgram>(new GLProgram(
+                m_vertexShaders[def.vertexShader].get(),
+                m_fragmentShaders[def.fragmentShader].get(),
+                def.perspectiveProjection));
     }
 
     m_bgModel.reset(new BackgroundModel(m_programs["bg"]));
@@ -96,24 +94,24 @@ void OpenGLRenderer::loadImage(const cv::Mat& imageBgr)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     glTexImage2D(GL_TEXTURE_2D,
-                 0, // Mip level
-                 GL_RGB,
-                 imageRgb.cols, // Width
-                 imageRgb.rows, // Height
-                 0, // Border
-                 GL_RGB,
-                 GL_UNSIGNED_BYTE, // Data type
-                 imageRgb.ptr());
+        0, // Mip level
+        GL_RGB,
+        imageRgb.cols, // Width
+        imageRgb.rows, // Height
+        0,             // Border
+        GL_RGB,
+        GL_UNSIGNED_BYTE, // Data type
+        imageRgb.ptr());
 }
 
-void OpenGLRenderer::loadModel(const Model &model)
+void OpenGLRenderer::loadModel(const Model& model)
 {
     m_sceneModels[model.name] = std::unique_ptr<SceneModel>(new SceneModel(m_programs["sceneModel"], model.vertices));
 }
 
 void OpenGLRenderer::draw(const std::vector<Pose>& cameraPoses,
-                          const Scene& scene,
-                          const cv::Mat& backgroundImage)
+    const Scene& scene,
+    const cv::Mat& backgroundImage)
 {
     // Load fresh background camera image.
     loadImage(backgroundImage);
@@ -140,8 +138,8 @@ void OpenGLRenderer::draw(const std::vector<Pose>& cameraPoses,
 }
 
 void OpenGLRenderer::drawCoordinateSystem(const Pose& cameraPose,
-                  const Scene& scene,
-                  const cv::Mat& backgroundImage)
+    const Scene& scene,
+    const cv::Mat& backgroundImage)
 {
     // Convert rotation from vector to matrix.
     cv::Mat rotation;
@@ -172,10 +170,10 @@ void OpenGLRenderer::drawCoordinateSystem(const Pose& cameraPose,
     cv::transpose(viewMatrix, glViewMatrix);
 
     // Calculate projection matrix.
-    float fx = cameraPose.camera.at<float>(0,0);
-    float cx = cameraPose.camera.at<float>(0,2);
-    float fy = cameraPose.camera.at<float>(1,1);
-    float cy = cameraPose.camera.at<float>(1,2);
+    float fx = cameraPose.camera.at<float>(0, 0);
+    float cx = cameraPose.camera.at<float>(0, 2);
+    float fy = cameraPose.camera.at<float>(1, 1);
+    float cy = cameraPose.camera.at<float>(1, 2);
     float far = 1000.0f;
     float near = 0.1f;
 
@@ -202,5 +200,4 @@ void OpenGLRenderer::drawCoordinateSystem(const Pose& cameraPose,
 
     render(scene);
 }
-
 }

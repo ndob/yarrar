@@ -23,6 +23,4 @@ private:
     std::weak_ptr<GLProgram> m_program;
     int m_numVertices;
 };
-
 }
-

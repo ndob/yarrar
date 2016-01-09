@@ -5,9 +5,16 @@
 #include <opencv2/imgcodecs.hpp>
 #include <iostream>
 
-namespace {
+namespace
+{
 
-enum Color { WHITE, RED, GREEN, BLUE };
+enum Color
+{
+    WHITE,
+    RED,
+    GREEN,
+    BLUE
+};
 typedef std::array<std::array<Color, 2>, 2> Grid;
 
 void validateGrid(const cv::Mat& image, const Grid& colors)
@@ -43,10 +50,10 @@ void validateGrid(const cv::Mat& image, const Grid& colors)
         }
     }
 }
-
 }
 
-namespace yarrar_test {
+namespace yarrar_test
+{
 
 TEST_CASE("Image is rotated correctly", "[util]")
 {
@@ -57,43 +64,34 @@ TEST_CASE("Image is rotated correctly", "[util]")
     {
         yarrar::util::rotate(src, dst, yarrar::Rotation90::DEG_0);
 
-        Grid grid{{
-            {{RED, GREEN}},
-            {{BLUE, WHITE}}
-        }};
+        Grid grid{ { { { RED, GREEN } },
+            { { BLUE, WHITE } } } };
 
         validateGrid(dst, grid);
     }
     SECTION("90 degrees")
     {
         yarrar::util::rotate(src, dst, yarrar::Rotation90::DEG_90);
-        Grid grid{{
-            {{BLUE, RED}},
-            {{WHITE, GREEN}}
-        }};
+        Grid grid{ { { { BLUE, RED } },
+            { { WHITE, GREEN } } } };
 
         validateGrid(dst, grid);
     }
     SECTION("180 degrees")
     {
         yarrar::util::rotate(src, dst, yarrar::Rotation90::DEG_180);
-        Grid grid{{
-            {{WHITE, BLUE}},
-            {{GREEN, RED}}
-        }};
+        Grid grid{ { { { WHITE, BLUE } },
+            { { GREEN, RED } } } };
 
         validateGrid(dst, grid);
     }
     SECTION("270 degrees")
     {
         yarrar::util::rotate(src, dst, yarrar::Rotation90::DEG_270);
-        Grid grid{{
-            {{GREEN, WHITE}},
-            {{RED, BLUE}}
-        }};
+        Grid grid{ { { { GREEN, WHITE } },
+            { { RED, BLUE } } } };
 
         validateGrid(dst, grid);
     }
 }
-
 }

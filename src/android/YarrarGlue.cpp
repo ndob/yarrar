@@ -5,10 +5,10 @@
 #include <jni.h>
 #include <android/log.h>
 
-namespace {
+namespace
+{
 
 yarrar::Pipeline* s_pipe;
-
 }
 
 extern "C" {
@@ -16,7 +16,7 @@ extern "C" {
 void Java_com_ndob_yarrar_YarrarActivity_initYarrar(JNIEnv* env, jobject, jint width, jint height, jobject assetManager)
 {
     yarrar::android::initialize(env, assetManager);
-    yarrar::AndroidImageProvider::injectCameraSize(static_cast<int> (width), static_cast<int> (height));
+    yarrar::AndroidImageProvider::injectCameraSize(static_cast<int>(width), static_cast<int>(height));
     s_pipe = new yarrar::Pipeline("pipeline.json");
 }
 
@@ -29,7 +29,7 @@ void Java_com_ndob_yarrar_YarrarActivity_addModel(JNIEnv* env, jobject, jfloatAr
 {
     yarrar::Model cube;
     cube.name = "cube";
-    cube.translation = {0.0f, 0.0f, 0.0f};
+    cube.translation = { 0.0f, 0.0f, 0.0f };
 
     jfloat* vertexArray = env->GetFloatArrayElements(vertices, nullptr);
     jsize len = env->GetArrayLength(vertices);
@@ -38,7 +38,7 @@ void Java_com_ndob_yarrar_YarrarActivity_addModel(JNIEnv* env, jobject, jfloatAr
     {
         cube.vertices.push_back(static_cast<float>(vertexArray[i]));
     }
-    
+
     env->ReleaseFloatArrayElements(vertices, vertexArray, JNI_ABORT);
     s_pipe->addModel(cube);
 }
@@ -60,5 +60,4 @@ void Java_com_ndob_yarrar_YarrarActivity_injectCameraFrame(JNIEnv* env, jobject,
 
     env->ReleaseByteArrayElements(cameraData, buffer, JNI_ABORT);
 }
-
 }

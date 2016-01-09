@@ -1,6 +1,7 @@
 #include <catch.hpp>
 
-namespace yarrar_test {
+namespace yarrar_test
+{
 
 TEST_CASE("Marker is detected", "[marker_detector]")
 {
@@ -12,6 +13,4 @@ TEST_CASE("Marker is detected", "[marker_detector]")
     Pose getPose(const std::vector<cv::Point2f>& contour);
      */
 }
-
-
 }

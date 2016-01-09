@@ -7,7 +7,7 @@
 namespace yarrar
 {
 
-class WebcamDataProvider: public DataProvider
+class WebcamDataProvider : public DataProvider
 {
 public:
     WebcamDataProvider(const json11::Json& config);
@@ -18,6 +18,4 @@ public:
 private:
     cv::VideoCapture m_videoCapture;
 };
-
 }
-

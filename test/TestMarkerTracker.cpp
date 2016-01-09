@@ -6,7 +6,8 @@
 #include <json11.hpp>
 #include <catch.hpp>
 
-namespace yarrar_test {
+namespace yarrar_test
+{
 
 TEST_CASE("Pose is detected correctly", "[marker_tracker]")
 {
@@ -59,7 +60,7 @@ TEST_CASE("Detect multiple poses from same frame", "[marker_tracker]")
     using namespace yarrar;
     using namespace json11;
 
-        Json staticImageConf = Json::object{
+    Json staticImageConf = Json::object{
         { "image_path", "test/fixture/img/multiple_markers.jpg" }
     };
     StaticImageDataProvider provider(staticImageConf);
@@ -80,5 +81,4 @@ TEST_CASE("Detect multiple poses from same frame", "[marker_tracker]")
     REQUIRE(poses.at(2).coordinateSystemId == 26);
     REQUIRE(poses.at(3).coordinateSystemId == 70);
 }
-
 }

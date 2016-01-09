@@ -3,9 +3,9 @@
 namespace yarrar
 {
 
-WebcamDataProvider::WebcamDataProvider(const json11::Json& config):
-    DataProvider(config),
-    m_videoCapture(0)
+WebcamDataProvider::WebcamDataProvider(const json11::Json& config)
+    : DataProvider(config)
+    , m_videoCapture(0)
 {
     if(!m_videoCapture.isOpened())
     {
@@ -34,7 +34,4 @@ DatatypeFlags WebcamDataProvider::provides()
 {
     return RGB_CAMERA_FLAG;
 }
-
 }
-
-

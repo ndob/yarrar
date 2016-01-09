@@ -5,7 +5,8 @@
 #include <string>
 #include <vector>
 
-namespace yarrar {
+namespace yarrar
+{
 
 struct Model
 {
@@ -17,13 +18,10 @@ struct Model
 class Scene
 {
 public:
-
     void addModel(const Model& model);
     const std::vector<Model>& getModels() const;
 
 private:
     std::vector<Model> m_models;
-
 };
-
 }

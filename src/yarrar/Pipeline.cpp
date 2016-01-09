@@ -9,26 +9,29 @@
 
 #include <algorithm>
 
-#define VALIDATE_PIPELINE_STAGE_JSON(stageConfig) \
-if(!stageConfig.has_shape(PIPELINE_STAGE_SHAPE, err)) \
-{ throw std::runtime_error(std::string("Pipeline: ") + err); }
+#define VALIDATE_PIPELINE_STAGE_JSON(stageConfig)                  \
+    if(!stageConfig.has_shape(PIPELINE_STAGE_SHAPE, err))          \
+    {                                                              \
+        throw std::runtime_error(std::string("Pipeline: ") + err); \
+    }
 
-namespace {
+namespace
+{
 
 const json11::Json::shape TOP_LEVEL_SHAPE{
-    {"dataproviders",   json11::Json::ARRAY},
-    {"trackers",        json11::Json::ARRAY},
-    {"renderers",       json11::Json::ARRAY},
+    { "dataproviders", json11::Json::ARRAY },
+    { "trackers", json11::Json::ARRAY },
+    { "renderers", json11::Json::ARRAY },
 };
 
 const json11::Json::shape PIPELINE_STAGE_SHAPE{
-    {"type",   json11::Json::STRING},
-    {"config", json11::Json::OBJECT}
+    { "type", json11::Json::STRING },
+    { "config", json11::Json::OBJECT }
 };
-
 }
 
-namespace yarrar {
+namespace yarrar
+{
 
 Pipeline::Pipeline(const std::string& configFile)
 {
@@ -143,17 +146,14 @@ void Pipeline::validate()
     }
 
     const auto rgbProviders = std::count_if(m_dataProviders.begin(), m_dataProviders.end(),
-         [] (const std::unique_ptr<DataProvider>& provider)
-         {
+        [](const std::unique_ptr<DataProvider>& provider)
+        {
              return provider->provides() & DatatypeFlags::RGB_CAMERA_FLAG;
-         }
-    );
+        });
 
     // TODO: This could be relaxed. Instead of throwing, one provider should be promoted as primary.
     // Primary can then be used as backgroundImage-input for Renderer-stage.
     if(rgbProviders > 1)
         throw std::runtime_error("Pipeline: only one rgb-dataprovider should be defined.");
 }
-
 }
-

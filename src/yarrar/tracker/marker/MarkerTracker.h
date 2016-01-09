@@ -8,9 +8,10 @@
 
 #define DEBUG_DRAWING 1
 
-namespace yarrar {
+namespace yarrar
+{
 
-class MarkerTracker: public Tracker
+class MarkerTracker : public Tracker
 {
 public:
     MarkerTracker(int width, int height, const json11::Json& config);
@@ -19,10 +20,8 @@ public:
     void getPoses(const cv::Mat& image, std::vector<Pose>& output) override;
 
 private:
-
     cv::Size m_trackingResolution;
     std::unique_ptr<MarkerDetector> m_detector;
     std::unique_ptr<MarkerParser> m_parser;
 };
-
 }

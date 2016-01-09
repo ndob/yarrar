@@ -2,7 +2,8 @@
 
 #include "GLContext.h"
 
-namespace yarrar {
+namespace yarrar
+{
 
 struct ShaderDef;
 
@@ -10,9 +11,9 @@ class GLShader
 {
 public:
     GLShader(const ShaderDef& def, GLenum shaderType);
-    GLuint getObject() const 
+    GLuint getObject() const
     {
-        return m_object; 
+        return m_object;
     };
 
 private:
@@ -22,9 +23,9 @@ private:
 class ScopedAttachShader
 {
 public:
-    ScopedAttachShader(GLuint program, GLuint shader):
-        m_program(program),
-        m_shader(shader)
+    ScopedAttachShader(GLuint program, GLuint shader)
+        : m_program(program)
+        , m_shader(shader)
     {
         glAttachShader(m_program, m_shader);
     }
@@ -38,5 +39,4 @@ private:
     GLuint m_program;
     GLuint m_shader;
 };
-
 }

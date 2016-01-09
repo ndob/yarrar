@@ -10,7 +10,8 @@
 #include <vector>
 #include <opencv2/core/mat.hpp>
 
-namespace yarrar {
+namespace yarrar
+{
 
 class Pipeline
 {
@@ -21,23 +22,22 @@ public:
     void run() const;
 
 private:
-
     void validate();
 
-    template<typename T>
+    template <typename T>
     void addDataProvider(const json11::Json& config)
     {
         m_dataProviders.emplace_back(new T(config));
     }
 
-    template<typename T>
+    template <typename T>
     void addTracker(const json11::Json& config)
     {
         auto dim = m_dataProviders[0]->getDimensions();
         m_trackers.emplace_back(new T(dim.width, dim.height, config));
     }
 
-    template<typename T>
+    template <typename T>
     void addRenderer(const json11::Json& config)
     {
         auto dim = m_dataProviders[0]->getDimensions();
@@ -49,5 +49,4 @@ private:
     std::vector<std::unique_ptr<Renderer>> m_renderers;
     Scene m_scene;
 };
-
 }

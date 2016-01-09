@@ -4,7 +4,8 @@
 #include <cassert>
 #include <cstdint>
 
-namespace {
+namespace
+{
 
 using namespace yarrar;
 
@@ -19,7 +20,7 @@ int getId(const cv::Mat& field)
     {
         if(field.at<uint8_t>(3, i) == 1)
         {
-            id = id | (uint8_t) (1 << (7 - i));
+            id = id | (uint8_t)(1 << (7 - i));
         }
     }
 
@@ -31,17 +32,21 @@ Rotation90 getZRotation(const cv::Mat& field)
     // The rectangle in upper left corner is used to
     // indicate the rotation.
 
-    if(field.at<uint8_t>(1, 1) == 1) return Rotation90::DEG_0;
-    else if(field.at<uint8_t>(1, 6) == 1) return Rotation90::DEG_90;
-    else if(field.at<uint8_t>(6, 6) == 1) return Rotation90::DEG_180;
-    else if(field.at<uint8_t>(6, 1) == 1) return Rotation90::DEG_270;
+    if(field.at<uint8_t>(1, 1) == 1)
+        return Rotation90::DEG_0;
+    else if(field.at<uint8_t>(1, 6) == 1)
+        return Rotation90::DEG_90;
+    else if(field.at<uint8_t>(6, 6) == 1)
+        return Rotation90::DEG_180;
+    else if(field.at<uint8_t>(6, 1) == 1)
+        return Rotation90::DEG_270;
 
     return Rotation90::DEG_0;
 }
-
 }
 
-namespace yarrar {
+namespace yarrar
+{
 
 MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
 {
@@ -96,5 +101,4 @@ MarkerValue YarrarMarkerParser::getData(const cv::Mat& image)
         rot
     };
 }
-
 }

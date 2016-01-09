@@ -2,7 +2,8 @@
 
 #include <opencv2/opencv.hpp>
 
-namespace yarrar {
+namespace yarrar
+{
 
 struct Vector3
 {
@@ -25,7 +26,13 @@ struct Dimensions
     int height;
 };
 
-enum class Rotation90 { DEG_0, DEG_90, DEG_180, DEG_270 };
+enum class Rotation90
+{
+    DEG_0,
+    DEG_90,
+    DEG_180,
+    DEG_270
+};
 
 enum DatatypeFlags
 {
@@ -33,6 +40,4 @@ enum DatatypeFlags
     RGB_CAMERA_FLAG = 0x1,
     DEPTH_CAMERA_FLAG = 0x2
 };
-
 }
-

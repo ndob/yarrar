@@ -4,7 +4,8 @@
 
 #include <catch.hpp>
 
-namespace yarrar_test {
+namespace yarrar_test
+{
 
 TEST_CASE("Id and rotation is parsed correctly", "[yarrar_marker_parser]")
 {
@@ -45,5 +46,4 @@ TEST_CASE("Id and rotation is parsed correctly", "[yarrar_marker_parser]")
         REQUIRE(value.zRotation == Rotation90::DEG_270);
     }
 }
-
 }

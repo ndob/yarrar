@@ -1,17 +1,18 @@
 #include "BackgroundModel.h"
 #include "GLProgram.h"
 
-namespace yarrar {
-
-BackgroundModel::BackgroundModel(std::weak_ptr<GLProgram> program) :
-    m_vao(0),
-    m_vbo(0),
-    m_texture(0),
-    m_program(program),
-    m_numVertices(6)
+namespace yarrar
 {
-    // GL3 uses vertex arrays, but they are not available in
-    // GLES2.
+
+BackgroundModel::BackgroundModel(std::weak_ptr<GLProgram> program)
+    : m_vao(0)
+    , m_vbo(0)
+    , m_texture(0)
+    , m_program(program)
+    , m_numVertices(6)
+{
+// GL3 uses vertex arrays, but they are not available in
+// GLES2.
 #ifdef YARRAR_OPENGL_CONTEXT
     glGenVertexArrays(1, &m_vao);
     glBindVertexArray(m_vao);
@@ -21,14 +22,14 @@ BackgroundModel::BackgroundModel(std::weak_ptr<GLProgram> program) :
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 
     GLfloat vertexData[] = {
-            // x,y,z, tex_x, tex_y
-            -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-            -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-            1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        // x,y,z, tex_x, tex_y
+        -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
 
-            1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-            -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-            1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
     };
 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
@@ -42,7 +43,7 @@ BackgroundModel::BackgroundModel(std::weak_ptr<GLProgram> program) :
         GLint texCoordAttrib = prog->getAttrib("texCoord");
         glEnableVertexAttribArray(texCoordAttrib);
         glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat),
-                              (const GLvoid *) (3 * sizeof(GLfloat)));
+            (const GLvoid*) (3 * sizeof(GLfloat)));
     }
     else
     {
@@ -74,7 +75,7 @@ void BackgroundModel::render() const
 
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat),
-                              (const GLvoid *) (3 * sizeof(GLfloat)));
+            (const GLvoid*) (3 * sizeof(GLfloat)));
 #endif
 
         glDrawArrays(GL_TRIANGLES, 0, m_numVertices);
@@ -98,5 +99,4 @@ void BackgroundModel::setTexture(GLuint texture)
 {
     m_texture = texture;
 }
-
 }

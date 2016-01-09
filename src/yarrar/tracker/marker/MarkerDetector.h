@@ -35,5 +35,4 @@ private:
     cv::Mat m_poseRotation;
     cv::Mat m_poseTranslation;
 };
-
 }

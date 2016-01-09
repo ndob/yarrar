@@ -5,10 +5,11 @@
 #include <stdexcept>
 #include <vector>
 
-namespace yarrar {
+namespace yarrar
+{
 
-GLShader::GLShader(const ShaderDef& def, GLenum shaderType):
-    m_object(0)
+GLShader::GLShader(const ShaderDef& def, GLenum shaderType)
+    : m_object(0)
 {
     m_object = glCreateShader(shaderType);
     if(m_object == 0)
@@ -25,7 +26,7 @@ GLShader::GLShader(const ShaderDef& def, GLenum shaderType):
 
     GLint status;
     glGetShaderiv(m_object, GL_COMPILE_STATUS, &status);
-    if (status == GL_FALSE)
+    if(status == GL_FALSE)
     {
         GLint logLength;
         glGetShaderiv(m_object, GL_INFO_LOG_LENGTH, &logLength);
@@ -40,5 +41,4 @@ GLShader::GLShader(const ShaderDef& def, GLenum shaderType):
         throw std::runtime_error(msg);
     }
 }
-
 }

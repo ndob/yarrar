@@ -7,7 +7,8 @@
 #include <cmath>
 #include <vector>
 
-namespace {
+namespace
+{
 
 enum Hierarchy
 {
@@ -26,18 +27,18 @@ const cv::Scalar BLUE = cv::Scalar(255, 0, 0);
 // a history buffer needs to be implemented.
 const bool PNP_USE_EXTRINSIC_GUESS = false;
 const uint64 RANDOM_SEED = 12345;
-
 }
 
-namespace yarrar {
+namespace yarrar
+{
 
 using namespace cv;
 
-MarkerDetector::MarkerDetector(const cv::Size& trackingResolution):
-    m_trackingResolution(trackingResolution),
-    m_rng(RANDOM_SEED),
-    m_poseRotation(3,1,cv::DataType<double>::type),
-    m_poseTranslation(3,1,cv::DataType<double>::type)
+MarkerDetector::MarkerDetector(const cv::Size& trackingResolution)
+    : m_trackingResolution(trackingResolution)
+    , m_rng(RANDOM_SEED)
+    , m_poseRotation(3, 1, cv::DataType<double>::type)
+    , m_poseTranslation(3, 1, cv::DataType<double>::type)
 {
     assert(m_trackingResolution.width > 0);
     assert(m_trackingResolution.height > 0);
@@ -90,10 +91,10 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
         // Do not try to find markers inside of already used inner/outer rectangles.
         if(util::contains(usedIndices, validHierarchyIndices[i])) continue;
 
-        // Prevent full marker nesting. 
+        // Prevent full marker nesting.
         // ie. The whole marker inside some previous inner rectangle.
         if(util::contains(usedIndices,
-                    hierarchy[validHierarchyIndices[i]][HIERARCHY_PARENT]))
+               hierarchy[validHierarchyIndices[i]][HIERARCHY_PARENT]))
         {
             continue;
         }
@@ -118,8 +119,8 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
                     double innerPerimeterLength = arcLength(validRectangles[j], true);
 
                     if(innerPerimeterLength < outerPerimeterLength &&
-                       innerPerimeterLength > (0.6f * outerPerimeterLength) &&
-                       greatestInnerPerimeterLength < innerPerimeterLength)
+                        innerPerimeterLength > (0.6f * outerPerimeterLength) &&
+                        greatestInnerPerimeterLength < innerPerimeterLength)
                     {
                         greatestInnerPerimeterLength = innerPerimeterLength;
                         greatestIndex = j;
@@ -153,10 +154,10 @@ cv::Mat MarkerDetector::getRectifiedInnerImage(const std::vector<cv::Point2f>& i
     const int imageSize = 100;
     std::vector<Point2f> corners;
 
-    corners.push_back(Point2f(imageSize,0));
-    corners.push_back(Point2f(imageSize,imageSize));
-    corners.push_back(Point2f(0,imageSize));
-    corners.push_back(Point2f(0,0));
+    corners.push_back(Point2f(imageSize, 0));
+    corners.push_back(Point2f(imageSize, imageSize));
+    corners.push_back(Point2f(0, imageSize));
+    corners.push_back(Point2f(0, 0));
 
     // Find perspective transform for image points.
     Mat transform = findHomography(imagePoints, corners, CV_RANSAC);
@@ -183,13 +184,13 @@ Pose MarkerDetector::getPose(const std::vector<cv::Point2f>& contour)
 
 Mat MarkerDetector::getCameraMatrix()
 {
-    Mat cameraMatrix(3,3,DataType<float>::type);
+    Mat cameraMatrix(3, 3, DataType<float>::type);
 
     const float horizFOVDegrees = 50.0f;
     const float horizFOVRadians = horizFOVDegrees / 2.0f * (static_cast<float>(M_PI) / 180.0f);
 
-    const float cx = static_cast<float> (m_trackingResolution.width) / 2.0f;
-    const float cy = static_cast<float> (m_trackingResolution.height) / 2.0f;
+    const float cx = static_cast<float>(m_trackingResolution.width) / 2.0f;
+    const float cy = static_cast<float>(m_trackingResolution.height) / 2.0f;
     const float fx = cx / std::tan(horizFOVRadians);
     const float fy = fx;
 
@@ -210,7 +211,7 @@ Mat MarkerDetector::getCameraMatrix()
 
 Mat MarkerDetector::getDistCoeffs()
 {
-    Mat distCoeffs(4,1,cv::DataType<float>::type);
+    Mat distCoeffs(4, 1, cv::DataType<float>::type);
     distCoeffs.at<float>(0) = 0;
     distCoeffs.at<float>(1) = 0;
     distCoeffs.at<float>(2) = 0;
@@ -229,22 +230,22 @@ void MarkerDetector::estimatePnP(const std::vector<Point2f>& corners)
      * |       |
      * p2 --- p3
      */
-    objectPoints.push_back(Point3f(1,1,0));
-    objectPoints.push_back(Point3f(-1,1,0));
-    objectPoints.push_back(Point3f(-1,-1,0));
-    objectPoints.push_back(Point3f(1,-1,0));
+    objectPoints.push_back(Point3f(1, 1, 0));
+    objectPoints.push_back(Point3f(-1, 1, 0));
+    objectPoints.push_back(Point3f(-1, -1, 0));
+    objectPoints.push_back(Point3f(1, -1, 0));
 
     cv::solvePnPRansac(objectPoints, corners, getCameraMatrix(), getDistCoeffs(),
-                       m_poseRotation, m_poseTranslation, PNP_USE_EXTRINSIC_GUESS);
+        m_poseRotation, m_poseTranslation, PNP_USE_EXTRINSIC_GUESS);
 }
 
 void MarkerDetector::drawAxes(const Mat& image, const Mat& rvec, const Mat& tvec)
 {
     std::vector<Point3f> linepoints;
-    linepoints.push_back(Point3f(0,0,0));
-    linepoints.push_back(Point3f(1,0,0));
-    linepoints.push_back(Point3f(0,1,0));
-    linepoints.push_back(Point3f(0,0,1));
+    linepoints.push_back(Point3f(0, 0, 0));
+    linepoints.push_back(Point3f(1, 0, 0));
+    linepoints.push_back(Point3f(0, 1, 0));
+    linepoints.push_back(Point3f(0, 0, 1));
 
     std::vector<Point2f> projectedPoints;
     cv::projectPoints(linepoints, rvec, tvec, getCameraMatrix(), getDistCoeffs(), projectedPoints);
@@ -259,17 +260,16 @@ void MarkerDetector::drawAxes(const Mat& image, const Mat& rvec, const Mat& tvec
 
 void MarkerDetector::drawPolygon(const std::vector<cv::Point2f>& vertices, const Mat& image)
 {
-    Scalar color = Scalar(m_rng.uniform(0,255), m_rng.uniform(0,255), m_rng.uniform(0,255));
+    Scalar color = Scalar(m_rng.uniform(0, 255), m_rng.uniform(0, 255), m_rng.uniform(0, 255));
 
     std::vector<Point> corners;
     for(const auto& vertex : vertices)
     {
-        corners.push_back(Point(static_cast<int> (vertex.x), static_cast<int> (vertex.y)));
+        corners.push_back(Point(static_cast<int>(vertex.x), static_cast<int>(vertex.y)));
     }
 
     std::vector<std::vector<Point>> polygons;
     polygons.push_back(corners);
     drawContours(image, polygons, -1, color, 2);
 }
-
 }

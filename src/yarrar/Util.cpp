@@ -4,23 +4,24 @@
 #include <opencv2/core.hpp>
 #include <fstream>
 
-namespace yarrar {
-namespace util {
+namespace yarrar
+{
+namespace util
+{
 
 cv::Size getScaledDownResolution(const int width,
-                                 const int height,
-                                 const int preferredWidth)
+    const int height,
+    const int preferredWidth)
 {
     if(width <= preferredWidth)
     {
-        std::pair<int, int> (width, height);
+        std::pair<int, int>(width, height);
     }
-    float aspect = static_cast<float> (width) / static_cast<float> (height);
+    float aspect = static_cast<float>(width) / static_cast<float>(height);
 
     return cv::Size(
-            preferredWidth,
-            static_cast<int> (std::floor(preferredWidth / aspect))
-    );
+        preferredWidth,
+        static_cast<int>(std::floor(preferredWidth / aspect)));
 }
 
 void rotate(const cv::Mat& src, cv::Mat& dst, const yarrar::Rotation90& rotation)
@@ -66,6 +67,5 @@ json11::Json loadJson(const std::string& filePath)
 
     return ret.object_items();
 }
-
 }
 }
