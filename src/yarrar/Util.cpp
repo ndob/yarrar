@@ -54,7 +54,7 @@ void rotate(const cv::Mat& src, cv::Mat& dst, const yarrar::Rotation90& rotation
 json11::Json loadJson(const std::string& filePath)
 {
     std::string jsonStr;
-    filesystem::readFile(filePath, jsonStr);
+    io::readFile(filePath, jsonStr);
 
     std::string err;
     json11::Json ret = json11::Json::parse(jsonStr, err);

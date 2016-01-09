@@ -12,7 +12,7 @@ std::string DATA_PATH = "../../data/";
 #endif
 
 namespace yarrar {
-namespace filesystem {
+namespace io {
 
 void readFile(const std::string& relativePath, std::string& toBuffer)
 {

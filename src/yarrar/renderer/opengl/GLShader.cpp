@@ -17,7 +17,7 @@ GLShader::GLShader(const ShaderDef& def, GLenum shaderType):
     }
 
     std::string code;
-    filesystem::readFile(def.path, code);
+    io::readFile(def.path, code);
 
     const GLchar* strings[] = { code.c_str() };
     glShaderSource(m_object, 1, strings, nullptr);
