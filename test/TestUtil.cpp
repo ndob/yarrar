@@ -51,7 +51,7 @@ namespace yarrar_test {
 TEST_CASE("Image is rotated correctly", "[util]")
 {
     cv::Mat src, dst;
-    src = cv::imread("data/img/util_rotate_test.png", cv::IMREAD_COLOR);
+    src = cv::imread("test/fixture/img/util_rotate_test.png", cv::IMREAD_COLOR);
 
     SECTION("0 degrees")
     {

@@ -10,7 +10,7 @@ TEST_CASE("Id and rotation is parsed correctly", "[yarrar_marker_parser]")
 {
     using namespace yarrar;
 
-    cv::Mat image = cv::imread("data/img/yarrar_marker_datafield.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat image = cv::imread("test/fixture/img/yarrar_marker_datafield.png", cv::IMREAD_GRAYSCALE);
     cv::Mat rotated;
     YarrarMarkerParser parser;
 

@@ -14,7 +14,7 @@ TEST_CASE("Pose is detected correctly", "[marker_tracker]")
     using namespace json11;
 
     Json staticImageConf = Json::object{
-        { "image_path", "data/img/marker.jpg" }
+        { "image_path", "test/fixture/img/marker.jpg" }
     };
     StaticImageDataProvider provider(staticImageConf);
 
