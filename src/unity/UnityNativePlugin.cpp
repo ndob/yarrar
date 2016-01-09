@@ -64,6 +64,7 @@ void storePoseToReturnBuffer(const yarrar::Pose& pose)
 
 extern "C"
 {
+
     const EXPORT_API char* getPose(void* pixelBuffer, int width, int height)
     {
         cv::Mat argb(height, width, CV_8UC4, pixelBuffer);
@@ -84,4 +85,5 @@ extern "C"
         if(poses.size() > 0) storePoseToReturnBuffer(poses[0]);
         return returnStringBuffer.c_str();
     }
+    
 }

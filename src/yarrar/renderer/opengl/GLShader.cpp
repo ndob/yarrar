@@ -42,4 +42,3 @@ GLShader::GLShader(const ShaderDef& def, GLenum shaderType):
 }
 
 }
-
