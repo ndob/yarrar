@@ -72,7 +72,7 @@ const EXPORT_API char* getPose(void* pixelBuffer, int width, int height)
     cv::flip(bgr, flipped, 0);
 
     yarrar::Datapoint datapoint{
-        std::chrono::high_resolution_clock::now(),
+        TimestampClock::now(),
         flipped
     };
 

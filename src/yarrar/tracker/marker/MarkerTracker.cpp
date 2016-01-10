@@ -22,7 +22,7 @@ namespace yarrar
 
 MarkerTracker::MarkerTracker(int width, int height, const json11::Json& config)
     : Tracker(config)
-    , m_lastUpdated(std::chrono::high_resolution_clock::now())
+    , m_lastUpdated(Timestamp::min())
 {
     applyJsonConfig(config, width, height);
 

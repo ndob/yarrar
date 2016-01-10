@@ -32,7 +32,7 @@ DatatypeFlags AndroidCameraProvider::provides()
 void AndroidCameraProvider::injectCameraFrame(const cv::Mat& rgb)
 {
     auto handle = s_dp.lockReadWrite();
-    handle.set({ std::chrono::high_resolution_clock::now(),
+    handle.set({ TimestampClock::now(),
         rgb });
 }
 

@@ -34,7 +34,7 @@ StaticImageDataProvider::StaticImageDataProvider(const json11::Json& config)
     };
 
     auto handle = m_dp.lockReadWrite();
-    handle.set({ std::chrono::high_resolution_clock::now(),
+    handle.set({ TimestampClock::now(),
         cachedImage });
 }
 const LockableData<Datapoint>& StaticImageDataProvider::getData()

@@ -21,7 +21,7 @@ const LockableData<Datapoint>& WebcamDataProvider::getData()
     m_videoCapture >> ret;
 
     auto handle = m_dp.lockReadWrite();
-    handle.set({ std::chrono::high_resolution_clock::now(),
+    handle.set({ TimestampClock::now(),
         ret });
 
     return m_dp;

@@ -75,9 +75,9 @@ TEST_CASE("LockableData basic functionality", "[util]")
         {
         }
 
-        auto startTime = high_resolution_clock::now();
+        auto startTime = steady_clock::now();
         auto handle = data.lockRead();
-        auto endTime = high_resolution_clock::now();
+        auto endTime = steady_clock::now();
 
         auto waitedMilliseconds = duration_cast<milliseconds>(endTime - startTime).count();
         auto innerData = handle.get();

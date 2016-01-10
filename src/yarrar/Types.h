@@ -5,8 +5,8 @@
 
 namespace yarrar
 {
-
-typedef std::chrono::time_point<std::chrono::system_clock> Timestamp;
+using TimestampClock = std::chrono::steady_clock;
+typedef std::chrono::time_point<TimestampClock> Timestamp;
 
 struct Datapoint
 {

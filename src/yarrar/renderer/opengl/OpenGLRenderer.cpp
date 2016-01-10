@@ -39,7 +39,7 @@ OpenGLRenderer::OpenGLRenderer(int width, int height, const json11::Json& config
     : Renderer(config)
     , m_context(new GLContext(width, height))
     , m_backgroundTex(0)
-    , m_lastUpdatedBackground(std::chrono::high_resolution_clock::now())
+    , m_lastUpdatedBackground(Timestamp::min())
 {
     for(const auto& def : VERTEX_SHADERS)
     {
