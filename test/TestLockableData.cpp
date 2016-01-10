@@ -64,8 +64,8 @@ TEST_CASE("LockableData basic functionality", "[util]")
         std::thread t(
             [&data, &flag]()
             {
-                flag = true;
                 auto handle = data.lockReadWrite();
+                flag = true;
                 TestData data3{3, "value3"};
                 handle.set(std::move(data3));
                 std::this_thread::sleep_for(milliseconds(300));
