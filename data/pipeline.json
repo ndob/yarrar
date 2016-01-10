@@ -17,7 +17,11 @@
                 "config":
                 {
                     "parser": "yarrar_parser",
-                    "tracking_resolution_width": 320
+                    "tracking_resolution_width": 320,
+                    "contour_min_area_size": 100,
+                    "inner_rectangle_min_size": 0.6,
+                    "marker_parser_image_size": 100,
+                    "binary_image_threshold": 100
                 }
             }
         ],
