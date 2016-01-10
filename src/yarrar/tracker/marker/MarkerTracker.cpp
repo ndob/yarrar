@@ -22,6 +22,7 @@ namespace yarrar
 
 MarkerTracker::MarkerTracker(int width, int height, const json11::Json& config)
     : Tracker(config)
+    , m_lastUpdated(std::chrono::high_resolution_clock::now())
 {
     applyJsonConfig(config, width, height);
 
@@ -88,6 +89,15 @@ void MarkerTracker::getPoses(const Datapoint& dp, std::vector<Pose>& output)
 {
     using namespace cv;
 
+    // If datapoint (camera data) hasn't been updated after last run
+    // no need to do the calculations again.
+    if(dp.created <= m_lastUpdated)
+    {
+        m_lastUpdated = dp.created;
+        output = m_poseCache;
+        return;
+    }
+
     Mat binary, gray;
     {
         Mat resizedColored;
@@ -153,6 +163,9 @@ void MarkerTracker::getPoses(const Datapoint& dp, std::vector<Pose>& output)
 
         output.push_back(cameraPose);
     }
+
+    // Save current pose data.
+    m_poseCache = output;
 
     // Gather all ids, that were used during this run
     // and prune detector history accordingly.

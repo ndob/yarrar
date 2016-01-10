@@ -32,5 +32,7 @@ private:
     Config m_config;
     std::unique_ptr<MarkerDetector> m_detector;
     std::unique_ptr<MarkerParser> m_parser;
+    std::vector<Pose> m_poseCache;
+    Timestamp m_lastUpdated;
 };
 }
