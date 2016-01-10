@@ -1,7 +1,7 @@
 #include "Pipeline.h"
 #include "dataprovider/StaticImageDataProvider.h"
 #include "dataprovider/WebcamDataProvider.h"
-#include "dataprovider/AndroidImageProvider.h"
+#include "dataprovider/AndroidCameraProvider.h"
 #include "tracker/marker/MarkerTracker.h"
 #include "renderer/opengl/OpenGLRenderer.h"
 #include "renderer/opencv/OpenCVRenderer.h"
@@ -61,7 +61,7 @@ Pipeline::Pipeline(const std::string& configFile)
         }
         else if(type == "android_image")
         {
-            addDataProvider<AndroidImageProvider>(provider["config"]);
+            addDataProvider<AndroidCameraProvider>(provider["config"]);
         }
     }
 

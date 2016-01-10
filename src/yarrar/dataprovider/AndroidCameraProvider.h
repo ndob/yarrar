@@ -8,10 +8,10 @@
 namespace yarrar
 {
 
-class AndroidImageProvider : public DataProvider
+class AndroidCameraProvider : public DataProvider
 {
 public:
-    AndroidImageProvider(const json11::Json& config);
+    AndroidCameraProvider(const json11::Json& config);
     const LockableData<Datapoint>& getData() override;
     Dimensions getDimensions() override;
     DatatypeFlags provides() override;

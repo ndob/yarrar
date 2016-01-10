@@ -22,7 +22,7 @@ else()
         yarrar/renderer/opengl/BackgroundModel.cpp
         yarrar/renderer/opengl/SceneModel.cpp
         yarrar/dataprovider/StaticImageDataProvider.cpp
-        yarrar/dataprovider/AndroidImageProvider.cpp
+        yarrar/dataprovider/AndroidCameraProvider.cpp
         yarrar/renderer/opengl/GLContext.cpp
         yarrar/Scene.cpp
         yarrar/Util.cpp)

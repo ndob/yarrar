@@ -1,6 +1,6 @@
 #include "AndroidServices.h"
 #include "yarrar/Pipeline.h"
-#include "yarrar/dataprovider/AndroidImageProvider.h"
+#include "yarrar/dataprovider/AndroidCameraProvider.h"
 
 #include <jni.h>
 #include <android/log.h>
@@ -16,7 +16,7 @@ extern "C" {
 void Java_com_ndob_yarrar_YarrarActivity_initYarrar(JNIEnv* env, jobject, jint width, jint height, jobject assetManager)
 {
     yarrar::android::initialize(env, assetManager);
-    yarrar::AndroidImageProvider::injectCameraSize(static_cast<int>(width), static_cast<int>(height));
+    yarrar::AndroidCameraProvider::injectCameraSize(static_cast<int>(width), static_cast<int>(height));
     s_pipe = new yarrar::Pipeline("pipeline.json");
 }
 
@@ -56,7 +56,7 @@ void Java_com_ndob_yarrar_YarrarActivity_injectCameraFrame(JNIEnv* env, jobject,
     cv::Mat rgb(height, width, CV_8UC3);
     cv::cvtColor(yuv, rgb, cv::COLOR_YUV2BGR_NV21);
     yarrar::util::rotate(rgb, rgb, yarrar::Rotation90::DEG_90);
-    yarrar::AndroidImageProvider::injectCameraFrame(rgb);
+    yarrar::AndroidCameraProvider::injectCameraFrame(rgb);
 
     env->ReleaseByteArrayElements(cameraData, buffer, JNI_ABORT);
 }
