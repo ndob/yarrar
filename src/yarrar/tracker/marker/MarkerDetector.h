@@ -13,13 +13,23 @@ struct Marker
     std::vector<cv::Point2f> outerContour;
 };
 
+
 class MarkerDetector
 {
 public:
-    MarkerDetector(const cv::Size& trackingResolution);
+    struct Config
+    {
+        cv::Size trackingResolution;
+        double contourAreaMinSize;
+        float innerRectangleMinimumSize;
+    };
+
+    MarkerDetector(const Config& config);
 
     std::vector<Marker> findMarkers(const cv::Mat& image);
-    cv::Mat getRectifiedInnerImage(const std::vector<cv::Point2f>& imagePoints, const cv::Mat& image);
+    cv::Mat getRectifiedInnerImage(const std::vector<cv::Point2f>& imagePoints,
+        const cv::Mat& image,
+        const int imageSize);
     Pose getPose(const std::vector<cv::Point2f>& contour);
 
     void drawAxes(const cv::Mat& image, const cv::Mat& rvec, const cv::Mat& tvec);
@@ -30,7 +40,7 @@ private:
     cv::Mat getCameraMatrix();
     cv::Mat getDistCoeffs();
 
-    cv::Size m_trackingResolution;
+    Config m_config;
     cv::RNG m_rng;
     cv::Mat m_poseRotation;
     cv::Mat m_poseTranslation;

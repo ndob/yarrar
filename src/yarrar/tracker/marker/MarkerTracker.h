@@ -20,7 +20,16 @@ public:
     void getPoses(const Datapoint& data, std::vector<Pose>& output) override;
 
 private:
-    cv::Size m_trackingResolution;
+    void applyJsonConfig(const json11::Json& config, int width, int height);
+
+    struct Config
+    {
+        MarkerDetector::Config detectorConfig;
+        int markerParserImageSize;
+        int binaryImageThreshold;
+    };
+
+    Config m_config;
     std::unique_ptr<MarkerDetector> m_detector;
     std::unique_ptr<MarkerParser> m_parser;
 };

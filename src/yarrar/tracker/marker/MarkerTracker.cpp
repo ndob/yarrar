@@ -3,9 +3,17 @@
 namespace
 {
 
+const std::string PARSER = "parser";
+const std::string YARRAR_PARSER = "yarrar_parser";
+const std::string TRACKING_RESOLUTION_WIDTH = "tracking_resolution_width";
+const std::string CONTOUR_MIN_AREA_SIZE = "contour_min_area_size";
+const std::string INNER_RECTANGLE_MIN_SIZE = "inner_rectangle_min_size";
+const std::string MARKER_PARSER_IMAGE_SIZE = "marker_parser_image_size";
+const std::string BINARY_IMAGE_THRESHOLD = "binary_image_threshold";
+
 const json11::Json::shape CONFIG_SHAPE{
-    { "parser", json11::Json::STRING },
-    { "tracking_resolution_width", json11::Json::NUMBER }
+    { PARSER, json11::Json::STRING },
+    { TRACKING_RESOLUTION_WIDTH, json11::Json::NUMBER }
 };
 }
 
@@ -15,25 +23,60 @@ namespace yarrar
 MarkerTracker::MarkerTracker(int width, int height, const json11::Json& config)
     : Tracker(config)
 {
+    applyJsonConfig(config, width, height);
+
+    m_detector.reset(new MarkerDetector(m_config.detectorConfig));
+
+    if(config[PARSER].string_value() == YARRAR_PARSER)
+    {
+        m_parser.reset(new YarrarMarkerParser);
+    }
+
+    assert(m_parser);
+}
+
+void MarkerTracker::applyJsonConfig(const json11::Json& config, int width, int height)
+{
     std::string err;
     if(!config.has_shape(CONFIG_SHAPE, err))
     {
         throw std::runtime_error(std::string("MarkerTracker: ") + err);
     }
 
-    const int preferredTrackingResolutionWidth = config["tracking_resolution_width"].int_value();
-    m_trackingResolution = util::getScaledDownResolution(width,
+    const int preferredTrackingResolutionWidth = config[TRACKING_RESOLUTION_WIDTH].int_value();
+    cv::Size trackingResolution = util::getScaledDownResolution(width,
         height,
         preferredTrackingResolutionWidth);
 
-    m_detector.reset(new MarkerDetector(m_trackingResolution));
+    // Default configuration values.
+    m_config = {
+        { trackingResolution, 100, 0.6f },
+        100,
+        100
+    };
 
-    if(config["parser"].string_value() == "yarrar_parser")
+    if(config[CONTOUR_MIN_AREA_SIZE].is_number())
     {
-        m_parser.reset(new YarrarMarkerParser);
+        m_config.detectorConfig.contourAreaMinSize = config[CONTOUR_MIN_AREA_SIZE].number_value();
     }
 
-    assert(m_parser);
+    if(config[INNER_RECTANGLE_MIN_SIZE].is_number())
+    {
+        m_config.detectorConfig.innerRectangleMinimumSize = static_cast<float>(
+            config[INNER_RECTANGLE_MIN_SIZE].number_value());
+    }
+
+    if(config[MARKER_PARSER_IMAGE_SIZE].is_number())
+    {
+        m_config.markerParserImageSize = static_cast<int>(
+            config[MARKER_PARSER_IMAGE_SIZE].number_value());
+    }
+
+    if(config[BINARY_IMAGE_THRESHOLD].is_number())
+    {
+        m_config.binaryImageThreshold = static_cast<int>(
+            config[BINARY_IMAGE_THRESHOLD].number_value());
+    }
 }
 
 DatatypeFlags MarkerTracker::depends()
@@ -49,7 +92,7 @@ void MarkerTracker::getPoses(const Datapoint& dp, std::vector<Pose>& output)
     {
         Mat resizedColored;
         // Downscale and convert to gray scale.
-        resize(dp.data, resizedColored, m_trackingResolution);
+        resize(dp.data, resizedColored, m_config.detectorConfig.trackingResolution);
         cvtColor(resizedColored, gray, CV_BGR2GRAY);
 
         // Mark areas that are between totally black (0) and gray
@@ -66,7 +109,7 @@ void MarkerTracker::getPoses(const Datapoint& dp, std::vector<Pose>& output)
     for(const auto& marker : markers)
     {
         Pose cameraPose = m_detector->getPose(marker.outerContour);
-        Mat rectified = m_detector->getRectifiedInnerImage(marker.innerContour, gray);
+        Mat rectified = m_detector->getRectifiedInnerImage(marker.innerContour, gray, 100);
         MarkerValue value = m_parser->getData(rectified);
 
         if(!value.valid) continue;

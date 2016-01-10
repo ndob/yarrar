@@ -34,14 +34,14 @@ namespace yarrar
 
 using namespace cv;
 
-MarkerDetector::MarkerDetector(const cv::Size& trackingResolution)
-    : m_trackingResolution(trackingResolution)
+MarkerDetector::MarkerDetector(const Config& config)
+    : m_config(config)
     , m_rng(RANDOM_SEED)
     , m_poseRotation(3, 1, cv::DataType<double>::type)
     , m_poseTranslation(3, 1, cv::DataType<double>::type)
 {
-    assert(m_trackingResolution.width > 0);
-    assert(m_trackingResolution.height > 0);
+    assert(m_config.trackingResolution.width > 0);
+    assert(m_config.trackingResolution.height > 0);
 }
 
 std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
@@ -63,7 +63,7 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
     {
         hierarchyIdx++;
         // Ignore too small contours.
-        if(contourArea(contour, false) < 100) continue;
+        if(contourArea(contour, false) < m_config.contourAreaMinSize) continue;
 
         // Calculate outer perimeter for contour.
         bool isClosed = true;
@@ -119,7 +119,7 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
                     double innerPerimeterLength = arcLength(validRectangles[j], true);
 
                     if(innerPerimeterLength < outerPerimeterLength &&
-                        innerPerimeterLength > (0.6f * outerPerimeterLength) &&
+                        innerPerimeterLength > (m_config.innerRectangleMinimumSize * outerPerimeterLength) &&
                         greatestInnerPerimeterLength < innerPerimeterLength)
                     {
                         greatestInnerPerimeterLength = innerPerimeterLength;
@@ -148,10 +148,9 @@ std::vector<Marker> MarkerDetector::findMarkers(const Mat& binaryImage)
     return ret;
 }
 
-cv::Mat MarkerDetector::getRectifiedInnerImage(const std::vector<cv::Point2f>& imagePoints, const cv::Mat& image)
+cv::Mat MarkerDetector::getRectifiedInnerImage(const std::vector<cv::Point2f>& imagePoints,
+    const cv::Mat& image, const int imageSize)
 {
-    // Size for image that will be parsed.
-    const int imageSize = 100;
     std::vector<Point2f> corners;
 
     corners.push_back(Point2f(imageSize, 0));
@@ -189,8 +188,8 @@ Mat MarkerDetector::getCameraMatrix()
     const float horizFOVDegrees = 50.0f;
     const float horizFOVRadians = horizFOVDegrees / 2.0f * (static_cast<float>(M_PI) / 180.0f);
 
-    const float cx = static_cast<float>(m_trackingResolution.width) / 2.0f;
-    const float cy = static_cast<float>(m_trackingResolution.height) / 2.0f;
+    const float cx = static_cast<float>(m_config.trackingResolution.width) / 2.0f;
+    const float cy = static_cast<float>(m_config.trackingResolution.height) / 2.0f;
     const float fx = cx / std::tan(horizFOVRadians);
     const float fy = fx;
 
