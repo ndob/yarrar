@@ -8,6 +8,7 @@ if(UNITY_PLUGIN)
         yarrar/tracker/marker/YarrarMarkerParser.cpp
         yarrar/tracker/marker/MarkerTracker.cpp
         yarrar/Util.cpp
+        yarrar/io/FileSystem_std.cpp
         unity/UnityNativePlugin.cpp)
 else()
     set(SOURCE_FILES
@@ -61,7 +62,7 @@ elseif(UNITY_PLUGIN)
         "${PROJECT_SOURCE_DIR}/external/opencv/build/include"
         "${PROJECT_SOURCE_DIR}/external/json11")
 
-    target_link_libraries(yarrar ${OpenCV_LIBS})
+    target_link_libraries(yarrar json11 ${OpenCV_LIBS})
 else()
     add_definitions(-DYARRAR_OPENGL_CONTEXT)
     if(MSVC)
