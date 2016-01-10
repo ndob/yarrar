@@ -96,10 +96,9 @@ void MarkerTracker::getPoses(const Datapoint& dp, std::vector<Pose>& output)
         cvtColor(resizedColored, gray, CV_BGR2GRAY);
 
         // Mark areas that are between totally black (0) and gray
-        // threshold (100) with black, others with white. Tracking
+        // threshold (default 100) with black, others with white. Tracking
         // and id-detection is done with this Mat.
-        // TODO: Threshold should be configurable.
-        inRange(gray, 0, 100, binary);
+        inRange(gray, 0, m_config.binaryImageThreshold, binary);
     }
 
     // TODO: Find markers modifies the binary image,
@@ -108,12 +107,11 @@ void MarkerTracker::getPoses(const Datapoint& dp, std::vector<Pose>& output)
 
     for(const auto& marker : markers)
     {
-        Pose cameraPose = m_detector->getPose(marker.outerContour);
-        Mat rectified = m_detector->getRectifiedInnerImage(marker.innerContour, gray, 100);
+        Mat rectified = m_detector->getRectifiedInnerImage(marker.innerContour, gray, m_config.markerParserImageSize);
         MarkerValue value = m_parser->getData(rectified);
-
         if(!value.valid) continue;
 
+        Pose cameraPose = m_detector->getPose(value.id, marker.outerContour);
         cameraPose.coordinateSystemId = value.id;
 
         // Check if marker data indicates that the marker is rotated around z-axis.
@@ -155,5 +153,15 @@ void MarkerTracker::getPoses(const Datapoint& dp, std::vector<Pose>& output)
 
         output.push_back(cameraPose);
     }
+
+    // Gather all ids, that were used during this run
+    // and prune detector history accordingly.
+    std::vector<int> usedIds(output.size());
+    std::transform(output.begin(), output.end(), usedIds.begin(),
+        [](const Pose& pose)
+        {
+            return pose.coordinateSystemId;
+        });
+    m_detector->pruneHistory(usedIds);
 }
 }

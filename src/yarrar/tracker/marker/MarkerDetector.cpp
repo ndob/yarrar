@@ -22,10 +22,6 @@ enum Hierarchy
 const cv::Scalar RED = cv::Scalar(0, 0, 255);
 const cv::Scalar GREEN = cv::Scalar(0, 255, 0);
 const cv::Scalar BLUE = cv::Scalar(255, 0, 0);
-
-// FIXME: To use extrinsic guess with multiple poses,
-// a history buffer needs to be implemented.
-const bool PNP_USE_EXTRINSIC_GUESS = false;
 const uint64 RANDOM_SEED = 12345;
 }
 
@@ -37,8 +33,6 @@ using namespace cv;
 MarkerDetector::MarkerDetector(const Config& config)
     : m_config(config)
     , m_rng(RANDOM_SEED)
-    , m_poseRotation(3, 1, cv::DataType<double>::type)
-    , m_poseTranslation(3, 1, cv::DataType<double>::type)
 {
     assert(m_config.trackingResolution.width > 0);
     assert(m_config.trackingResolution.height > 0);
@@ -169,16 +163,24 @@ cv::Mat MarkerDetector::getRectifiedInnerImage(const std::vector<cv::Point2f>& i
     return subImage;
 }
 
-Pose MarkerDetector::getPose(const std::vector<cv::Point2f>& contour)
+Pose MarkerDetector::getPose(const int coordinateSystemId, const std::vector<cv::Point2f>& contour)
 {
-    estimatePnP(contour);
+    return estimatePnP(coordinateSystemId, contour);
+}
 
-    return {
-        m_poseRotation,
-        m_poseTranslation,
-        getCameraMatrix(),
-        -1
-    };
+void MarkerDetector::pruneHistory(const std::vector<int>& usedCoordinateSystems)
+{
+    for(auto it = m_poseHistories.begin(); it != m_poseHistories.end(); /* no increment */)
+    {
+        if(!util::contains(usedCoordinateSystems, it->first))
+        {
+            it = m_poseHistories.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 }
 
 Mat MarkerDetector::getCameraMatrix()
@@ -219,10 +221,9 @@ Mat MarkerDetector::getDistCoeffs()
     return distCoeffs;
 }
 
-void MarkerDetector::estimatePnP(const std::vector<Point2f>& corners)
+Pose MarkerDetector::estimatePnP(const int coordinateSystemId, const std::vector<Point2f>& corners)
 {
     std::vector<Point3f> objectPoints;
-
     /*
      * p1 --- p0
      * |       |
@@ -234,8 +235,33 @@ void MarkerDetector::estimatePnP(const std::vector<Point2f>& corners)
     objectPoints.push_back(Point3f(-1, -1, 0));
     objectPoints.push_back(Point3f(1, -1, 0));
 
+    auto historyIt = m_poseHistories.find(coordinateSystemId);
+    // Insert new HistoryBuffer if there is none.
+    if(historyIt == m_poseHistories.end())
+    {
+        auto retPair = m_poseHistories.emplace(std::make_pair(coordinateSystemId, HistoryBuffer<Pose>(1)));
+        historyIt = retPair.first;
+    }
+    HistoryBuffer<Pose>& poseHistory = historyIt->second;
+    Pose newPose{
+        cv::Mat(),
+        cv::Mat(),
+        getCameraMatrix(),
+        coordinateSystemId
+    };
+
+    bool useExtrinsicGuess = poseHistory.size() > 0;
+    if(useExtrinsicGuess)
+    {
+        auto elem = poseHistory.get(1).begin();
+        newPose.rotation = (*elem).rotation;
+        newPose.translation = (*elem).translation;
+    }
     cv::solvePnPRansac(objectPoints, corners, getCameraMatrix(), getDistCoeffs(),
-        m_poseRotation, m_poseTranslation, PNP_USE_EXTRINSIC_GUESS);
+        newPose.rotation, newPose.translation, useExtrinsicGuess);
+
+    poseHistory.add(newPose);
+    return newPose;
 }
 
 void MarkerDetector::drawAxes(const Mat& image, const Mat& rvec, const Mat& tvec)
