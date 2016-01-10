@@ -17,7 +17,7 @@ public:
     MarkerTracker(int width, int height, const json11::Json& config);
 
     DatatypeFlags depends() override;
-    void getPoses(const cv::Mat& image, std::vector<Pose>& output) override;
+    void getPoses(const Datapoint& data, std::vector<Pose>& output) override;
 
 private:
     cv::Size m_trackingResolution;

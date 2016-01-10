@@ -2,6 +2,7 @@
 
 #include "Types.h"
 #include "Scene.h"
+#include "LockableData.h"
 
 #include <json11.hpp>
 #include <opencv2/opencv.hpp>
@@ -22,7 +23,7 @@ class DataProvider : public PipelineStage
 public:
     DataProvider(const json11::Json& config)
         : PipelineStage(config){};
-    virtual cv::Mat getData() = 0;
+    virtual const LockableData<Datapoint>& getData() = 0;
     virtual Dimensions getDimensions() = 0;
     virtual DatatypeFlags provides() = 0;
 };
@@ -33,7 +34,7 @@ public:
     Tracker(const json11::Json& config)
         : PipelineStage(config){};
     virtual DatatypeFlags depends() = 0;
-    virtual void getPoses(const cv::Mat& rawData, std::vector<Pose>& output) = 0;
+    virtual void getPoses(const Datapoint& rawData, std::vector<Pose>& output) = 0;
 };
 
 class Renderer : public PipelineStage

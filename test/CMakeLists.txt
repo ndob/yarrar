@@ -14,7 +14,9 @@ set(SOURCE_FILES
         TestMarkerTracker.cpp
         TestMarkerDetector.cpp
         TestYarrarMarkerParser.cpp
-        TestUtil.cpp)
+        TestUtil.cpp
+        TestHistoryBuffer.cpp
+        TestLockableData.cpp)
 
 add_executable(testrunner ${SOURCE_FILES})
 target_link_libraries(testrunner yarrar json11 ${OpenCV_LIBS})

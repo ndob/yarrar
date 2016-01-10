@@ -11,11 +11,12 @@ class WebcamDataProvider : public DataProvider
 {
 public:
     WebcamDataProvider(const json11::Json& config);
-    cv::Mat getData() override;
+    const LockableData<Datapoint>& getData() override;
     Dimensions getDimensions() override;
     DatatypeFlags provides() override;
 
 private:
     cv::VideoCapture m_videoCapture;
+    LockableData<Datapoint> m_dp;
 };
 }

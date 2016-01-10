@@ -6,6 +6,7 @@ namespace yarrar
 WebcamDataProvider::WebcamDataProvider(const json11::Json& config)
     : DataProvider(config)
     , m_videoCapture(0)
+    , m_dp({})
 {
     if(!m_videoCapture.isOpened())
     {
@@ -14,19 +15,25 @@ WebcamDataProvider::WebcamDataProvider(const json11::Json& config)
 }
 
 
-cv::Mat WebcamDataProvider::getData()
+const LockableData<Datapoint>& WebcamDataProvider::getData()
 {
     cv::Mat ret;
     m_videoCapture >> ret;
-    return ret;
+
+    auto handle = m_dp.lockReadWrite();
+    handle.set({ std::chrono::high_resolution_clock::now(),
+        ret });
+
+    return m_dp;
 }
 
 Dimensions WebcamDataProvider::getDimensions()
 {
     const auto& data = getData();
+    auto handle = data.lockRead();
     return {
-        data.cols,
-        data.rows
+        handle.get().data.cols,
+        handle.get().data.rows
     };
 }
 

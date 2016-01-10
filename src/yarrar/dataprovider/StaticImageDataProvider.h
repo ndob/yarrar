@@ -11,11 +11,12 @@ class StaticImageDataProvider : public DataProvider
 {
 public:
     StaticImageDataProvider(const json11::Json& config);
-    cv::Mat getData() override;
+    const LockableData<Datapoint>& getData() override;
     Dimensions getDimensions() override;
     DatatypeFlags provides() override;
 
 private:
-    cv::Mat m_cachedImage;
+    LockableData<Datapoint> m_dp;
+    Dimensions m_imageDimensions;
 };
 }

@@ -12,7 +12,7 @@ class AndroidImageProvider : public DataProvider
 {
 public:
     AndroidImageProvider(const json11::Json& config);
-    cv::Mat getData() override;
+    const LockableData<Datapoint>& getData() override;
     Dimensions getDimensions() override;
     DatatypeFlags provides() override;
 
@@ -22,7 +22,6 @@ public:
 private:
     static int s_width;
     static int s_height;
-    static cv::Mat s_image;
-    static std::mutex s_imageMutex;
+    static LockableData<Datapoint> s_dp;
 };
 }

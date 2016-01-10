@@ -5,18 +5,16 @@ namespace yarrar
 
 int AndroidImageProvider::s_width = 0;
 int AndroidImageProvider::s_height = 0;
-cv::Mat AndroidImageProvider::s_image;
-std::mutex AndroidImageProvider::s_imageMutex;
+LockableData<Datapoint> AndroidImageProvider::s_dp({});
 
 AndroidImageProvider::AndroidImageProvider(const json11::Json& config)
     : DataProvider(config)
 {
 }
 
-cv::Mat AndroidImageProvider::getData()
+const LockableData<Datapoint>& AndroidImageProvider::getData()
 {
-    std::lock_guard<std::mutex> m_(s_imageMutex);
-    return s_image;
+    return s_dp;
 }
 
 Dimensions AndroidImageProvider::getDimensions()
@@ -33,8 +31,9 @@ DatatypeFlags AndroidImageProvider::provides()
 
 void AndroidImageProvider::injectCameraFrame(const cv::Mat& rgb)
 {
-    std::lock_guard<std::mutex> m_(s_imageMutex);
-    s_image = rgb;
+    auto handle = s_dp.lockReadWrite();
+    handle.set({ std::chrono::high_resolution_clock::now(),
+        rgb });
 }
 
 void AndroidImageProvider::injectCameraSize(const int width, const int height)

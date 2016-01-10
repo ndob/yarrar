@@ -1,9 +1,18 @@
 #pragma once
 
 #include <opencv2/opencv.hpp>
+#include <chrono>
 
 namespace yarrar
 {
+
+typedef std::chrono::time_point<std::chrono::system_clock> Timestamp;
+
+struct Datapoint
+{
+    Timestamp created;
+    cv::Mat data;
+};
 
 struct Vector3
 {

@@ -41,7 +41,7 @@ DatatypeFlags MarkerTracker::depends()
     return RGB_CAMERA_FLAG;
 }
 
-void MarkerTracker::getPoses(const cv::Mat& image, std::vector<Pose>& output)
+void MarkerTracker::getPoses(const Datapoint& dp, std::vector<Pose>& output)
 {
     using namespace cv;
 
@@ -49,7 +49,7 @@ void MarkerTracker::getPoses(const cv::Mat& image, std::vector<Pose>& output)
     {
         Mat resizedColored;
         // Downscale and convert to gray scale.
-        resize(image, resizedColored, m_trackingResolution);
+        resize(dp.data, resizedColored, m_trackingResolution);
         cvtColor(resizedColored, gray, CV_BGR2GRAY);
 
         // Mark areas that are between totally black (0) and gray
@@ -104,9 +104,9 @@ void MarkerTracker::getPoses(const cv::Mat& image, std::vector<Pose>& output)
             cv::Rodrigues(rotationMatrix * Rz, cameraPose.rotation);
 
 #if defined(DEBUG_DRAWING)
-            m_detector->drawPolygon(marker.innerContour, image);
-            m_detector->drawPolygon(marker.outerContour, image);
-            m_detector->drawAxes(image, cameraPose.rotation, cameraPose.translation);
+            m_detector->drawPolygon(marker.innerContour, dp.data);
+            m_detector->drawPolygon(marker.outerContour, dp.data);
+            m_detector->drawAxes(dp.data, cameraPose.rotation, cameraPose.translation);
 #endif
         }
 

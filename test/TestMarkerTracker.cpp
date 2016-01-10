@@ -28,7 +28,11 @@ TEST_CASE("Pose is detected correctly", "[marker_tracker]")
     MarkerTracker tracker(dim.width, dim.height, markerTrackerConf);
 
     std::vector<Pose> poses;
-    tracker.getPoses(provider.getData(), poses);
+    {
+        auto handle = provider.getData().lockRead();
+        tracker.getPoses(handle.get(), poses);
+    }
+
     REQUIRE(poses.size() == 1);
 
     auto pose = poses.at(0);
@@ -74,7 +78,11 @@ TEST_CASE("Detect multiple poses from same frame", "[marker_tracker]")
     MarkerTracker tracker(dim.width, dim.height, markerTrackerConf);
 
     std::vector<Pose> poses;
-    tracker.getPoses(provider.getData(), poses);
+    {
+        auto handle = provider.getData().lockRead();
+        tracker.getPoses(handle.get(), poses);
+    }
+
     REQUIRE(poses.size() == 4);
     REQUIRE(poses.at(0).coordinateSystemId == 112);
     REQUIRE(poses.at(1).coordinateSystemId == 30);

@@ -13,6 +13,7 @@ namespace yarrar
 
 StaticImageDataProvider::StaticImageDataProvider(const json11::Json& config)
     : DataProvider(config)
+    , m_dp({})
 {
     std::string err;
     if(!config.has_shape(CONFIG_SHAPE, err))
@@ -21,24 +22,29 @@ StaticImageDataProvider::StaticImageDataProvider(const json11::Json& config)
     }
 
     auto imagePath = config["image_path"].string_value();
-    m_cachedImage = cv::imread(imagePath, cv::IMREAD_COLOR);
-    if(m_cachedImage.cols == 0 && m_cachedImage.rows == 0)
+    auto cachedImage = cv::imread(imagePath, cv::IMREAD_COLOR);
+    if(cachedImage.cols == 0 && cachedImage.rows == 0)
     {
         throw std::runtime_error(std::string("StaticImageDataProvider: error reading file") + imagePath);
     }
-}
 
-cv::Mat StaticImageDataProvider::getData()
+    m_imageDimensions = {
+        cachedImage.cols,
+        cachedImage.rows
+    };
+
+    auto handle = m_dp.lockReadWrite();
+    handle.set({ std::chrono::high_resolution_clock::now(),
+        cachedImage });
+}
+const LockableData<Datapoint>& StaticImageDataProvider::getData()
 {
-    return m_cachedImage;
+    return m_dp;
 }
 
 Dimensions StaticImageDataProvider::getDimensions()
 {
-    return {
-        m_cachedImage.cols,
-        m_cachedImage.rows
-    };
+    return m_imageDimensions;
 }
 
 DatatypeFlags StaticImageDataProvider::provides()

@@ -71,6 +71,11 @@ const EXPORT_API char* getPose(void* pixelBuffer, int width, int height)
     cv::cvtColor(argb, bgr, CV_RGBA2BGR);
     cv::flip(bgr, flipped, 0);
 
+    yarrar::Datapoint datapoint{
+        std::chrono::high_resolution_clock::now(),
+        flipped
+    };
+
     // TODO: This should be initialized only when configuration changes.
     json11::Json markerTrackerConf = json11::Json::object{
         { "parser", "yarrar_parser" },
@@ -79,7 +84,7 @@ const EXPORT_API char* getPose(void* pixelBuffer, int width, int height)
 
     yarrar::MarkerTracker tracker(width, height, markerTrackerConf);
     std::vector<yarrar::Pose> poses;
-    tracker.getPoses(flipped, poses);
+    tracker.getPoses(datapoint, poses);
 
     if(poses.size() > 0) storePoseToReturnBuffer(poses[0]);
     return returnStringBuffer.c_str();
