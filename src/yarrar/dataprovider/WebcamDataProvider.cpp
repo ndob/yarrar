@@ -29,11 +29,9 @@ const LockableData<Datapoint>& WebcamDataProvider::getData()
 
 Dimensions WebcamDataProvider::getDimensions()
 {
-    const auto& data = getData();
-    auto handle = data.lockRead();
     return {
-        handle.get().data.cols,
-        handle.get().data.rows
+        static_cast<int>(m_videoCapture.get(CV_CAP_PROP_FRAME_WIDTH)),
+        static_cast<int>(m_videoCapture.get(CV_CAP_PROP_FRAME_HEIGHT))
     };
 }
 
