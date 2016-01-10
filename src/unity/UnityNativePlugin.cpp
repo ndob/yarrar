@@ -6,7 +6,6 @@
 #include <json11.hpp>
 
 #include <string>
-#include <sstream>
 #include <vector>
 
 #if _MSC_VER
@@ -18,9 +17,10 @@
 namespace
 {
 
-std::string returnStringBuffer;
+yarrar::MarkerTracker* s_tracker;
+std::string s_returnStringBuffer;
 
-void storePoseToReturnBuffer(const yarrar::Pose& pose)
+void addPose(json11::Json::array& toJson, const yarrar::Pose& pose)
 {
     std::vector<double> rotationMatrix;
     rotationMatrix.reserve(9);
@@ -30,39 +30,71 @@ void storePoseToReturnBuffer(const yarrar::Pose& pose)
     cameraMatrix.reserve(9);
 
     cv::Mat rotationMtx;
-    cv::Rodrigues(pose.rotation, rotationMatrix);
-    for(int i = 0; i < 3; ++i)
+    cv::Rodrigues(pose.rotation, rotationMtx);
+    for (int i = 0; i < 3; ++i)
     {
-        for(int j = 0; j < 3; ++j)
+        for (int j = 0; j < 3; ++j)
         {
             rotationMatrix.push_back(rotationMtx.at<double>(i, j));
         }
     }
-
-    for(int i = 0; i < 3; ++i)
+    
+    for (int i = 0; i < 3; ++i)
     {
         translationMatrix.push_back(pose.translation.at<double>(i));
     }
 
-    for(int i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; ++i)
     {
-        for(int j = 0; j < 3; ++j)
+        for (int j = 0; j < 3; ++j)
         {
             cameraMatrix.push_back(pose.camera.at<float>(i, j));
         }
     }
-
+    
     json11::Json poseJson = json11::Json::object{
-        { "valid", true },
         { "rotation", rotationMatrix },
         { "translation", translationMatrix },
-        { "camera", cameraMatrix }
+        { "camera", cameraMatrix },
+        { "coordinateSystemId", pose.coordinateSystemId }
     };
-    poseJson.dump(returnStringBuffer);
+
+    toJson.push_back(poseJson);
+}
+
+void storePosesToReturnBuffer(const std::vector<yarrar::Pose>& poses)
+{
+    // Add all poses to a JSON-array.
+    json11::Json::array poseArray;
+    for (const auto& pose : poses)
+    {
+        addPose(poseArray, pose);
+    }
+
+    json11::Json ret = json11::Json::object{
+        { "poses", poseArray }
+    };
+
+    ret.dump(s_returnStringBuffer);
 }
 }
 
 extern "C" {
+
+void EXPORT_API initYarrar(int width, int height /*,TODO: const char* jsonString */)
+{
+    json11::Json markerTrackerConf = json11::Json::object{
+        { "parser", "yarrar_parser" },
+        { "tracking_resolution_width", 320 }
+    };
+
+    s_tracker = new yarrar::MarkerTracker(width, height, markerTrackerConf);
+}
+
+void EXPORT_API deinitYarrar()
+{
+    delete s_tracker;
+}
 
 const EXPORT_API char* getPose(void* pixelBuffer, int width, int height)
 {
@@ -72,21 +104,19 @@ const EXPORT_API char* getPose(void* pixelBuffer, int width, int height)
     cv::flip(bgr, flipped, 0);
 
     yarrar::Datapoint datapoint{
-        TimestampClock::now(),
+        yarrar::TimestampClock::now(),
         flipped
     };
 
-    // TODO: This should be initialized only when configuration changes.
-    json11::Json markerTrackerConf = json11::Json::object{
-        { "parser", "yarrar_parser" },
-        { "tracking_resolution_width", 320 }
-    };
-
-    yarrar::MarkerTracker tracker(width, height, markerTrackerConf);
     std::vector<yarrar::Pose> poses;
-    tracker.getPoses(datapoint, poses);
+    s_tracker->getPoses(datapoint, poses);
+    
+    s_returnStringBuffer.clear();
+    if (poses.size() > 0)
+    {
+        storePosesToReturnBuffer(poses);
+    }
 
-    if(poses.size() > 0) storePoseToReturnBuffer(poses[0]);
-    return returnStringBuffer.c_str();
+    return s_returnStringBuffer.c_str();
 }
 }
