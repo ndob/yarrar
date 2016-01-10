@@ -3,6 +3,7 @@
 #include "GLShader.h"
 #include "BackgroundModel.h"
 #include "SceneModel.h"
+#include "Util.h"
 
 namespace
 {
@@ -38,6 +39,7 @@ OpenGLRenderer::OpenGLRenderer(int width, int height, const json11::Json& config
     : Renderer(config)
     , m_context(new GLContext(width, height))
     , m_backgroundTex(0)
+    , m_lastUpdatedBackground(std::chrono::high_resolution_clock::now())
 {
     for(const auto& def : VERTEX_SHADERS)
     {
@@ -111,10 +113,14 @@ void OpenGLRenderer::loadModel(const Model& model)
 
 void OpenGLRenderer::draw(const std::vector<Pose>& cameraPoses,
     const Scene& scene,
-    const cv::Mat& backgroundImage)
+    const Datapoint& rawData)
 {
     // Load fresh background camera image.
-    loadImage(backgroundImage);
+    if(rawData.created > m_lastUpdatedBackground)
+    {
+        m_lastUpdatedBackground = rawData.created;
+        loadImage(rawData.data);
+    }
 
     // Clear screen.
     glClearColor(0, 0, 0, 1);
@@ -131,15 +137,14 @@ void OpenGLRenderer::draw(const std::vector<Pose>& cameraPoses,
 
     for(const auto& pose : cameraPoses)
     {
-        drawCoordinateSystem(pose, scene, backgroundImage);
+        drawCoordinateSystem(pose, scene);
     }
 
     m_context->swapBuffers();
 }
 
 void OpenGLRenderer::drawCoordinateSystem(const Pose& cameraPose,
-    const Scene& scene,
-    const cv::Mat& backgroundImage)
+    const Scene& scene)
 {
     // Convert rotation from vector to matrix.
     cv::Mat rotation;

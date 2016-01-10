@@ -34,7 +34,8 @@ public:
     Tracker(const json11::Json& config)
         : PipelineStage(config){};
     virtual DatatypeFlags depends() = 0;
-    virtual void getPoses(const Datapoint& rawData, std::vector<Pose>& output) = 0;
+    virtual void getPoses(const Datapoint& rawData,
+        std::vector<Pose>& output) = 0;
 };
 
 class Renderer : public PipelineStage
@@ -45,6 +46,6 @@ public:
     virtual void loadModel(const Model& model) = 0;
     virtual void draw(const std::vector<Pose>& cameraPoses,
         const Scene& scene,
-        const cv::Mat& backgroundImage) = 0;
+        const Datapoint& rawData) = 0;
 };
 }

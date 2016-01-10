@@ -43,12 +43,11 @@ public:
 
     void draw(const std::vector<Pose>& cameraPoses,
         const Scene& scene,
-        const cv::Mat& backgroundImage) override;
+        const Datapoint& rawData) override;
 
 private:
     void drawCoordinateSystem(const Pose& cameraPose,
-        const Scene& scene,
-        const cv::Mat& backgroundImage);
+        const Scene& scene);
     void render(const Scene& scene);
     void loadImage(const cv::Mat& image);
 
@@ -60,5 +59,6 @@ private:
     std::unique_ptr<BackgroundModel> m_bgModel;
     std::map<std::string, std::unique_ptr<SceneModel>> m_sceneModels;
     GLuint m_backgroundTex;
+    Timestamp m_lastUpdatedBackground;
 };
 }

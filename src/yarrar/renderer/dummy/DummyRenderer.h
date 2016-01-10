@@ -19,7 +19,7 @@ public:
 
     void draw(const std::vector<Pose>& cameraPoses,
         const Scene& scene,
-        const cv::Mat& backgroundImage) override
+        const Datapoint& rawData) override
     {
         for(const auto& pose : cameraPoses)
         {

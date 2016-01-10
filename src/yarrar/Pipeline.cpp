@@ -115,7 +115,7 @@ void Pipeline::run() const
 
     for(const auto& renderer : m_renderers)
     {
-        renderer->draw(poses, m_scene, dataPoint.data);
+        renderer->draw(poses, m_scene, dataPoint);
     }
 }
 

@@ -20,9 +20,9 @@ public:
 
     void draw(const std::vector<Pose>& cameraPoses,
         const Scene& scene,
-        const cv::Mat& backgroundImage) override
+        const Datapoint& rawData) override
     {
-        cv::imshow("OpenCVRenderer", backgroundImage);
+        cv::imshow("OpenCVRenderer", rawData.data);
         cv::waitKey(30);
     }
 };
