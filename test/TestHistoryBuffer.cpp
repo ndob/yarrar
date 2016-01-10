@@ -35,6 +35,7 @@ TEST_CASE("HistoryBuffer basic functionality", "[util]")
     SECTION("empty buffer returns no data")
     {
         REQUIRE_RANGE_ITEM_COUNT(buffer.get(2), 0);
+        REQUIRE(buffer.size() == 0);
     }
 
     SECTION("adding element works")
@@ -42,6 +43,7 @@ TEST_CASE("HistoryBuffer basic functionality", "[util]")
         buffer.add({ 1, "value1" });
         auto range = buffer.get(2);
         REQUIRE_RANGE_ITEM_COUNT(range, 1);
+        REQUIRE(buffer.size() == 1);
     }
 
     SECTION("adding too many elements prunes the oldest one")
@@ -51,6 +53,7 @@ TEST_CASE("HistoryBuffer basic functionality", "[util]")
         buffer.add({ 3, "value3" });
         auto range = buffer.get(2);
         REQUIRE_RANGE_ITEM_COUNT(range, 2);
+        REQUIRE(buffer.size() == 2);
 
         bool value1Found = false;
         bool value2Found = false;
@@ -110,9 +113,11 @@ TEST_CASE("HistoryBuffer basic functionality", "[util]")
         buffer.add({ 1, "value" });
         buffer.add({ 2, "value2" });
         REQUIRE_RANGE_ITEM_COUNT(buffer.get(2), 2);
+        REQUIRE(buffer.size() == 2);
 
         buffer.clear();
         REQUIRE_RANGE_ITEM_COUNT(buffer.get(0), 0);
+        REQUIRE(buffer.size() == 0);
     }
 }
 }

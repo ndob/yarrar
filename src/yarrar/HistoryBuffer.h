@@ -43,6 +43,11 @@ public:
         };
     };
 
+    size_t size()
+    {
+        return m_data.size();
+    }
+
     void clear()
     {
         m_data.clear();
