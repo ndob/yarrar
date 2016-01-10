@@ -15,6 +15,7 @@ set(SOURCE_FILES
         TestMarkerDetector.cpp
         TestYarrarMarkerParser.cpp
         TestUtil.cpp
+        TestHistoryBuffer.cpp
         TestLockableData.cpp)
 
 add_executable(testrunner ${SOURCE_FILES})
