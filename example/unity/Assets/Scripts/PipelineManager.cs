@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 public class PipelineManager : MonoBehaviour 
 {
-	[DllImport ("yarrar")]
+    [DllImport ("yarrar")]
     private static extern IntPtr initYarrar(int width, int height); 
     [DllImport ("yarrar")]
     private static extern IntPtr deinitYarrar();
@@ -31,27 +31,27 @@ public class PipelineManager : MonoBehaviour
 
     private struct CoordinateSystem
     {
-		public List<GameObject> objects;
-		public GameObject camera;
-		public int cullingMask;
-		public int layerNumber;
+        public List<GameObject> objects;
+        public GameObject camera;
+        public int cullingMask;
+        public int layerNumber;
     }
 
     public GameObject m_backgroundCanvas;
     public GameObject m_cameraPrefab;
 
-	private Dictionary<int, CoordinateSystem> m_coordinateSystems = new Dictionary<int, CoordinateSystem>();
-	private WebCamTexture m_webcamTexture;
+    private Dictionary<int, CoordinateSystem> m_coordinateSystems = new Dictionary<int, CoordinateSystem>();
+    private WebCamTexture m_webcamTexture;
 
     void Start()
     {
-		m_webcamTexture = new WebCamTexture();
-		var rawImage = m_backgroundCanvas.GetComponent<RawImage>();
-		rawImage.texture = m_webcamTexture;
-		rawImage.material.mainTexture = m_webcamTexture;
+        m_webcamTexture = new WebCamTexture();
+        var rawImage = m_backgroundCanvas.GetComponent<RawImage>();
+        rawImage.texture = m_webcamTexture;
+        rawImage.material.mainTexture = m_webcamTexture;
         m_webcamTexture.Play();
 
-		initYarrar(m_webcamTexture.width, m_webcamTexture.height);
+        initYarrar(m_webcamTexture.width, m_webcamTexture.height);
         Debug.Log("Yarrar initialized.");
     }
 
@@ -63,14 +63,14 @@ public class PipelineManager : MonoBehaviour
 
     void Update() 
     {
-		Color32[] pixelData = m_webcamTexture.GetPixels32();
+        Color32[] pixelData = m_webcamTexture.GetPixels32();
         IntPtr poseDataStringPtr;
         GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
         try
         {
-			poseDataStringPtr = getPose(handle.AddrOfPinnedObject(), 
-				m_webcamTexture.width, 
-				m_webcamTexture.height);
+            poseDataStringPtr = getPose(handle.AddrOfPinnedObject(), 
+                m_webcamTexture.width, 
+                m_webcamTexture.height);
         }
         finally
         {
@@ -80,40 +80,40 @@ public class PipelineManager : MonoBehaviour
         var jsonString = Marshal.PtrToStringAnsi(poseDataStringPtr);
         if(jsonString.Length == 0)
         {
-			foreach(var key in m_coordinateSystems.Keys)
-        	{
-				SetCoordinateSystemActive(key, false);
-        	}
+            foreach(var key in m_coordinateSystems.Keys)
+            {
+                SetCoordinateSystemActive(key, false);
+            }
             return;
         }
 
         var poseCollection = JsonUtility.FromJson<PoseCollection>(jsonString);
-		for(int i = 0; i < poseCollection.poses.Length; ++i)
-		{
-			UpdateCoordinateSystem(poseCollection.poses[i]);
-		}        
+        for(int i = 0; i < poseCollection.poses.Length; ++i)
+        {
+            UpdateCoordinateSystem(poseCollection.poses[i]);
+        }        
     }
 
     void SetCoordinateSystemActive(int id, bool active)
     {
-		if(m_coordinateSystems.ContainsKey(id))
-		{
-			var objects = m_coordinateSystems[id].objects;
-			for(int i = 0; i < objects.Count; ++i)
-			{
-				objects[i].SetActive(active);
-			}
-		}
+        if(m_coordinateSystems.ContainsKey(id))
+        {
+            var objects = m_coordinateSystems[id].objects;
+            for(int i = 0; i < objects.Count; ++i)
+            {
+                objects[i].SetActive(active);
+            }
+        }
     }
 
     void UpdateCoordinateSystem(Pose pose)
     {
-		if(!m_coordinateSystems.ContainsKey(pose.coordinateSystemId))
-		{
-			return;
-		}
+        if(!m_coordinateSystems.ContainsKey(pose.coordinateSystemId))
+        {
+            return;
+        }
 
-		SetCoordinateSystemActive(pose.coordinateSystemId, true);
+        SetCoordinateSystemActive(pose.coordinateSystemId, true);
         var camera = m_coordinateSystems[pose.coordinateSystemId].camera.GetComponent<Camera>();
 
         Matrix4x4 viewMatrix = Matrix4x4.identity;
@@ -159,45 +159,45 @@ public class PipelineManager : MonoBehaviour
         camera.projectionMatrix = projection;
     }
 
-	public void RegisterModel(int coordinateSystemId, GameObject go)
-	{
-		if(!m_coordinateSystems.ContainsKey(coordinateSystemId))
-		{
-			CreateNewCoordinateSystem(coordinateSystemId);
-		}
+    public void RegisterModel(int coordinateSystemId, GameObject go)
+    {
+        if(!m_coordinateSystems.ContainsKey(coordinateSystemId))
+        {
+            CreateNewCoordinateSystem(coordinateSystemId);
+        }
 
-		SetLayer(go, m_coordinateSystems[coordinateSystemId].layerNumber, true);
-		m_coordinateSystems[coordinateSystemId].objects.Add(go);
-	}
+        SetLayer(go, m_coordinateSystems[coordinateSystemId].layerNumber, true);
+        m_coordinateSystems[coordinateSystemId].objects.Add(go);
+    }
 
-	private void CreateNewCoordinateSystem(int id)
-	{
-		if((31 - m_coordinateSystems.Count) < 15)
-		{
-			throw new OverflowException("Too many coordinate systems in use.");
-		}
+    private void CreateNewCoordinateSystem(int id)
+    {
+        if((31 - m_coordinateSystems.Count) < 15)
+        {
+            throw new OverflowException("Too many coordinate systems in use.");
+        }
 
-		var coordSystem = new CoordinateSystem();
-		coordSystem.objects = new List<GameObject>();
-		coordSystem.layerNumber = (31 - m_coordinateSystems.Count);
-		coordSystem.cullingMask =  1 << coordSystem.layerNumber;
+        var coordSystem = new CoordinateSystem();
+        coordSystem.objects = new List<GameObject>();
+        coordSystem.layerNumber = (31 - m_coordinateSystems.Count);
+        coordSystem.cullingMask =  1 << coordSystem.layerNumber;
 
-		coordSystem.camera = Instantiate(m_cameraPrefab);
-		// Add new camera under "Cameras"-entity.
-		coordSystem.camera.transform.parent = transform.parent.FindChild("Cameras");
-		coordSystem.camera.GetComponent<Camera>().cullingMask = coordSystem.cullingMask;
-		m_coordinateSystems[id] = coordSystem;
-	}
+        coordSystem.camera = Instantiate(m_cameraPrefab);
+        // Add new camera under "Cameras"-entity.
+        coordSystem.camera.transform.parent = transform.parent.FindChild("Cameras");
+        coordSystem.camera.GetComponent<Camera>().cullingMask = coordSystem.cullingMask;
+        m_coordinateSystems[id] = coordSystem;
+    }
 
-	private void SetLayer(GameObject go, int layer, bool recursive)
-	{
-		go.layer = layer;
-		if(recursive)
-		{
-			for(int i = 0; i < go.transform.childCount; ++i)
-			{
-				SetLayer(go.transform.GetChild(i).gameObject, layer, true);
-			}
-		}
-	}
+    private void SetLayer(GameObject go, int layer, bool recursive)
+    {
+        go.layer = layer;
+        if(recursive)
+        {
+            for(int i = 0; i < go.transform.childCount; ++i)
+            {
+                SetLayer(go.transform.GetChild(i).gameObject, layer, true);
+            }
+        }
+    }
 }
