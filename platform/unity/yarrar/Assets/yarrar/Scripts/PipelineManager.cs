@@ -5,14 +5,23 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-public class PipelineManager : MonoBehaviour 
+public class PipelineManager : MonoBehaviour
 {
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN 
     [DllImport ("yarrar")]
-    private static extern IntPtr initYarrar(int width, int height); 
+    private static extern IntPtr initYarrar(int width, int height);
     [DllImport ("yarrar")]
     private static extern IntPtr deinitYarrar();
     [DllImport ("yarrar")]
-    private static extern IntPtr getPose(IntPtr pixelBuffer, int width, int height);    
+    private static extern IntPtr getPose(IntPtr pixelBuffer, int width, int height);
+#else
+    [DllImport ("libyarrar")]
+    private static extern IntPtr initYarrar(int width, int height);
+    [DllImport ("libyarrar")]
+    private static extern IntPtr deinitYarrar();
+    [DllImport ("libyarrar")]
+    private static extern IntPtr getPose(IntPtr pixelBuffer, int width, int height);
+#endif
 
     [Serializable]
     private struct Pose
