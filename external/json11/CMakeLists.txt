@@ -7,6 +7,7 @@ if(NOT MSVC)
         -std=c++11
         -fno-rtti
         -fno-exceptions
+        -fPIC
         -Wall
         -Wextra
         -Werror)
