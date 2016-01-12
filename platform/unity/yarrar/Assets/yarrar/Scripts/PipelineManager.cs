@@ -49,6 +49,7 @@ public class PipelineManager : MonoBehaviour
         var rawImage = m_backgroundCanvas.GetComponent<RawImage>();
         rawImage.texture = m_webcamTexture;
         rawImage.material.mainTexture = m_webcamTexture;
+        rawImage.rectTransform.sizeDelta = new Vector2(Screen.width, Screen.height);
         m_webcamTexture.Play();
 
         initYarrar(m_webcamTexture.width, m_webcamTexture.height);
