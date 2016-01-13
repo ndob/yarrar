@@ -68,9 +68,9 @@ OpenGLRenderer::~OpenGLRenderer()
 {
 }
 
-void OpenGLRenderer::render(const Scene& scene)
+void OpenGLRenderer::render(int coordinateSystemId, const Scene& scene)
 {
-    const auto& models = scene.getModels();
+    const auto& models = scene.getModels(coordinateSystemId);
     for(const auto& model : models)
     {
         auto glModel = m_sceneModels.find(model.name);
@@ -203,6 +203,6 @@ void OpenGLRenderer::drawCoordinateSystem(const Pose& cameraPose,
         }
     }
 
-    render(scene);
+    render(cameraPose.coordinateSystemId, scene);
 }
 }

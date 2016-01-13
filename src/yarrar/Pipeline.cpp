@@ -119,9 +119,9 @@ void Pipeline::run() const
     }
 }
 
-void Pipeline::addModel(const Model& model)
+void Pipeline::addModel(int coordinateSystemId, const Model& model)
 {
-    m_scene.addModel(model);
+    m_scene.addModel(coordinateSystemId, model);
     for(const auto& renderer : m_renderers)
     {
         renderer->loadModel(model);

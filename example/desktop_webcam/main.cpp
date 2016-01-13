@@ -70,7 +70,8 @@ int main(int argc, char** argv)
         1.0f, 1.0f, 2.0
     };
 
-    p.addModel(cube);
+    p.addModel(30, cube); // ID 30
+    p.addModel(112, cube); // ID 112
 
     while(true)
     {

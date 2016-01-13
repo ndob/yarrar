@@ -2,6 +2,7 @@
 
 #include "Types.h"
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -18,10 +19,10 @@ struct Model
 class Scene
 {
 public:
-    void addModel(const Model& model);
-    const std::vector<Model>& getModels() const;
+    void addModel(int coordinateSystemId, const Model& model);
+    const std::vector<Model>& getModels(int coordinateSystemId) const;
 
 private:
-    std::vector<Model> m_models;
+    std::map<int, std::vector<Model>> m_models;
 };
 }

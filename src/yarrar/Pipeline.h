@@ -18,7 +18,7 @@ class Pipeline
 public:
     explicit Pipeline(const std::string& configFile);
 
-    void addModel(const Model& model);
+    void addModel(int coordinateSystemId, const Model& model);
     void run() const;
 
 private:

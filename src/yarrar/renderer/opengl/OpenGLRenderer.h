@@ -48,7 +48,7 @@ public:
 private:
     void drawCoordinateSystem(const Pose& cameraPose,
         const Scene& scene);
-    void render(const Scene& scene);
+    void render(int coordinateSystemId, const Scene& scene);
     void loadImage(const cv::Mat& image);
 
     std::map<std::string, std::unique_ptr<GLShader>> m_vertexShaders;
