@@ -66,8 +66,8 @@ public class MainActivity extends YarrarActivity {
             1.0f,   1.0f,   0.0f,
             1.0f,   1.0f,   2.0f
         };
-
-        addModel(cubeVertices);
+        int coordinateSystemId = 30;
+        addModel(coordinateSystemId, cubeVertices);
     }
 
 }

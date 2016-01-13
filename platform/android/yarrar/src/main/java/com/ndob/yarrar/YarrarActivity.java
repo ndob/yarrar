@@ -94,5 +94,5 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
     private native void deinitYarrar();
     private native void run();
     private native void injectCameraFrame(int width, int height, byte[] cameraData);
-    protected native void addModel(float[] vertices);
+    protected native void addModel(int coordinateSystemId, float[] vertices);
 }

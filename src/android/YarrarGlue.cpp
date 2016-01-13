@@ -25,7 +25,7 @@ void Java_com_ndob_yarrar_YarrarActivity_deinitYarrar(JNIEnv*, jobject)
     delete s_pipe;
 }
 
-void Java_com_ndob_yarrar_YarrarActivity_addModel(JNIEnv* env, jobject, jfloatArray vertices)
+void Java_com_ndob_yarrar_YarrarActivity_addModel(JNIEnv* env, jobject, jint coordinateSystemId, jfloatArray vertices)
 {
     yarrar::Model cube;
     cube.name = "cube";
@@ -40,7 +40,7 @@ void Java_com_ndob_yarrar_YarrarActivity_addModel(JNIEnv* env, jobject, jfloatAr
     }
 
     env->ReleaseFloatArrayElements(vertices, vertexArray, JNI_ABORT);
-    s_pipe->addModel(cube);
+    s_pipe->addModel(coordinateSystemId, cube);
 }
 
 void Java_com_ndob_yarrar_YarrarActivity_run(JNIEnv*, jobject)
