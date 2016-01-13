@@ -31,27 +31,27 @@ void addPose(json11::Json::array& toJson, const yarrar::Pose& pose)
 
     cv::Mat rotationMtx;
     cv::Rodrigues(pose.rotation, rotationMtx);
-    for (int i = 0; i < 3; ++i)
+    for(int i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for(int j = 0; j < 3; ++j)
         {
             rotationMatrix.push_back(rotationMtx.at<double>(i, j));
         }
     }
-    
-    for (int i = 0; i < 3; ++i)
+
+    for(int i = 0; i < 3; ++i)
     {
         translationMatrix.push_back(pose.translation.at<double>(i));
     }
 
-    for (int i = 0; i < 3; ++i)
+    for(int i = 0; i < 3; ++i)
     {
-        for (int j = 0; j < 3; ++j)
+        for(int j = 0; j < 3; ++j)
         {
             cameraMatrix.push_back(pose.camera.at<float>(i, j));
         }
     }
-    
+
     json11::Json poseJson = json11::Json::object{
         { "rotation", rotationMatrix },
         { "translation", translationMatrix },
@@ -66,7 +66,7 @@ void storePosesToReturnBuffer(const std::vector<yarrar::Pose>& poses)
 {
     // Add all poses to a JSON-array.
     json11::Json::array poseArray;
-    for (const auto& pose : poses)
+    for(const auto& pose : poses)
     {
         addPose(poseArray, pose);
     }
@@ -110,9 +110,9 @@ const EXPORT_API char* getPose(void* pixelBuffer, int width, int height)
 
     std::vector<yarrar::Pose> poses;
     s_tracker->getPoses(datapoint, poses);
-    
+
     s_returnStringBuffer.clear();
-    if (poses.size() > 0)
+    if(poses.size() > 0)
     {
         storePosesToReturnBuffer(poses);
     }
