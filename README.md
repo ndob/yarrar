@@ -1,9 +1,10 @@
 # libyarrar [![Build Status](https://travis-ci.com/ndob/yarrar.svg?token=VufYWjmk7wxVPM2557Mq)](https://travis-ci.com/ndob/yarrar)
 
-## Overview
 A cross-platform Augmented Reality library written in C++11. 
 
 Strongly WIP, so don't expect to use this for anything real at the moment. :)
+
+## Overview
 
 ### Current features
 * Supported platforms:
