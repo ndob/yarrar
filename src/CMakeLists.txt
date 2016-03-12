@@ -24,6 +24,7 @@ else()
         yarrar/renderer/opengl/SceneModel.cpp
         yarrar/dataprovider/StaticImageDataProvider.cpp
         yarrar/dataprovider/AndroidCameraProvider.cpp
+        yarrar/dataprovider/AndroidSensorProvider.cpp
         yarrar/renderer/opengl/GLContext.cpp
         yarrar/Scene.cpp
         yarrar/Util.cpp)

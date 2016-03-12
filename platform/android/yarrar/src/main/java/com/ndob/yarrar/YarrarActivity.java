@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 
+import java.lang.Override;
+
 public class YarrarActivity extends ActionBarActivity implements Camera.PreviewCallback {
     private static final String TAG = "YarrarActivity";
     private Camera mCamera;
     private AssetManager mAssetManager;
+    private Sensors mSensors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +23,10 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
         System.loadLibrary("yarrar");
         Log.i(TAG, "Yarrar glue loaded.");
 
+        mSensors = new Sensors(this);
         mAssetManager = getResources().getAssets();
         mCamera = getCameraInstance();
-        if(mCamera == null)
-        {
+        if(mCamera == null) {
             showError("Can't open camera.");
             return;
         }
@@ -57,6 +60,17 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
             mCamera.release();
         }
         mCamera = null;
+        if (mSensors != null) {
+            mSensors.setUpdating(false);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mSensors != null) {
+            mSensors.setUpdating(true);
+        }
     }
 
     @Override
@@ -73,6 +87,10 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
 
     public void onOpenGLDrawFrame() {
         run();
+    }
+
+    public void onSensorRotationUpdate(float[] quaternion) {
+        injectSensorRotation(quaternion);
     }
 
     protected void initialize(LinearLayout layout) {
@@ -94,5 +112,6 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
     private native void deinitYarrar();
     private native void run();
     private native void injectCameraFrame(int width, int height, byte[] cameraData);
+    private native void injectSensorRotation(float[] rotationQuaternion);
     protected native void addModel(int coordinateSystemId, float[] vertices);
 }

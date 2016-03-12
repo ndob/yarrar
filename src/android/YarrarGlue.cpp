@@ -1,9 +1,11 @@
 #include "AndroidServices.h"
 #include "yarrar/Pipeline.h"
 #include "yarrar/dataprovider/AndroidCameraProvider.h"
+#include "yarrar/dataprovider/AndroidSensorProvider.h"
 
 #include <jni.h>
-#include <android/log.h>
+
+#include <vector>
 
 namespace
 {
@@ -59,5 +61,19 @@ void Java_com_ndob_yarrar_YarrarActivity_injectCameraFrame(JNIEnv* env, jobject,
     yarrar::AndroidCameraProvider::injectCameraFrame(rgb);
 
     env->ReleaseByteArrayElements(cameraData, buffer, JNI_ABORT);
+}
+
+void Java_com_ndob_yarrar_YarrarActivity_injectSensorRotation(JNIEnv* env, jobject, jfloatArray quaternion)
+{
+    std::vector<float> retQuaternion;
+    retQuaternion.reserve(4);
+    jfloat* quaternionArray = env->GetFloatArrayElements(quaternion, nullptr);
+    jsize len = env->GetArrayLength(quaternion);
+    for(jsize i = 0; i < len; ++i)
+    {
+        retQuaternion.push_back(static_cast<float>(quaternionArray[i]));
+    }
+    yarrar::AndroidSensorProvider::injectRotation(retQuaternion);
+    env->ReleaseFloatArrayElements(quaternion, quaternionArray, JNI_ABORT);
 }
 }

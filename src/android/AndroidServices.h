@@ -1,7 +1,9 @@
 #pragma once
 
 #include <android/asset_manager_jni.h>
+#include <android/log.h>
 #include <jni.h>
+
 #include <string>
 
 namespace yarrar
