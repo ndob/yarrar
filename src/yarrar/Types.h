@@ -48,6 +48,6 @@ enum DatatypeFlags
     EMPTY = 0x0,
     RGB_CAMERA_FLAG = 0x1,
     DEPTH_CAMERA_FLAG = 0x2,
-    ORIENTATION_SENSOR = 0x4
+    ORIENTATION_SENSOR_FLAG = 0x4
 };
 }

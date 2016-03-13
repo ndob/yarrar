@@ -22,7 +22,7 @@ yarrar::Dimensions AndroidSensorProvider::getDimensions()
 
 yarrar::DatatypeFlags AndroidSensorProvider::provides()
 {
-    return ORIENTATION_SENSOR;
+    return ORIENTATION_SENSOR_FLAG;
 }
 
 void AndroidSensorProvider::injectRotation(const std::vector<float>& quaternion)
