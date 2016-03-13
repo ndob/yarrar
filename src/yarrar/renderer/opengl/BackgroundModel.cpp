@@ -70,11 +70,13 @@ void BackgroundModel::render() const
         glBindVertexArray(m_vao);
 #elif YARRAR_OPENGLES_CONTEXT
         glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
+        GLint vertAttrib = prog->getAttrib("vert");
+        glEnableVertexAttribArray(vertAttrib);
+        glVertexAttribPointer(vertAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
 
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat),
+        GLint texCoordAttrib = prog->getAttrib("texCoord");
+        glEnableVertexAttribArray(texCoordAttrib);
+        glVertexAttribPointer(texCoordAttrib, 2, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat),
             (const GLvoid*) (3 * sizeof(GLfloat)));
 #endif
 
@@ -83,8 +85,8 @@ void BackgroundModel::render() const
 #ifdef YARRAR_OPENGL_CONTEXT
         glBindVertexArray(0);
 #elif YARRAR_OPENGLES_CONTEXT
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(vertAttrib);
+        glDisableVertexAttribArray(texCoordAttrib);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 #endif
         glBindTexture(GL_TEXTURE_2D, 0);

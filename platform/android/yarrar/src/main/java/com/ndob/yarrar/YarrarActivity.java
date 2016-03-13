@@ -2,17 +2,24 @@ package com.ndob.yarrar;
 
 import android.app.AlertDialog;
 import android.content.res.AssetManager;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
 
+import java.io.IOException;
 import java.lang.Override;
 
 public class YarrarActivity extends ActionBarActivity implements Camera.PreviewCallback {
     private static final String TAG = "YarrarActivity";
+    private static final int DUMMY_TEXTURE_ID = 10;
+
     private Camera mCamera;
+    // TODO: Use mCameraTexture with OpenGL-rendering, instead of uploading the texture every frame.
+    // For the moment this is only a dummy texture, because otherwise the preview doesn't start.
+    private SurfaceTexture mCameraTexture;
     private AssetManager mAssetManager;
     private Sensors mSensors;
 
@@ -30,9 +37,6 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
             showError("Can't open camera.");
             return;
         }
-
-        mCamera.setPreviewCallback(this);
-        mCamera.startPreview();
     }
 
     @Override
@@ -80,6 +84,16 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
     }
 
     public void onOpenGLSurfaceCreated() {
+        try {
+            mCameraTexture = new SurfaceTexture(DUMMY_TEXTURE_ID);
+            mCamera.setPreviewTexture(mCameraTexture);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        mCamera.setPreviewCallback(this);
+        mCamera.startPreview();
+
         Camera.Size size = mCamera.getParameters().getPreviewSize();
         initYarrar(size.width, size.height, mAssetManager);
         onYarrarInitialized();
