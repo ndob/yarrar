@@ -27,7 +27,9 @@ else()
         yarrar/dataprovider/AndroidSensorProvider.cpp
         yarrar/renderer/opengl/GLContext.cpp
         yarrar/Scene.cpp
-        yarrar/Util.cpp)
+        yarrar/Util.cpp
+        yarrar/tracker/sensor/SensorTracker.cpp
+        yarrar/fusion/vsfusion/VisualWithSensors.cpp)
 
     if(ANDROID)
         set(SOURCE_FILES

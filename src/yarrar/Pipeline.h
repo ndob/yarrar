@@ -38,6 +38,12 @@ private:
     }
 
     template <typename T>
+    void addSensorFusion(const json11::Json& config)
+    {
+        m_sensorFusions.emplace_back(new T(config));
+    }
+
+    template <typename T>
     void addRenderer(const json11::Json& config)
     {
         auto dim = m_dataProviders[0]->getDimensions();
@@ -46,6 +52,7 @@ private:
 
     std::vector<std::unique_ptr<DataProvider>> m_dataProviders;
     std::vector<std::unique_ptr<Tracker>> m_trackers;
+    std::vector<std::unique_ptr<SensorFusion>> m_sensorFusions;
     std::vector<std::unique_ptr<Renderer>> m_renderers;
     Scene m_scene;
 };

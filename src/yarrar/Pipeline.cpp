@@ -2,7 +2,10 @@
 #include "dataprovider/StaticImageDataProvider.h"
 #include "dataprovider/WebcamDataProvider.h"
 #include "dataprovider/AndroidCameraProvider.h"
+#include "dataprovider/AndroidSensorProvider.h"
 #include "tracker/marker/MarkerTracker.h"
+#include "tracker/sensor/SensorTracker.h"
+#include "fusion/vsfusion/VisualWithSensors.h"
 #include "renderer/opengl/OpenGLRenderer.h"
 #include "renderer/opencv/OpenCVRenderer.h"
 #include "renderer/dummy/DummyRenderer.h"
@@ -63,6 +66,10 @@ Pipeline::Pipeline(const std::string& configFile)
         {
             addDataProvider<AndroidCameraProvider>(provider["config"]);
         }
+        else if(type == "android_sensor")
+        {
+            addDataProvider<AndroidSensorProvider>(provider["config"]);
+        }
     }
 
     auto trackers = pipeline["trackers"];
@@ -74,6 +81,22 @@ Pipeline::Pipeline(const std::string& configFile)
         if(type == "marker")
         {
             addTracker<MarkerTracker>(tracker["config"]);
+        }
+        else if(type == "sensor")
+        {
+            addTracker<SensorTracker>(tracker["config"]);
+        }
+    }
+
+    auto fusions = pipeline["fusion"];
+    for(const auto& fusion : fusions.array_items())
+    {
+        VALIDATE_PIPELINE_STAGE_JSON(fusion);
+        auto type = fusion["type"].string_value();
+
+        if(type == "visual_with_sensors")
+        {
+            addSensorFusion<VisualWithSensors>(fusion["config"]);
         }
     }
 
@@ -108,9 +131,26 @@ void Pipeline::run() const
     if(dataPoint.data.total() == 0) return;
 
     std::vector<Pose> poses;
-    for(const auto& tracker : m_trackers)
+
+    if(m_sensorFusions.empty())
     {
-        tracker->getPoses(dataPoint, poses);
+        for(const auto& tracker : m_trackers)
+        {
+            tracker->getPoses(dataPoint, poses);
+        }
+    }
+    else
+    {
+        std::map<size_t, std::vector<Pose>> m_posesByTrackerIndex;
+        for(size_t i = 0; i < m_trackers.size(); ++i)
+        {
+            m_trackers[i]->getPoses(dataPoint, m_posesByTrackerIndex[i]);
+        }
+
+        for(const auto& fusion : m_sensorFusions)
+        {
+            fusion->getFusedPoses(m_posesByTrackerIndex, poses);
+        }
     }
 
     for(const auto& renderer : m_renderers)

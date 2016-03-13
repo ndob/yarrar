@@ -7,6 +7,7 @@
 #include <json11.hpp>
 #include <opencv2/opencv.hpp>
 #include <vector>
+#include <map>
 
 namespace yarrar
 {
@@ -35,6 +36,15 @@ public:
         : PipelineStage(config){};
     virtual DatatypeFlags depends() = 0;
     virtual void getPoses(const Datapoint& rawData,
+        std::vector<Pose>& output) = 0;
+};
+
+class SensorFusion : public PipelineStage
+{
+public:
+    SensorFusion(const json11::Json& config)
+        : PipelineStage(config){};
+    virtual void getFusedPoses(const std::map<size_t, std::vector<Pose>>& poseLists,
         std::vector<Pose>& output) = 0;
 };
 
