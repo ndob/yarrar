@@ -86,7 +86,8 @@ else()
 
         include_directories(
             yarrar
-            "${PROJECT_SOURCE_DIR}/external/json11")
+            "${PROJECT_SOURCE_DIR}/external/json11"
+            "${PROJECT_SOURCE_DIR}/external/eigen")
 
         target_link_libraries(yarrar ${OpenCV_LIBS} GL GLEW glfw)
     endif()

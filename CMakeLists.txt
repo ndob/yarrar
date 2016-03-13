@@ -13,6 +13,8 @@ option(UNITY_PLUGIN "Build plugin for Unity" OFF)
 option(BUILD_EXAMPLES "Build example applications" ON)
 option(BUILD_TESTS "Build tests" ON)
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
@@ -31,6 +33,7 @@ elseif(MSVC)
 endif()
 
 find_package(OpenCV REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 add_subdirectory(external/json11)
 add_subdirectory(src)
