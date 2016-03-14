@@ -30,7 +30,7 @@ std::tuple<CircularMotion::StateVector, CircularMotion::StateMatrix> transition(
 {
     float distanceDiff = state[2];
     float angleDiff = state[3];
-    float theta = state[4] + angleDiff;
+    float theta = clampAngle(state[4] + angleDiff);
 
     float x = state[0] + std::cos(theta) * distanceDiff;
     float y = state[1] + std::sin(theta) * distanceDiff;
@@ -96,8 +96,14 @@ TEST_CASE("Measures circular motion correctly", "[kalman_filter]")
 
     // Initialize Kalman filter.
     CircularMotion::StateVector xInitial = CircularMotion::StateVector::Zero();
+    float moved_angle = (float) atan2(measurements[2][1] - measurements[1][1], measurements[2][0] - measurements[1][0]);
+    float angle_diff = moved_angle - (float) atan2(measurements[1][1] - measurements[0][1], measurements[1][0] - measurements[0][0]);
+    float distance_diff = distanceBetween(measurements[1][0], measurements[1][1], measurements[0][0], measurements[0][1]);
+
+    xInitial << measurements[2][0], measurements[2][1], distance_diff, angle_diff, moved_angle;
+
     CircularMotion::StateMatrix pInitial;
-    float init = 999.0f;
+    float init = 999.f;
     pInitial << init, 0.f, 0.f, 0.f, 0.f,
         0.f, init, 0.f, 0.f, 0.f,
         0.f, 0.f, init, 0.f, 0.f,
@@ -107,20 +113,25 @@ TEST_CASE("Measures circular motion correctly", "[kalman_filter]")
     CircularMotion::StateVector uInitial = CircularMotion::StateVector::Zero();
 
     CircularMotion::MeasurementUncertaintyMatrix RInitial;
-    RInitial << 0.1f, 0.f,
-        0.f, 0.1f;
+    RInitial << 0.5f, 0.f,
+        0.f, 0.5f;
 
     CircularMotion filter(transition, measurement, xInitial, pInitial, uInitial, RInitial);
 
-    for(size_t i = 0; i < measurements.size(); ++i)
+    const float EPSILON = 0.1f;
+    int32_t localizedAmount = 0;
+
+    for(size_t i = 2; i < measurements.size(); ++i)
     {
         filter.update(measurements[i]);
+
         auto state = filter.state();
-        std::cout << "x: " << controlValues[i].first << " y:" << controlValues[i].second << std::endl;
-        std::cout << "xDiff: " << controlValues[i].first - state[0] << " yDiff:" << controlValues[i].second - state[1] << std::endl;
+        if(std::abs(controlValues[i].first - state[0]) < EPSILON && std::abs(controlValues[i].second - state[1]) < EPSILON)
+        {
+            localizedAmount++;
+        }
     }
 
-    auto state = filter.state();
-    std::cout << "state 0:" << state[0] << "," << state[1] << "," << state[2] << "," << state[3] << "," << state[4] << std::endl;
+    REQUIRE(localizedAmount == 945);
 }
 }
