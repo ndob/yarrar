@@ -9,6 +9,7 @@
 namespace yarrar_test
 {
 // State: [x, y, distance_diff_between_measurements, angle_diff_between_measurements, moved_angle]
+// Measurement: [x, y]
 using CircularMotion = yarrar::ExtendedKalmanFilter<5, 2>;
 
 float distanceBetween(float x0, float y0, float x1, float y1)
@@ -39,8 +40,8 @@ std::tuple<CircularMotion::StateVector, CircularMotion::StateMatrix> transition(
     float new_angle_diff = clampAngle(moved_angle - state[4]);
     float new_distance_diff = distanceBetween(x, y, state[0], state[1]);
 
-    CircularMotion::StateVector vec;
-    vec << x, y, new_distance_diff, new_angle_diff, theta;
+    CircularMotion::StateVector newState;
+    newState << x, y, new_distance_diff, new_angle_diff, theta;
 
     CircularMotion::StateMatrix jacobian;
     jacobian << 1.f, 0.f, std::cos(theta), 0.f, -1.f * std::sin(theta) * distanceDiff,
@@ -49,18 +50,18 @@ std::tuple<CircularMotion::StateVector, CircularMotion::StateMatrix> transition(
         0.f, 0.f, 0.f, 1.f, 0.f,
         0.f, 0.f, 0.f, 1.f, 1.f;
 
-    return std::make_tuple(vec, jacobian);
+    return std::make_tuple(newState, jacobian);
 }
 
 std::tuple<CircularMotion::MeasurementVector, CircularMotion::MeasurementMatrix> measurement(const CircularMotion::StateVector& state)
 {
-    CircularMotion::MeasurementVector measurement = CircularMotion::MeasurementVector::Zero();
-    measurement[0] = state[0];
-    measurement[1] = state[1];
+    CircularMotion::MeasurementVector newMeasurement = CircularMotion::MeasurementVector::Zero();
+    newMeasurement[0] = state[0];
+    newMeasurement[1] = state[1];
 
     CircularMotion::MeasurementMatrix jacobian = CircularMotion::MeasurementMatrix::Identity();
 
-    return std::make_tuple(measurement, jacobian);
+    return std::make_tuple(newMeasurement, jacobian);
 }
 
 TEST_CASE("Measures circular motion correctly", "[kalman_filter]")
@@ -96,12 +97,6 @@ TEST_CASE("Measures circular motion correctly", "[kalman_filter]")
 
     // Initialize Kalman filter.
     CircularMotion::StateVector xInitial = CircularMotion::StateVector::Zero();
-    float moved_angle = (float) atan2(measurements[2][1] - measurements[1][1], measurements[2][0] - measurements[1][0]);
-    float angle_diff = moved_angle - (float) atan2(measurements[1][1] - measurements[0][1], measurements[1][0] - measurements[0][0]);
-    float distance_diff = distanceBetween(measurements[1][0], measurements[1][1], measurements[0][0], measurements[0][1]);
-
-    xInitial << measurements[2][0], measurements[2][1], distance_diff, angle_diff, moved_angle;
-
     CircularMotion::StateMatrix pInitial;
     float init = 999.f;
     pInitial << init, 0.f, 0.f, 0.f, 0.f,
@@ -111,16 +106,16 @@ TEST_CASE("Measures circular motion correctly", "[kalman_filter]")
         0.f, 0.f, 0.f, 0.f, init;
 
     CircularMotion::StateVector uInitial = CircularMotion::StateVector::Zero();
-
     CircularMotion::MeasurementUncertaintyMatrix RInitial;
     RInitial << 0.5f, 0.f,
         0.f, 0.5f;
 
     CircularMotion filter(transition, measurement, xInitial, pInitial, uInitial, RInitial);
 
+    // Check that kalman filter estimates for the measurement set
+    // are close enough (epsilon) to the list of control values.
     const float EPSILON = 0.1f;
     int32_t localizedAmount = 0;
-
     for(size_t i = 2; i < measurements.size(); ++i)
     {
         filter.update(measurements[i]);
@@ -132,6 +127,6 @@ TEST_CASE("Measures circular motion correctly", "[kalman_filter]")
         }
     }
 
-    REQUIRE(localizedAmount == 945);
+    REQUIRE(localizedAmount == 875);
 }
 }

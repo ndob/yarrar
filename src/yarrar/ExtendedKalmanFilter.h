@@ -10,8 +10,8 @@ namespace yarrar
 {
 
 template <
-    int StateDimensions,
-    int MeasurementDimensions,
+    uint32_t StateDimensions,
+    uint32_t MeasurementDimensions,
     typename ValueType = float>
 class ExtendedKalmanFilter
 {
@@ -26,13 +26,13 @@ public:
     using MeasurementFunction = std::function<std::tuple<MeasurementVector, MeasurementMatrix>(StateVector)>;
 
     ExtendedKalmanFilter(const TransitionFunction& transitionFunc,
-        const MeasurementFunction& measurement,
+        const MeasurementFunction& measurementFunc,
         const StateVector& xInitial = StateVector::Zero(),
         const StateMatrix& PInitial = StateMatrix::Zero(),
         const StateVector& uInitial = StateVector::Zero(),
         const MeasurementUncertaintyMatrix& RInitial = MeasurementUncertaintyMatrix::Zero())
         : m_transitionFunc(transitionFunc)
-        , m_measurementFunc(measurement)
+        , m_measurementFunc(measurementFunc)
         , x(xInitial)
         , P(PInitial)
         , u(uInitial)
@@ -50,7 +50,6 @@ public:
         P = G * P * G.transpose();
 
         // Measurement (a posteriori estimate)
-        // MeasurementVector, MeasurementMatrix
         MeasurementVector newX;
         std::tie(newX, H) = m_measurementFunc(x);
         auto y = measurement - newX;
