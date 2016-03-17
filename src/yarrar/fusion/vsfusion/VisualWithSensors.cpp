@@ -42,8 +42,14 @@ VisualWithSensors::VisualWithSensors(const json11::Json& config)
 {
 }
 
-void VisualWithSensors::getFusedPoses(const std::map<size_t, std::vector<Pose>>& poseLists,
+void VisualWithSensors::getFusedPoses(const std::vector<std::reference_wrapper<const LockableData<Datapoint>>>& datapoints,
+    const std::map<size_t, std::vector<Pose>>& poseLists,
     std::vector<Pose>& output)
 {
+    // datapoints:
+    // 0. rotation-vector
+    // 1. gyroscope
+
+    // pose list contains poses from visual tracking
 }
 }

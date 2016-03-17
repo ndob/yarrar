@@ -5,21 +5,15 @@
         [
             {
                 "type": "android_image",
-                "config":
-                {
-                }
+                "config": { }
             },
             {
                 "type": "android_sensor",
-                "config":
-                {
-                }
+                "config": { }
             },
             {
                 "type": "android_gyro",
-                "config":
-                {
-                }
+                "config": { }
             }
         ],
         "trackers":
@@ -33,13 +27,18 @@
                 }
             }
         ],
+        "fusion":
+        [
+            {
+                "type": "visual_with_sensors",
+                "config": {}
+            }
+        ],
         "renderers":
         [
             {
                 "type": "opengl",
-                "config": 
-                {
-                }
+                "config": { }
             }
         ]
     }

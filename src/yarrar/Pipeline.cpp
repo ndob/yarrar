@@ -130,10 +130,12 @@ Pipeline::Pipeline(const std::string& configFile)
 
 void Pipeline::run() const
 {
-    const auto& rawData = m_dataProviders[0]->getData();
-    auto readLock = rawData.lockRead();
-    const auto& dataPoint = readLock.get();
-    if(dataPoint.data.total() == 0) return;
+    // Camera data is handled separately and is always in index 0.
+    // TODO: Remove hard coded index. Separate visual and sensor data inputs?
+    const auto& rawCameraData = m_dataProviders[0]->getData();
+    auto readLock = rawCameraData.lockRead();
+    const auto& cameraData = readLock.get();
+    if(cameraData.data.total() == 0) return;
 
     std::vector<Pose> poses;
 
@@ -141,26 +143,33 @@ void Pipeline::run() const
     {
         for(const auto& tracker : m_trackers)
         {
-            tracker->getPoses(dataPoint, poses);
+            tracker->getPoses(cameraData, poses);
         }
     }
     else
     {
-        std::map<size_t, std::vector<Pose>> m_posesByTrackerIndex;
+        // Other (sensor) dataproviders will be used in fusion stage.
+        std::vector<std::reference_wrapper<const LockableData<Datapoint>>> datapoints;
+        for(size_t i = 1; i < m_dataProviders.size(); ++i)
+        {
+            datapoints.push_back(std::cref(m_dataProviders[i]->getData()));
+        }
+
+        std::map<size_t, std::vector<Pose>> posesByTrackerIndex;
         for(size_t i = 0; i < m_trackers.size(); ++i)
         {
-            m_trackers[i]->getPoses(dataPoint, m_posesByTrackerIndex[i]);
+            m_trackers[i]->getPoses(cameraData, posesByTrackerIndex[i]);
         }
 
         for(const auto& fusion : m_sensorFusions)
         {
-            fusion->getFusedPoses(m_posesByTrackerIndex, poses);
+            fusion->getFusedPoses(datapoints, posesByTrackerIndex, poses);
         }
     }
 
     for(const auto& renderer : m_renderers)
     {
-        renderer->draw(poses, m_scene, dataPoint);
+        renderer->draw(poses, m_scene, cameraData);
     }
 }
 

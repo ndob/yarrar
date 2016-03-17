@@ -28,7 +28,8 @@ class VisualWithSensors : public SensorFusion
 {
 public:
     VisualWithSensors(const json11::Json& config);
-    void getFusedPoses(const std::map<size_t, std::vector<Pose>>& poseLists,
+    void getFusedPoses(const std::vector<std::reference_wrapper<const LockableData<Datapoint>>>& datapoints,
+        const std::map<size_t, std::vector<Pose>>& poseLists,
         std::vector<Pose>& output) override;
 
 private:
