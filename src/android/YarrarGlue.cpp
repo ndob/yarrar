@@ -1,6 +1,7 @@
 #include "AndroidServices.h"
 #include "yarrar/Pipeline.h"
 #include "yarrar/dataprovider/AndroidCameraProvider.h"
+#include "yarrar/dataprovider/AndroidGyroscopeProvider.h"
 #include "yarrar/dataprovider/AndroidSensorProvider.h"
 
 #include <jni.h>
@@ -17,9 +18,16 @@ extern "C" {
 
 void Java_com_ndob_yarrar_YarrarActivity_initYarrar(JNIEnv* env, jobject, jint width, jint height, jobject assetManager)
 {
-    yarrar::android::initialize(env, assetManager);
-    yarrar::AndroidCameraProvider::injectCameraSize(static_cast<int>(width), static_cast<int>(height));
-    s_pipe = new yarrar::Pipeline("pipeline.json");
+    try
+    {
+        yarrar::android::initialize(env, assetManager);
+        yarrar::AndroidCameraProvider::injectCameraSize(static_cast<int>(width), static_cast<int>(height));
+        s_pipe = new yarrar::Pipeline("pipeline.json");
+    }
+    catch(const std::exception& error)
+    {
+        yarrar::android::log(std::string("Error initializing yarrar-native:") + error.what());
+    }
 }
 
 void Java_com_ndob_yarrar_YarrarActivity_deinitYarrar(JNIEnv*, jobject)
@@ -65,15 +73,32 @@ void Java_com_ndob_yarrar_YarrarActivity_injectCameraFrame(JNIEnv* env, jobject,
 
 void Java_com_ndob_yarrar_YarrarActivity_injectSensorRotation(JNIEnv* env, jobject, jfloatArray quaternion)
 {
-    std::vector<float> retQuaternion;
-    retQuaternion.reserve(4);
+
     jfloat* quaternionArray = env->GetFloatArrayElements(quaternion, nullptr);
     jsize len = env->GetArrayLength(quaternion);
+
+    std::vector<float> retQuaternion;
+    retQuaternion.reserve(len);
     for(jsize i = 0; i < len; ++i)
     {
         retQuaternion.push_back(static_cast<float>(quaternionArray[i]));
     }
     yarrar::AndroidSensorProvider::injectRotation(retQuaternion);
     env->ReleaseFloatArrayElements(quaternion, quaternionArray, JNI_ABORT);
+}
+
+void Java_com_ndob_yarrar_YarrarActivity_injectSensorGyroscope(JNIEnv* env, jobject, jfloatArray values)
+{
+    jfloat* valueArray = env->GetFloatArrayElements(values, nullptr);
+    jsize len = env->GetArrayLength(values);
+
+    std::vector<float> ret;
+    ret.reserve(len);
+    for(jsize i = 0; i < len; ++i)
+    {
+        ret.push_back(static_cast<float>(valueArray[i]));
+    }
+    yarrar::AndroidGyroscopeProvider::injectGyroscope(ret);
+    env->ReleaseFloatArrayElements(values, valueArray, JNI_ABORT);
 }
 }

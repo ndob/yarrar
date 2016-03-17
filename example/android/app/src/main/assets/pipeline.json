@@ -8,6 +8,18 @@
                 "config":
                 {
                 }
+            },
+            {
+                "type": "android_sensor",
+                "config":
+                {
+                }
+            },
+            {
+                "type": "android_gyro",
+                "config":
+                {
+                }
             }
         ],
         "trackers":

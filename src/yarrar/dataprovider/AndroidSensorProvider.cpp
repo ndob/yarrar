@@ -1,4 +1,5 @@
 #include "AndroidSensorProvider.h"
+#include "android/AndroidServices.h"
 
 namespace yarrar
 {
@@ -28,8 +29,9 @@ yarrar::DatatypeFlags AndroidSensorProvider::provides()
 void AndroidSensorProvider::injectRotation(const std::vector<float>& quaternion)
 {
     assert(quaternion.size() == 4);
-    auto handle = s_dp.lockReadWrite();
+    yarrar::android::log("Got new rotation data.");
 
+    auto handle = s_dp.lockReadWrite();
     handle.set({ TimestampClock::now(),
         cv::Mat(quaternion, true) });
 }

@@ -30,6 +30,11 @@ public class Sensors implements SensorEventListener
                 this,
                 mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR),
                 SensorManager.SENSOR_DELAY_UI);
+
+            mSensorManager.registerListener(
+                this,
+                mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+                SensorManager.SENSOR_DELAY_UI);
         } 
         else if(mUpdating && !shouldUpdate) {
             mUpdating = false;
@@ -40,21 +45,16 @@ public class Sensors implements SensorEventListener
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-            mAccuracy = event.accuracy;
             float[] quaternion = new float[4];
             SensorManager.getQuaternionFromVector(quaternion, event.values);
-
             mParent.onSensorRotationUpdate(quaternion);
-            Log.d("yarrar", "Orientation quaternion: " + 
-                quaternion[0] + ", " + 
-                quaternion[1] + ", " + 
-                quaternion[2] + ", " + 
-                quaternion[3]);
+        }
+        else if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+            mParent.onSensorGyroscopeUpdate(event.values);
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        mAccuracy = accuracy;
     }
 }

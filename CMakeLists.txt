@@ -33,7 +33,6 @@ elseif(MSVC)
 endif()
 
 find_package(OpenCV REQUIRED)
-find_package(Eigen3 REQUIRED)
 
 add_subdirectory(external/json11)
 add_subdirectory(src)

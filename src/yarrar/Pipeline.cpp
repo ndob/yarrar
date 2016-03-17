@@ -2,6 +2,7 @@
 #include "dataprovider/StaticImageDataProvider.h"
 #include "dataprovider/WebcamDataProvider.h"
 #include "dataprovider/AndroidCameraProvider.h"
+#include "dataprovider/AndroidGyroscopeProvider.h"
 #include "dataprovider/AndroidSensorProvider.h"
 #include "tracker/marker/MarkerTracker.h"
 #include "tracker/sensor/SensorTracker.h"
@@ -69,6 +70,10 @@ Pipeline::Pipeline(const std::string& configFile)
         else if(type == "android_sensor")
         {
             addDataProvider<AndroidSensorProvider>(provider["config"]);
+        }
+        else if(type == "android_gyro")
+        {
+            addDataProvider<AndroidGyroscopeProvider>(provider["config"]);
         }
     }
 
@@ -170,8 +175,8 @@ void Pipeline::addModel(int coordinateSystemId, const Model& model)
 
 void Pipeline::validate()
 {
-    int trackerDependencies = 0;
-    int provided = 0;
+    int32_t trackerDependencies = 0;
+    int32_t provided = 0;
     for(const auto& tracker : m_trackers)
     {
         trackerDependencies |= tracker->depends();
@@ -182,7 +187,7 @@ void Pipeline::validate()
         provided |= provider->provides();
     }
 
-    if(trackerDependencies != provided)
+    if((trackerDependencies & provided) != trackerDependencies)
     {
         throw std::runtime_error(util::format("Pipeline: Dependency mismatch. needed %#x, got %#x.", trackerDependencies, provided));
     }

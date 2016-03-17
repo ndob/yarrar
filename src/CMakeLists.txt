@@ -24,6 +24,7 @@ else()
         yarrar/renderer/opengl/SceneModel.cpp
         yarrar/dataprovider/StaticImageDataProvider.cpp
         yarrar/dataprovider/AndroidCameraProvider.cpp
+        yarrar/dataprovider/AndroidGyroscopeProvider.cpp
         yarrar/dataprovider/AndroidSensorProvider.cpp
         yarrar/renderer/opengl/GLContext.cpp
         yarrar/Scene.cpp
@@ -54,7 +55,8 @@ if(ANDROID)
         yarrar 
         "${PROJECT_SOURCE_DIR}/external/OpenCV-android-sdk/sdk/native/jni/include/"
         "${PROJECT_SOURCE_DIR}/src"
-        "${PROJECT_SOURCE_DIR}/external/json11")
+        "${PROJECT_SOURCE_DIR}/external/json11"
+        "${PROJECT_SOURCE_DIR}/external/eigen")
 
     target_link_libraries(yarrar json11 ${OpenCV_LIBS} GLESv2 android)
 elseif(UNITY_PLUGIN)

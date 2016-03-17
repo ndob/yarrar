@@ -97,6 +97,7 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
         Camera.Size size = mCamera.getParameters().getPreviewSize();
         initYarrar(size.width, size.height, mAssetManager);
         onYarrarInitialized();
+        Log.i(TAG, "Yarrar successfully loaded.");
     }
 
     public void onOpenGLDrawFrame() {
@@ -105,6 +106,10 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
 
     public void onSensorRotationUpdate(float[] quaternion) {
         injectSensorRotation(quaternion);
+    }
+
+    public void onSensorGyroscopeUpdate(float[] values) {
+        injectSensorGyroscope(values);
     }
 
     protected void initialize(LinearLayout layout) {
@@ -127,5 +132,6 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
     private native void run();
     private native void injectCameraFrame(int width, int height, byte[] cameraData);
     private native void injectSensorRotation(float[] rotationQuaternion);
+    private native void injectSensorGyroscope(float[] values);
     protected native void addModel(int coordinateSystemId, float[] vertices);
 }
