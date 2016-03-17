@@ -1,5 +1,4 @@
 #include "AndroidGyroscopeProvider.h"
-#include "android/AndroidServices.h"
 
 namespace yarrar
 {
@@ -28,7 +27,6 @@ DatatypeFlags AndroidGyroscopeProvider::provides()
 
 void AndroidGyroscopeProvider::injectGyroscope(const std::vector<float>& data)
 {
-    yarrar::android::log("Got new gyroscope data.");
     auto handle = s_dp.lockReadWrite();
     handle.set({ TimestampClock::now(),
         cv::Mat(data, true) });
