@@ -155,6 +155,7 @@ cv::Mat MarkerDetector::getRectifiedInnerImage(const std::vector<cv::Point2f>& i
     // Find perspective transform for image points.
     Mat transform = findHomography(imagePoints, corners, CV_RANSAC);
     cv::Mat rectified(image.size(), image.type());
+    // TODO: Really slow. Try to incorporate subimage here?
     cv::warpPerspective(image, rectified, transform, image.size());
 
     // Select only the part of the image, which contains marker id.
