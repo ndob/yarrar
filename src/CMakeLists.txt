@@ -15,6 +15,7 @@ else()
         yarrar/tracker/marker/MarkerDetector.cpp
         yarrar/tracker/marker/YarrarMarkerParser.cpp
         yarrar/tracker/marker/MarkerTracker.cpp
+        yarrar/tracker/sensor/SensorTracker.cpp
         yarrar/renderer/opengl/OpenGLRenderer.cpp
         yarrar/Pipeline.cpp
         yarrar/dataprovider/WebcamDataProvider.cpp
@@ -29,7 +30,6 @@ else()
         yarrar/renderer/opengl/GLContext.cpp
         yarrar/Scene.cpp
         yarrar/Util.cpp
-        yarrar/tracker/sensor/SensorTracker.cpp
         yarrar/fusion/vsfusion/VisualWithSensors.cpp)
 
     if(ANDROID)
