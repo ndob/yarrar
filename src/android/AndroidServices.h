@@ -11,8 +11,18 @@ namespace yarrar
 namespace android
 {
 
-bool initialize(JNIEnv* env, jobject assetManager);
+// Android sensor constants
+// See: http://developer.android.com/reference/android/hardware/Sensor.html
+enum SensorType
+{
+    TYPE_ROTATION_VECTOR = 0x0000000b,
+    TYPE_GYROSCOPE = 0x00000004
+};
+
+
+bool initialize(JNIEnv* env, jobject yarrarActivity, jobject assetManager);
 AAssetManager* getAssetManager();
+bool setSensorState(SensorType type, bool active);
 void log(const std::string& message);
 }
 }

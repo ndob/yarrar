@@ -100,6 +100,12 @@ public class YarrarActivity extends ActionBarActivity implements Camera.PreviewC
         Log.i(TAG, "Yarrar successfully loaded.");
     }
 
+    public boolean native_setSensorState(int sensorType, boolean active) {
+        boolean result = mSensors.setSensorState(sensorType, active);
+        Log.i(TAG, "Set sensor state: " + sensorType + ":" + result);
+        return result;
+    }
+
     public void onOpenGLDrawFrame() {
         run();
     }
