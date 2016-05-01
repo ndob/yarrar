@@ -37,6 +37,8 @@ std::string format(const std::string& format, Args... args)
     return buf;
 }
 
+void log(const std::string& msg);
+
 cv::Size getScaledDownResolution(const int width,
     const int height,
     const int preferredWidth);

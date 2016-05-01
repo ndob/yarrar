@@ -1,6 +1,12 @@
 #include "Util.h"
 #include "io/FileSystem.h"
 
+#ifdef ANDROID
+#include "android/AndroidServices.h"
+#else
+#include <iostream>
+#endif
+
 #include <opencv2/core.hpp>
 #include <fstream>
 
@@ -8,6 +14,15 @@ namespace yarrar
 {
 namespace util
 {
+
+void log(const std::string& msg)
+{
+#ifdef ANDROID
+    android::log(msg);
+#else
+    std::cout << msg << std::endl;
+#endif
+}
 
 cv::Size getScaledDownResolution(const int width,
     const int height,
