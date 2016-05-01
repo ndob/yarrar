@@ -1,5 +1,7 @@
 #include "AndroidSensorProvider.h"
 
+#include "android/AndroidServices.h"
+
 namespace yarrar
 {
 
@@ -8,6 +10,7 @@ LockableData<Datapoint> AndroidSensorProvider::s_dp({});
 AndroidSensorProvider::AndroidSensorProvider(const json11::Json& config)
     : DataProvider(config)
 {
+    android::setSensorState(android::SensorType::TYPE_ROTATION_VECTOR, true);
 }
 
 const LockableData<yarrar::Datapoint>& yarrar::AndroidSensorProvider::getData()

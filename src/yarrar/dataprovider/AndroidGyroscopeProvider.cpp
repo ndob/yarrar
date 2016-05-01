@@ -1,5 +1,7 @@
 #include "AndroidGyroscopeProvider.h"
 
+#include "android/AndroidServices.h"
+
 namespace yarrar
 {
 
@@ -8,6 +10,7 @@ LockableData<Datapoint> AndroidGyroscopeProvider::s_dp({});
 AndroidGyroscopeProvider::AndroidGyroscopeProvider(const json11::Json& config)
     : DataProvider(config)
 {
+    android::setSensorState(android::SensorType::TYPE_GYROSCOPE, true);
 }
 
 const LockableData<Datapoint>& AndroidGyroscopeProvider::getData()
