@@ -10,6 +10,13 @@ if(UNITY_PLUGIN)
         yarrar/Util.cpp
         yarrar/io/FileSystem_std.cpp
         unity/UnityNativePlugin.cpp)
+
+        if(ANDROID)
+            set(SOURCE_FILES
+                ${SOURCE_FILES}
+                android/AndroidServices.cpp)
+        endif()
+
 else()
     set(SOURCE_FILES
         yarrar/tracker/marker/MarkerDetector.cpp
