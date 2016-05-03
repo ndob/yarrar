@@ -84,7 +84,8 @@ else()
             "${PROJECT_SOURCE_DIR}/external/opencv/build/include" 
             "${PROJECT_SOURCE_DIR}/external/glfw/include"
             "${PROJECT_SOURCE_DIR}/external/glew/include"
-            "${PROJECT_SOURCE_DIR}/external/json11")
+            "${PROJECT_SOURCE_DIR}/external/json11"
+            "${PROJECT_SOURCE_DIR}/external/eigen")
 
         target_link_libraries(
             yarrar opengl32 
