@@ -15,10 +15,10 @@ Strongly WIP, so don't expect to use this for anything real at the moment. :)
 * Extendable pipeline architechture (see [Architechture](#architechture))
 * Marker tracking: multiple markers
 * OpenGL-rendering: only simple 3D-shapes supported for the moment
+* Support for sensor data:
+   * Android: gyroscope, rotation vector (virtual sensor)
 
 ### Roadmap
-* Support for sensor data (accelerometer, gyroscope)
-* Sensor fusion pipeline-stage
 * Support for more trackers
     * SLAM
     * Edge-based
@@ -40,20 +40,22 @@ Yarrar is modeled as a pipeline, which consists of four stages. Each stage has o
 
 **Limitations in current implementation**:
 * Only one dataprovider with *RGB_CAMERA_FLAG* set is supported
-* SensorFusion-stage is not implemented
+* SensorFusion-stage is WIP
 
 ## Dependencies
 Yarrar depends heavily on C++11-features, so a fairly recent compiler is needed.
 
 Library dependencies per compilation target:
 
-| Platform          | OpenCV | json11 | GLEW | GLFW |
-| --------          | ------ | ------ | ---- | ---- |
-| Linux             | X      | X      | X    | X    |
-| Windows           | X      | X      | X    | X    |
-| Android           | X      | X      |      |      |
-| Unity3D (Windows) | X      | X      |      |      |
-| Unity3D (Android) | X      | X      |      |      |
+| Platform          | OpenCV 3.0 | json11 | eigen | GLEW | GLFW |
+| --------          | ------     | ------ | ----- | ---- | ---- |
+| Linux             | X          | X      | X     | X    | X    |
+| Windows           | X          | X      | X     | X    | X    |
+| Android           | X          | X      | X     |      |      |
+| Unity3D (Windows) | X          | X      | *     |      |      |
+| Unity3D (Android) | X          | X      | *     |      |      |
+
+* Doesn't currently support sensor fusion, but will become a dependency in the future.
 
 ## Compiling and running tests
 
