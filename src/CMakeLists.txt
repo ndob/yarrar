@@ -24,9 +24,6 @@ else()
         yarrar/renderer/opengl/BackgroundModel.cpp
         yarrar/renderer/opengl/SceneModel.cpp
         yarrar/dataprovider/StaticImageDataProvider.cpp
-        yarrar/dataprovider/AndroidCameraProvider.cpp
-        yarrar/dataprovider/AndroidGyroscopeProvider.cpp
-        yarrar/dataprovider/AndroidSensorProvider.cpp
         yarrar/renderer/opengl/GLContext.cpp
         yarrar/Scene.cpp
         yarrar/Util.cpp
@@ -37,6 +34,9 @@ else()
             ${SOURCE_FILES}
             android/YarrarGlue.cpp
             android/AndroidServices.cpp
+            yarrar/dataprovider/AndroidCameraProvider.cpp
+            yarrar/dataprovider/AndroidGyroscopeProvider.cpp
+            yarrar/dataprovider/AndroidSensorProvider.cpp
             yarrar/io/FileSystem_android.cpp)
     else()
         set(SOURCE_FILES

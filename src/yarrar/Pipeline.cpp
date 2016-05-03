@@ -1,9 +1,11 @@
 #include "Pipeline.h"
 #include "dataprovider/StaticImageDataProvider.h"
 #include "dataprovider/WebcamDataProvider.h"
+#ifdef ANDROID
 #include "dataprovider/AndroidCameraProvider.h"
 #include "dataprovider/AndroidGyroscopeProvider.h"
 #include "dataprovider/AndroidSensorProvider.h"
+#endif
 #include "tracker/marker/MarkerTracker.h"
 #include "tracker/sensor/SensorTracker.h"
 #include "fusion/vsfusion/VisualWithSensors.h"
@@ -63,6 +65,7 @@ Pipeline::Pipeline(const std::string& configFile)
         {
             addDataProvider<StaticImageDataProvider>(provider["config"]);
         }
+#ifdef ANDROID
         else if(type == "android_image")
         {
             addDataProvider<AndroidCameraProvider>(provider["config"]);
@@ -75,6 +78,7 @@ Pipeline::Pipeline(const std::string& configFile)
         {
             addDataProvider<AndroidGyroscopeProvider>(provider["config"]);
         }
+#endif
     }
 
     auto trackers = pipeline["trackers"];
