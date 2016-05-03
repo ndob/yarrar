@@ -55,7 +55,7 @@ Library dependencies per compilation target:
 | Unity3D (Windows) | X          | X      | *     |      |      |
 | Unity3D (Android) | X          | X      | *     |      |      |
 
-* Doesn't currently support sensor fusion, but will become a dependency in the future.
+\* Doesn't currently support sensor fusion, but will become a dependency in the future.
 
 ## Compiling and running tests
 
