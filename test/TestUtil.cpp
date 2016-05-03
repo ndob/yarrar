@@ -4,6 +4,7 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <iostream>
+#include <array>
 
 namespace
 {

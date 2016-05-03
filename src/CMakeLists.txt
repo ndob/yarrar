@@ -88,7 +88,7 @@ else()
             "${PROJECT_SOURCE_DIR}/external/eigen")
 
         target_link_libraries(
-            yarrar opengl32 
+            yarrar opengl32 json11
             "${PROJECT_SOURCE_DIR}/external/glfw/lib-vc2015/glfw3.lib"
             "${PROJECT_SOURCE_DIR}/external/glew/lib/Release/x64/glew32.lib"
             ${OpenCV_LIBS})
