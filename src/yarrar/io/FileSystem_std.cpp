@@ -1,4 +1,5 @@
 #include "FileSystem.h"
+#include "ApplicationPath.h"
 
 #include <stdexcept>
 #include <fstream>
@@ -18,8 +19,11 @@ namespace io
 
 void readFile(const std::string& relativePath, std::string& toBuffer)
 {
+    // TODO: APPLE
     std::ifstream file;
-    file.open(DATA_PATH + relativePath, std::ios::in | std::ios::binary);
+    DATA_PATH = getPath();
+    std::string fullPath = DATA_PATH + "/" + relativePath;
+    file.open(fullPath, std::ios::in | std::ios::binary);
     if(!file.is_open())
     {
         throw std::runtime_error(std::string("failed to open file: ") + relativePath);

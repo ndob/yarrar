@@ -6,6 +6,7 @@
 #include "dataprovider/AndroidGyroscopeProvider.h"
 #include "dataprovider/AndroidSensorProvider.h"
 #endif
+#include "dataprovider/IOSCameraProvider.h"
 #include "tracker/marker/MarkerTracker.h"
 #include "tracker/sensor/SensorTracker.h"
 #include "fusion/vsfusion/VisualWithSensors.h"
@@ -79,6 +80,10 @@ Pipeline::Pipeline(const std::string& configFile)
             addDataProvider<AndroidGyroscopeProvider>(provider["config"]);
         }
 #endif
+        else if(type == "ios_image")
+        {
+            addDataProvider<IOSCameraProvider>(provider["config"]);
+        }
     }
 
     auto trackers = pipeline["trackers"];
@@ -208,7 +213,7 @@ void Pipeline::validate()
     const auto rgbProviders = std::count_if(m_dataProviders.begin(), m_dataProviders.end(),
         [](const std::unique_ptr<DataProvider>& provider)
         {
-             return provider->provides() & DatatypeFlags::RGB_CAMERA_FLAG;
+            return provider->provides() & DatatypeFlags::RGB_CAMERA_FLAG;
         });
 
     // TODO: This could be relaxed. Instead of throwing, one provider should be promoted as primary.

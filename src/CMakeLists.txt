@@ -99,6 +99,8 @@ else()
             "${PROJECT_SOURCE_DIR}/external/json11"
             "${PROJECT_SOURCE_DIR}/external/eigen")
 
-        target_link_libraries(yarrar ${OpenCV_LIBS} GL GLEW glfw)
+        # TODO: APPLE
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -framework OpenGL")
+        target_link_libraries(yarrar ${OpenCV_LIBS} json11 GLEW glfw3)
     endif()
 endif()
