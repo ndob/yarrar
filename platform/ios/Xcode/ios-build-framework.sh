@@ -1,5 +1,12 @@
 set -e
 set +u
+
+# Don't run in headless mode.
+if [[ $SKIP_PACKAGE_SCRIPT ]]
+then
+exit 0
+fi
+
 # Avoid recursively calling this script.
 if [[ $SF_MASTER_SCRIPT_RUNNING ]]
 then
