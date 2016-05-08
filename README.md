@@ -11,6 +11,7 @@ Strongly WIP, so don't expect to use this for anything real at the moment. :)
    * Linux
    * Windows
    * Android
+   * iOS
    * Unity3D-plugin (Windows, Linux and Android). Unity 5.3 required.
 * Extendable pipeline architechture (see [Architechture](#architechture))
 * Marker tracking: multiple markers
@@ -23,7 +24,8 @@ Strongly WIP, so don't expect to use this for anything real at the moment. :)
     * SLAM
     * Edge-based
     * Face
-* Platform support for iOS and OSX (native and Unity3D-plugin)
+* Platform support for OSX (native and Unity3D-plugin)
+* Platform support for iOS-Unity3D-plugin
 * Improved marker detection / different marker data-fields
 * Support for a proper rendering-library (Ogre3D or OpenSceneGraph)
 
@@ -52,10 +54,11 @@ Library dependencies per compilation target:
 | Linux             | X          | X      | X     | X    | X    |
 | Windows           | X          | X      | X     | X    | X    |
 | Android           | X          | X      | X     |      |      |
+| iOS               | X          | X      | X     |      |      |
 | Unity3D (Windows) | X          | X      | *     |      |      |
 | Unity3D (Android) | X          | X      | *     |      |      |
 
-\* Doesn't currently support sensor fusion, but will become a dependency in the future.
+\* Currently not needed (doesn't support sensor fusion), but will become a dependency in the future.
 
 ## Compiling and running tests
 
@@ -79,6 +82,12 @@ make test ARGS="-V"
 1. Build AAR (see [Compiling](doc/compiling.md)). 
 2. If you built it with build_aar.sh-script, .aar gets automatically copied to *example/android/app/libs*.
 3. Open and build *example/android* with gradle or Android studio.
+
+#### iOS
+
+1. Build Yarrar.framework (see [Compiling](doc/compiling.md)). 
+2. Copy Yarrar.framework to *example/ios*-directory.
+3. Open and build *example/ios/yarrarexample.xcodeproj* with Xcode.
 
 #### Windows/Linux
 
