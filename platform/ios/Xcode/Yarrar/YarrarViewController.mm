@@ -26,6 +26,12 @@
 
 @implementation YarrarViewController
 
+- (void)onYarrarInitialized
+{
+    // Should be implemented in child class.
+    NSLog(@"Warning: onYarrarInitialized not implemented");
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -114,68 +120,30 @@
 
 - (void)setupYarrar
 {
+    // TODO: Remove hardcoding.
     yarrar::IOSCameraProvider::injectCameraSize(480, 360);
     m_pipeline = new yarrar::Pipeline(std::string("pipeline.json"));
+    [self onYarrarInitialized];
+}
 
-    yarrar::Model cube;
-    cube.name = "cube";
-    cube.translation = { 0.0f, 0.0f, 0.0f };
-    cube.vertices = {
-        // bottom
-        -1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        -1.0f, -1.0f, 2.0f,
-        1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 2.0f,
-        -1.0f, -1.0f, 2.0f,
+- (void)addModel:(int)modelId withName:(NSString*)name withVertices:(NSArray*)vertexArray withTranslation:(vector_float3)translation
+{
+    yarrar::Model model;
+    model.name = [name UTF8String];
+    model.translation = { translation[0], translation[1], translation[2] };
 
-        // top
-        -1.0f, 1.0f, 0.0f,
-        -1.0f, 1.0f, 2.0f,
-        1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, 0.0f,
-        -1.0f, 1.0f, 2.0f,
-        1.0f, 1.0f, 2.0f,
+    model.vertices.reserve(vertexArray.count);
+    for(NSNumber* val in vertexArray)
+    {
+        model.vertices.push_back([val floatValue]);
+    }
 
-        // front
-        -1.0f, -1.0f, 2.0f,
-        1.0f, -1.0f, 2.0f,
-        -1.0f, 1.0f, 2.0f,
-        1.0f, -1.0f, 2.0f,
-        1.0f, 1.0f, 2.0f,
-        -1.0f, 1.0f, 2.0f,
-
-        // back
-        -1.0f, -1.0f, 0.0f,
-        -1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        1.0f, -1.0f, 0.0f,
-        -1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, 0.0f,
-
-        // left
-        -1.0f, -1.0f, 2.0f,
-        -1.0f, 1.0f, 0.0f,
-        -1.0f, -1.0f, 0.0f,
-        -1.0f, -1.0f, 2.0f,
-        -1.0f, 1.0f, 2.0f,
-        -1.0f, 1.0f, 0.0f,
-
-        // right
-        1.0f, -1.0f, 2.0f,
-        1.0f, -1.0f, 0.0f,
-        1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 2.0f,
-        1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, 2.0
-    };
-
-    m_pipeline->addModel(30, cube);
+    m_pipeline->addModel(modelId, model);
 }
 
 - (void)glkView:(GLKView*)view drawInRect:(CGRect)rect
 {
-    //m_pipeline->run();
+    m_pipeline->run();
 }
 
 @end

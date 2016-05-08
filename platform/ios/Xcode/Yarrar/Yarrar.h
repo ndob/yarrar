@@ -1,3 +1,5 @@
+#import <UIKit/UIKit.h>
+
 //! Project version number for Yarrar.
 FOUNDATION_EXPORT double YarrarVersionNumber;
 
