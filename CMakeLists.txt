@@ -32,8 +32,6 @@ elseif(MSVC)
     set("OpenCV_DIR" "${PROJECT_SOURCE_DIR}/external/opencv/build")
 endif()
 
-# TODO: APPLE
-set("OpenCV_DIR" "/usr/local/opt/opencv3/share/OpenCV")
 find_package(OpenCV REQUIRED)
 
 add_subdirectory(external/json11)
