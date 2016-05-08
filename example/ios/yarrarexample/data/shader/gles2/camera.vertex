@@ -1,0 +1,32 @@
+#version 100
+
+uniform mat4 world;
+uniform mat4 camera;
+uniform mat4 projection;
+
+attribute vec3 vert;
+
+varying vec3 randomColor;
+
+float rand(vec2 co)
+{
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+void main()
+{
+    if(rand(vert.xy) < 0.3)
+    {
+        randomColor = vec3(255, 0, 0);
+    }
+    else if(rand(vert.xy) < 0.7)
+    {
+        randomColor = vec3(0, 255, 0);
+    }
+    else
+    {
+        randomColor = vec3(0, 0, 255);
+    }
+    randomColor = vec3(rand(vert.xy), rand(vert.yz), rand(vert.xy));
+    gl_Position = projection * camera * world * vec4(vert, 1);
+}

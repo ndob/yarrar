@@ -1,0 +1,16 @@
+#version 100
+
+// unused
+uniform mat4 camera;
+uniform mat4 projection;
+
+attribute vec3 vert;
+attribute vec2 texCoord;
+
+varying vec2 fragTexCoord;
+
+void main()
+{
+    fragTexCoord = texCoord;
+    gl_Position = vec4(vert, 1);
+}
