@@ -6,7 +6,9 @@
 #include "dataprovider/AndroidGyroscopeProvider.h"
 #include "dataprovider/AndroidSensorProvider.h"
 #endif
+#ifdef __APPLE__
 #include "dataprovider/IOSCameraProvider.h"
+#endif
 #include "tracker/marker/MarkerTracker.h"
 #include "tracker/sensor/SensorTracker.h"
 #include "fusion/vsfusion/VisualWithSensors.h"
@@ -80,10 +82,12 @@ Pipeline::Pipeline(const std::string& configFile)
             addDataProvider<AndroidGyroscopeProvider>(provider["config"]);
         }
 #endif
+#ifdef __APPLE__
         else if(type == "ios_image")
         {
             addDataProvider<IOSCameraProvider>(provider["config"]);
         }
+#endif
     }
 
     auto trackers = pipeline["trackers"];
