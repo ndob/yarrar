@@ -13,12 +13,7 @@ using namespace yarrar;
 #ifdef YARRAR_OPENGL_CONTEXT
 std::string SHADER_PATH = "shader/gl3/";
 #elif YARRAR_OPENGLES_CONTEXT
-// TODO: Remove __APPLE__-branch
-#ifdef __APPLE__
-std::string SHADER_PATH = "/";
-#else
 std::string SHADER_PATH = "shader/gles2/";
-#endif
 #endif
 
 const std::vector<ShaderDef> VERTEX_SHADERS{

@@ -2,7 +2,7 @@
 
 #include "ApplicationPath.h"
 
-std::string getPath()
+std::string iOSGetApplicationPath()
 {
     NSBundle* bundle = [NSBundle mainBundle];
     NSString* path = [bundle resourcePath];

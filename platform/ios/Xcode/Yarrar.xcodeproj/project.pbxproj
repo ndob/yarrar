@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		005EA1A31CDFBC9A0098666E /* FileSystem_ios.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 005EA1A21CDFBC9A0098666E /* FileSystem_ios.cpp */; };
+		005EA1A51CDFBD3B0098666E /* ios in Resources */ = {isa = PBXBuildFile; fileRef = 005EA1A41CDFBD3B0098666E /* ios */; };
+		005EA1A71CDFBDAC0098666E /* ApplicationPath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 005EA1A61CDFBDAC0098666E /* ApplicationPath.mm */; };
 		009B25581CDF7A190072F585 /* Yarrar.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25571CDF7A190072F585 /* Yarrar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		009B25611CDF7AB20072F585 /* YarrarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 009B255F1CDF7AB20072F585 /* YarrarViewController.mm */; };
 		009B25621CDF7AB20072F585 /* YarrarViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25601CDF7AB20072F585 /* YarrarViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -21,10 +24,7 @@
 		009B25F91CDF8A790072F585 /* VisualWithSensors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25BA1CDF8A790072F585 /* VisualWithSensors.cpp */; };
 		009B25FA1CDF8A790072F585 /* VisualWithSensors.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25BB1CDF8A790072F585 /* VisualWithSensors.h */; };
 		009B25FB1CDF8A790072F585 /* HistoryBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25BC1CDF8A790072F585 /* HistoryBuffer.h */; };
-		009B25FC1CDF8A790072F585 /* ApplicationPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25BE1CDF8A790072F585 /* ApplicationPath.h */; };
-		009B25FD1CDF8A790072F585 /* ApplicationPath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 009B25BF1CDF8A790072F585 /* ApplicationPath.mm */; };
 		009B25FE1CDF8A790072F585 /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25C01CDF8A790072F585 /* FileSystem.h */; };
-		009B26001CDF8A790072F585 /* FileSystem_std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25C21CDF8A790072F585 /* FileSystem_std.cpp */; };
 		009B26011CDF8A790072F585 /* IterableRange.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25C31CDF8A790072F585 /* IterableRange.h */; };
 		009B26021CDF8A790072F585 /* LockableData.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25C41CDF8A790072F585 /* LockableData.h */; };
 		009B26031CDF8A790072F585 /* Pipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25C51CDF8A790072F585 /* Pipeline.cpp */; };
@@ -69,6 +69,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		005EA1A21CDFBC9A0098666E /* FileSystem_ios.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem_ios.cpp; sourceTree = "<group>"; };
+		005EA1A41CDFBD3B0098666E /* ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ios; path = ../../../../src/ios; sourceTree = "<group>"; };
+		005EA1A61CDFBDAC0098666E /* ApplicationPath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = ApplicationPath.mm; path = ../../../src/ios/ApplicationPath.mm; sourceTree = "<group>"; };
 		009B25541CDF7A190072F585 /* Yarrar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Yarrar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		009B25571CDF7A190072F585 /* Yarrar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Yarrar.h; sourceTree = "<group>"; };
 		009B25591CDF7A190072F585 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -85,10 +88,7 @@
 		009B25BA1CDF8A790072F585 /* VisualWithSensors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VisualWithSensors.cpp; sourceTree = "<group>"; };
 		009B25BB1CDF8A790072F585 /* VisualWithSensors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VisualWithSensors.h; sourceTree = "<group>"; };
 		009B25BC1CDF8A790072F585 /* HistoryBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryBuffer.h; sourceTree = "<group>"; };
-		009B25BE1CDF8A790072F585 /* ApplicationPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationPath.h; sourceTree = "<group>"; };
-		009B25BF1CDF8A790072F585 /* ApplicationPath.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ApplicationPath.mm; sourceTree = "<group>"; };
 		009B25C01CDF8A790072F585 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
-		009B25C21CDF8A790072F585 /* FileSystem_std.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem_std.cpp; sourceTree = "<group>"; };
 		009B25C31CDF8A790072F585 /* IterableRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IterableRange.h; sourceTree = "<group>"; };
 		009B25C41CDF8A790072F585 /* LockableData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LockableData.h; sourceTree = "<group>"; };
 		009B25C51CDF8A790072F585 /* Pipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pipeline.cpp; sourceTree = "<group>"; };
@@ -153,6 +153,7 @@
 		009B254A1CDF7A190072F585 = {
 			isa = PBXGroup;
 			children = (
+				005EA1A61CDFBDAC0098666E /* ApplicationPath.mm */,
 				009B26311CDF8E800072F585 /* CoreGraphics.framework */,
 				009B26231CDF8B240072F585 /* opencv2.framework */,
 				009B25711CDF7BE10072F585 /* OpenGLES.framework */,
@@ -176,6 +177,7 @@
 		009B25561CDF7A190072F585 /* Yarrar */ = {
 			isa = PBXGroup;
 			children = (
+				005EA1A41CDFBD3B0098666E /* ios */,
 				009B26251CDF8E0F0072F585 /* external */,
 				009B25A91CDF8A790072F585 /* yarrar */,
 				009B255F1CDF7AB20072F585 /* YarrarViewController.mm */,
@@ -245,10 +247,8 @@
 		009B25BD1CDF8A790072F585 /* io */ = {
 			isa = PBXGroup;
 			children = (
-				009B25BE1CDF8A790072F585 /* ApplicationPath.h */,
-				009B25BF1CDF8A790072F585 /* ApplicationPath.mm */,
+				005EA1A21CDFBC9A0098666E /* FileSystem_ios.cpp */,
 				009B25C01CDF8A790072F585 /* FileSystem.h */,
-				009B25C21CDF8A790072F585 /* FileSystem_std.cpp */,
 			);
 			path = io;
 			sourceTree = "<group>";
@@ -360,7 +360,6 @@
 				009B25FE1CDF8A790072F585 /* FileSystem.h in Headers */,
 				009B26021CDF8A790072F585 /* LockableData.h in Headers */,
 				009B261D1CDF8A790072F585 /* YarrarMarkerParser.h in Headers */,
-				009B25FC1CDF8A790072F585 /* ApplicationPath.h in Headers */,
 				009B260F1CDF8A790072F585 /* GLShader.h in Headers */,
 				009B261F1CDF8A790072F585 /* SensorTracker.h in Headers */,
 				009B26041CDF8A790072F585 /* Pipeline.h in Headers */,
@@ -445,6 +444,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				005EA1A51CDFBD3B0098666E /* ios in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,18 +477,18 @@
 				009B260A1CDF8A790072F585 /* GLContext.cpp in Sources */,
 				009B260C1CDF8A790072F585 /* GLProgram.cpp in Sources */,
 				009B26031CDF8A790072F585 /* Pipeline.cpp in Sources */,
+				005EA1A71CDFBDAC0098666E /* ApplicationPath.mm in Sources */,
 				009B260E1CDF8A790072F585 /* GLShader.cpp in Sources */,
 				009B25611CDF7AB20072F585 /* YarrarViewController.mm in Sources */,
 				009B262F1CDF8E520072F585 /* WebcamDataProvider.cpp in Sources */,
 				009B262D1CDF8E520072F585 /* StaticImageDataProvider.cpp in Sources */,
 				009B26171CDF8A790072F585 /* MarkerDetector.cpp in Sources */,
-				009B25FD1CDF8A790072F585 /* ApplicationPath.mm in Sources */,
 				009B26141CDF8A790072F585 /* Scene.cpp in Sources */,
 				009B261A1CDF8A790072F585 /* MarkerTracker.cpp in Sources */,
+				005EA1A31CDFBC9A0098666E /* FileSystem_ios.cpp in Sources */,
 				009B26211CDF8A790072F585 /* Util.cpp in Sources */,
 				009B261C1CDF8A790072F585 /* YarrarMarkerParser.cpp in Sources */,
 				009B25F91CDF8A790072F585 /* VisualWithSensors.cpp in Sources */,
-				009B26001CDF8A790072F585 /* FileSystem_std.cpp in Sources */,
 				009B26281CDF8E300072F585 /* json11.cpp in Sources */,
 				009B25F21CDF8A790072F585 /* IOSCameraProvider.cpp in Sources */,
 				009B261E1CDF8A790072F585 /* SensorTracker.cpp in Sources */,

@@ -39,7 +39,7 @@ public:
     OpenGLRenderer(const OpenGLRenderer&&) = delete;
     OpenGLRenderer operator=(const OpenGLRenderer&&) = delete;
 
-    void loadModel(const Model& model);
+    void loadModel(const Model& model) override;
 
     void draw(const std::vector<Pose>& cameraPoses,
         const Scene& scene,
