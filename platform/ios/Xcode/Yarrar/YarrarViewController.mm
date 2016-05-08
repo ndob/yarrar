@@ -175,7 +175,7 @@
 
 - (void)glkView:(GLKView*)view drawInRect:(CGRect)rect
 {
-    m_pipeline->run();
+    //m_pipeline->run();
 }
 
 @end

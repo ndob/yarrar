@@ -1,0 +1,678 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		009B25581CDF7A190072F585 /* Yarrar.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25571CDF7A190072F585 /* Yarrar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		009B25611CDF7AB20072F585 /* YarrarViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 009B255F1CDF7AB20072F585 /* YarrarViewController.mm */; };
+		009B25621CDF7AB20072F585 /* YarrarViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25601CDF7AB20072F585 /* YarrarViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		009B256A1CDF7B970072F585 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B25691CDF7B970072F585 /* AVFoundation.framework */; };
+		009B256C1CDF7BA50072F585 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B256B1CDF7BA50072F585 /* GLKit.framework */; };
+		009B256E1CDF7BBC0072F585 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B256D1CDF7BBC0072F585 /* CoreMedia.framework */; };
+		009B25701CDF7BD00072F585 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B256F1CDF7BD00072F585 /* CoreVideo.framework */; };
+		009B25721CDF7BE10072F585 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B25711CDF7BE10072F585 /* OpenGLES.framework */; };
+		009B25F21CDF8A790072F585 /* IOSCameraProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25B11CDF8A790072F585 /* IOSCameraProvider.cpp */; };
+		009B25F31CDF8A790072F585 /* IOSCameraProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25B21CDF8A790072F585 /* IOSCameraProvider.h */; };
+		009B25F81CDF8A790072F585 /* ExtendedKalmanFilter.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25B71CDF8A790072F585 /* ExtendedKalmanFilter.h */; };
+		009B25F91CDF8A790072F585 /* VisualWithSensors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25BA1CDF8A790072F585 /* VisualWithSensors.cpp */; };
+		009B25FA1CDF8A790072F585 /* VisualWithSensors.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25BB1CDF8A790072F585 /* VisualWithSensors.h */; };
+		009B25FB1CDF8A790072F585 /* HistoryBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25BC1CDF8A790072F585 /* HistoryBuffer.h */; };
+		009B25FC1CDF8A790072F585 /* ApplicationPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25BE1CDF8A790072F585 /* ApplicationPath.h */; };
+		009B25FD1CDF8A790072F585 /* ApplicationPath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 009B25BF1CDF8A790072F585 /* ApplicationPath.mm */; };
+		009B25FE1CDF8A790072F585 /* FileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25C01CDF8A790072F585 /* FileSystem.h */; };
+		009B26001CDF8A790072F585 /* FileSystem_std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25C21CDF8A790072F585 /* FileSystem_std.cpp */; };
+		009B26011CDF8A790072F585 /* IterableRange.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25C31CDF8A790072F585 /* IterableRange.h */; };
+		009B26021CDF8A790072F585 /* LockableData.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25C41CDF8A790072F585 /* LockableData.h */; };
+		009B26031CDF8A790072F585 /* Pipeline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25C51CDF8A790072F585 /* Pipeline.cpp */; };
+		009B26041CDF8A790072F585 /* Pipeline.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25C61CDF8A790072F585 /* Pipeline.h */; };
+		009B26051CDF8A790072F585 /* PipelineStage.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25C71CDF8A790072F585 /* PipelineStage.h */; };
+		009B26061CDF8A790072F585 /* DummyRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25CA1CDF8A790072F585 /* DummyRenderer.h */; };
+		009B26071CDF8A790072F585 /* OpenCVRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25CC1CDF8A790072F585 /* OpenCVRenderer.h */; };
+		009B26081CDF8A790072F585 /* BackgroundModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25CE1CDF8A790072F585 /* BackgroundModel.cpp */; };
+		009B26091CDF8A790072F585 /* BackgroundModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25CF1CDF8A790072F585 /* BackgroundModel.h */; };
+		009B260A1CDF8A790072F585 /* GLContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25D01CDF8A790072F585 /* GLContext.cpp */; };
+		009B260B1CDF8A790072F585 /* GLContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25D11CDF8A790072F585 /* GLContext.h */; };
+		009B260C1CDF8A790072F585 /* GLProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25D21CDF8A790072F585 /* GLProgram.cpp */; };
+		009B260D1CDF8A790072F585 /* GLProgram.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25D31CDF8A790072F585 /* GLProgram.h */; };
+		009B260E1CDF8A790072F585 /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25D41CDF8A790072F585 /* GLShader.cpp */; };
+		009B260F1CDF8A790072F585 /* GLShader.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25D51CDF8A790072F585 /* GLShader.h */; };
+		009B26101CDF8A790072F585 /* OpenGLRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25D61CDF8A790072F585 /* OpenGLRenderer.cpp */; };
+		009B26111CDF8A790072F585 /* OpenGLRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25D71CDF8A790072F585 /* OpenGLRenderer.h */; };
+		009B26121CDF8A790072F585 /* SceneModel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25D81CDF8A790072F585 /* SceneModel.cpp */; };
+		009B26131CDF8A790072F585 /* SceneModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25D91CDF8A790072F585 /* SceneModel.h */; };
+		009B26141CDF8A790072F585 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25DA1CDF8A790072F585 /* Scene.cpp */; };
+		009B26151CDF8A790072F585 /* Scene.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25DB1CDF8A790072F585 /* Scene.h */; };
+		009B26161CDF8A790072F585 /* Timer.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25DC1CDF8A790072F585 /* Timer.h */; };
+		009B26171CDF8A790072F585 /* MarkerDetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25DF1CDF8A790072F585 /* MarkerDetector.cpp */; };
+		009B26181CDF8A790072F585 /* MarkerDetector.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25E01CDF8A790072F585 /* MarkerDetector.h */; };
+		009B26191CDF8A790072F585 /* MarkerParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25E11CDF8A790072F585 /* MarkerParser.h */; };
+		009B261A1CDF8A790072F585 /* MarkerTracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25E21CDF8A790072F585 /* MarkerTracker.cpp */; };
+		009B261B1CDF8A790072F585 /* MarkerTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25E31CDF8A790072F585 /* MarkerTracker.h */; };
+		009B261C1CDF8A790072F585 /* YarrarMarkerParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25E41CDF8A790072F585 /* YarrarMarkerParser.cpp */; };
+		009B261D1CDF8A790072F585 /* YarrarMarkerParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25E51CDF8A790072F585 /* YarrarMarkerParser.h */; };
+		009B261E1CDF8A790072F585 /* SensorTracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25E71CDF8A790072F585 /* SensorTracker.cpp */; };
+		009B261F1CDF8A790072F585 /* SensorTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25E81CDF8A790072F585 /* SensorTracker.h */; };
+		009B26201CDF8A790072F585 /* Types.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25E91CDF8A790072F585 /* Types.h */; };
+		009B26211CDF8A790072F585 /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B25EA1CDF8A790072F585 /* Util.cpp */; };
+		009B26221CDF8A790072F585 /* Util.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B25EB1CDF8A790072F585 /* Util.h */; };
+		009B26241CDF8B240072F585 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B26231CDF8B240072F585 /* opencv2.framework */; };
+		009B26281CDF8E300072F585 /* json11.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B26271CDF8E300072F585 /* json11.cpp */; };
+		009B262D1CDF8E520072F585 /* StaticImageDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B26291CDF8E520072F585 /* StaticImageDataProvider.cpp */; };
+		009B262E1CDF8E520072F585 /* StaticImageDataProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B262A1CDF8E520072F585 /* StaticImageDataProvider.h */; };
+		009B262F1CDF8E520072F585 /* WebcamDataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 009B262B1CDF8E520072F585 /* WebcamDataProvider.cpp */; };
+		009B26301CDF8E520072F585 /* WebcamDataProvider.h in Headers */ = {isa = PBXBuildFile; fileRef = 009B262C1CDF8E520072F585 /* WebcamDataProvider.h */; };
+		009B26321CDF8E810072F585 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 009B26311CDF8E800072F585 /* CoreGraphics.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		009B25541CDF7A190072F585 /* Yarrar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Yarrar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		009B25571CDF7A190072F585 /* Yarrar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Yarrar.h; sourceTree = "<group>"; };
+		009B25591CDF7A190072F585 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		009B255F1CDF7AB20072F585 /* YarrarViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = YarrarViewController.mm; sourceTree = "<group>"; };
+		009B25601CDF7AB20072F585 /* YarrarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YarrarViewController.h; sourceTree = "<group>"; };
+		009B25691CDF7B970072F585 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		009B256B1CDF7BA50072F585 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		009B256D1CDF7BBC0072F585 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		009B256F1CDF7BD00072F585 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		009B25711CDF7BE10072F585 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		009B25B11CDF8A790072F585 /* IOSCameraProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IOSCameraProvider.cpp; sourceTree = "<group>"; };
+		009B25B21CDF8A790072F585 /* IOSCameraProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOSCameraProvider.h; sourceTree = "<group>"; };
+		009B25B71CDF8A790072F585 /* ExtendedKalmanFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtendedKalmanFilter.h; sourceTree = "<group>"; };
+		009B25BA1CDF8A790072F585 /* VisualWithSensors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VisualWithSensors.cpp; sourceTree = "<group>"; };
+		009B25BB1CDF8A790072F585 /* VisualWithSensors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VisualWithSensors.h; sourceTree = "<group>"; };
+		009B25BC1CDF8A790072F585 /* HistoryBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HistoryBuffer.h; sourceTree = "<group>"; };
+		009B25BE1CDF8A790072F585 /* ApplicationPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationPath.h; sourceTree = "<group>"; };
+		009B25BF1CDF8A790072F585 /* ApplicationPath.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ApplicationPath.mm; sourceTree = "<group>"; };
+		009B25C01CDF8A790072F585 /* FileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileSystem.h; sourceTree = "<group>"; };
+		009B25C21CDF8A790072F585 /* FileSystem_std.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileSystem_std.cpp; sourceTree = "<group>"; };
+		009B25C31CDF8A790072F585 /* IterableRange.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IterableRange.h; sourceTree = "<group>"; };
+		009B25C41CDF8A790072F585 /* LockableData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LockableData.h; sourceTree = "<group>"; };
+		009B25C51CDF8A790072F585 /* Pipeline.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pipeline.cpp; sourceTree = "<group>"; };
+		009B25C61CDF8A790072F585 /* Pipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pipeline.h; sourceTree = "<group>"; };
+		009B25C71CDF8A790072F585 /* PipelineStage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PipelineStage.h; sourceTree = "<group>"; };
+		009B25CA1CDF8A790072F585 /* DummyRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DummyRenderer.h; sourceTree = "<group>"; };
+		009B25CC1CDF8A790072F585 /* OpenCVRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCVRenderer.h; sourceTree = "<group>"; };
+		009B25CE1CDF8A790072F585 /* BackgroundModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BackgroundModel.cpp; sourceTree = "<group>"; };
+		009B25CF1CDF8A790072F585 /* BackgroundModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundModel.h; sourceTree = "<group>"; };
+		009B25D01CDF8A790072F585 /* GLContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLContext.cpp; sourceTree = "<group>"; };
+		009B25D11CDF8A790072F585 /* GLContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLContext.h; sourceTree = "<group>"; };
+		009B25D21CDF8A790072F585 /* GLProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLProgram.cpp; sourceTree = "<group>"; };
+		009B25D31CDF8A790072F585 /* GLProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLProgram.h; sourceTree = "<group>"; };
+		009B25D41CDF8A790072F585 /* GLShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShader.cpp; sourceTree = "<group>"; };
+		009B25D51CDF8A790072F585 /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
+		009B25D61CDF8A790072F585 /* OpenGLRenderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OpenGLRenderer.cpp; sourceTree = "<group>"; };
+		009B25D71CDF8A790072F585 /* OpenGLRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLRenderer.h; sourceTree = "<group>"; };
+		009B25D81CDF8A790072F585 /* SceneModel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneModel.cpp; sourceTree = "<group>"; };
+		009B25D91CDF8A790072F585 /* SceneModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneModel.h; sourceTree = "<group>"; };
+		009B25DA1CDF8A790072F585 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
+		009B25DB1CDF8A790072F585 /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
+		009B25DC1CDF8A790072F585 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
+		009B25DF1CDF8A790072F585 /* MarkerDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MarkerDetector.cpp; sourceTree = "<group>"; };
+		009B25E01CDF8A790072F585 /* MarkerDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkerDetector.h; sourceTree = "<group>"; };
+		009B25E11CDF8A790072F585 /* MarkerParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkerParser.h; sourceTree = "<group>"; };
+		009B25E21CDF8A790072F585 /* MarkerTracker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MarkerTracker.cpp; sourceTree = "<group>"; };
+		009B25E31CDF8A790072F585 /* MarkerTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkerTracker.h; sourceTree = "<group>"; };
+		009B25E41CDF8A790072F585 /* YarrarMarkerParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YarrarMarkerParser.cpp; sourceTree = "<group>"; };
+		009B25E51CDF8A790072F585 /* YarrarMarkerParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YarrarMarkerParser.h; sourceTree = "<group>"; };
+		009B25E71CDF8A790072F585 /* SensorTracker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SensorTracker.cpp; sourceTree = "<group>"; };
+		009B25E81CDF8A790072F585 /* SensorTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensorTracker.h; sourceTree = "<group>"; };
+		009B25E91CDF8A790072F585 /* Types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Types.h; sourceTree = "<group>"; };
+		009B25EA1CDF8A790072F585 /* Util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Util.cpp; sourceTree = "<group>"; };
+		009B25EB1CDF8A790072F585 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		009B26231CDF8B240072F585 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = Yarrar/opencv2.framework; sourceTree = "<group>"; };
+		009B26271CDF8E300072F585 /* json11.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = json11.cpp; path = ../../../../external/json11/json11.cpp; sourceTree = "<group>"; };
+		009B26291CDF8E520072F585 /* StaticImageDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticImageDataProvider.cpp; sourceTree = "<group>"; };
+		009B262A1CDF8E520072F585 /* StaticImageDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticImageDataProvider.h; sourceTree = "<group>"; };
+		009B262B1CDF8E520072F585 /* WebcamDataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WebcamDataProvider.cpp; sourceTree = "<group>"; };
+		009B262C1CDF8E520072F585 /* WebcamDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebcamDataProvider.h; sourceTree = "<group>"; };
+		009B26311CDF8E800072F585 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		009B25501CDF7A190072F585 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				009B26321CDF8E810072F585 /* CoreGraphics.framework in Frameworks */,
+				009B26241CDF8B240072F585 /* opencv2.framework in Frameworks */,
+				009B25721CDF7BE10072F585 /* OpenGLES.framework in Frameworks */,
+				009B25701CDF7BD00072F585 /* CoreVideo.framework in Frameworks */,
+				009B256E1CDF7BBC0072F585 /* CoreMedia.framework in Frameworks */,
+				009B256C1CDF7BA50072F585 /* GLKit.framework in Frameworks */,
+				009B256A1CDF7B970072F585 /* AVFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		009B254A1CDF7A190072F585 = {
+			isa = PBXGroup;
+			children = (
+				009B26311CDF8E800072F585 /* CoreGraphics.framework */,
+				009B26231CDF8B240072F585 /* opencv2.framework */,
+				009B25711CDF7BE10072F585 /* OpenGLES.framework */,
+				009B256F1CDF7BD00072F585 /* CoreVideo.framework */,
+				009B256D1CDF7BBC0072F585 /* CoreMedia.framework */,
+				009B256B1CDF7BA50072F585 /* GLKit.framework */,
+				009B25691CDF7B970072F585 /* AVFoundation.framework */,
+				009B25551CDF7A190072F585 /* Products */,
+				009B25561CDF7A190072F585 /* Yarrar */,
+			);
+			sourceTree = "<group>";
+		};
+		009B25551CDF7A190072F585 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				009B25541CDF7A190072F585 /* Yarrar.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		009B25561CDF7A190072F585 /* Yarrar */ = {
+			isa = PBXGroup;
+			children = (
+				009B26251CDF8E0F0072F585 /* external */,
+				009B25A91CDF8A790072F585 /* yarrar */,
+				009B255F1CDF7AB20072F585 /* YarrarViewController.mm */,
+				009B25601CDF7AB20072F585 /* YarrarViewController.h */,
+				009B25571CDF7A190072F585 /* Yarrar.h */,
+				009B25591CDF7A190072F585 /* Info.plist */,
+			);
+			path = Yarrar;
+			sourceTree = "<group>";
+		};
+		009B25A91CDF8A790072F585 /* yarrar */ = {
+			isa = PBXGroup;
+			children = (
+				009B25AA1CDF8A790072F585 /* dataprovider */,
+				009B25B71CDF8A790072F585 /* ExtendedKalmanFilter.h */,
+				009B25B81CDF8A790072F585 /* fusion */,
+				009B25BC1CDF8A790072F585 /* HistoryBuffer.h */,
+				009B25BD1CDF8A790072F585 /* io */,
+				009B25C31CDF8A790072F585 /* IterableRange.h */,
+				009B25C41CDF8A790072F585 /* LockableData.h */,
+				009B25C51CDF8A790072F585 /* Pipeline.cpp */,
+				009B25C61CDF8A790072F585 /* Pipeline.h */,
+				009B25C71CDF8A790072F585 /* PipelineStage.h */,
+				009B25C81CDF8A790072F585 /* renderer */,
+				009B25DA1CDF8A790072F585 /* Scene.cpp */,
+				009B25DB1CDF8A790072F585 /* Scene.h */,
+				009B25DC1CDF8A790072F585 /* Timer.h */,
+				009B25DD1CDF8A790072F585 /* tracker */,
+				009B25E91CDF8A790072F585 /* Types.h */,
+				009B25EA1CDF8A790072F585 /* Util.cpp */,
+				009B25EB1CDF8A790072F585 /* Util.h */,
+			);
+			name = yarrar;
+			path = ../../../../src/yarrar;
+			sourceTree = "<group>";
+		};
+		009B25AA1CDF8A790072F585 /* dataprovider */ = {
+			isa = PBXGroup;
+			children = (
+				009B26291CDF8E520072F585 /* StaticImageDataProvider.cpp */,
+				009B262A1CDF8E520072F585 /* StaticImageDataProvider.h */,
+				009B262B1CDF8E520072F585 /* WebcamDataProvider.cpp */,
+				009B262C1CDF8E520072F585 /* WebcamDataProvider.h */,
+				009B25B11CDF8A790072F585 /* IOSCameraProvider.cpp */,
+				009B25B21CDF8A790072F585 /* IOSCameraProvider.h */,
+			);
+			path = dataprovider;
+			sourceTree = "<group>";
+		};
+		009B25B81CDF8A790072F585 /* fusion */ = {
+			isa = PBXGroup;
+			children = (
+				009B25B91CDF8A790072F585 /* vsfusion */,
+			);
+			path = fusion;
+			sourceTree = "<group>";
+		};
+		009B25B91CDF8A790072F585 /* vsfusion */ = {
+			isa = PBXGroup;
+			children = (
+				009B25BA1CDF8A790072F585 /* VisualWithSensors.cpp */,
+				009B25BB1CDF8A790072F585 /* VisualWithSensors.h */,
+			);
+			path = vsfusion;
+			sourceTree = "<group>";
+		};
+		009B25BD1CDF8A790072F585 /* io */ = {
+			isa = PBXGroup;
+			children = (
+				009B25BE1CDF8A790072F585 /* ApplicationPath.h */,
+				009B25BF1CDF8A790072F585 /* ApplicationPath.mm */,
+				009B25C01CDF8A790072F585 /* FileSystem.h */,
+				009B25C21CDF8A790072F585 /* FileSystem_std.cpp */,
+			);
+			path = io;
+			sourceTree = "<group>";
+		};
+		009B25C81CDF8A790072F585 /* renderer */ = {
+			isa = PBXGroup;
+			children = (
+				009B25C91CDF8A790072F585 /* dummy */,
+				009B25CB1CDF8A790072F585 /* opencv */,
+				009B25CD1CDF8A790072F585 /* opengl */,
+			);
+			path = renderer;
+			sourceTree = "<group>";
+		};
+		009B25C91CDF8A790072F585 /* dummy */ = {
+			isa = PBXGroup;
+			children = (
+				009B25CA1CDF8A790072F585 /* DummyRenderer.h */,
+			);
+			path = dummy;
+			sourceTree = "<group>";
+		};
+		009B25CB1CDF8A790072F585 /* opencv */ = {
+			isa = PBXGroup;
+			children = (
+				009B25CC1CDF8A790072F585 /* OpenCVRenderer.h */,
+			);
+			path = opencv;
+			sourceTree = "<group>";
+		};
+		009B25CD1CDF8A790072F585 /* opengl */ = {
+			isa = PBXGroup;
+			children = (
+				009B25CE1CDF8A790072F585 /* BackgroundModel.cpp */,
+				009B25CF1CDF8A790072F585 /* BackgroundModel.h */,
+				009B25D01CDF8A790072F585 /* GLContext.cpp */,
+				009B25D11CDF8A790072F585 /* GLContext.h */,
+				009B25D21CDF8A790072F585 /* GLProgram.cpp */,
+				009B25D31CDF8A790072F585 /* GLProgram.h */,
+				009B25D41CDF8A790072F585 /* GLShader.cpp */,
+				009B25D51CDF8A790072F585 /* GLShader.h */,
+				009B25D61CDF8A790072F585 /* OpenGLRenderer.cpp */,
+				009B25D71CDF8A790072F585 /* OpenGLRenderer.h */,
+				009B25D81CDF8A790072F585 /* SceneModel.cpp */,
+				009B25D91CDF8A790072F585 /* SceneModel.h */,
+			);
+			path = opengl;
+			sourceTree = "<group>";
+		};
+		009B25DD1CDF8A790072F585 /* tracker */ = {
+			isa = PBXGroup;
+			children = (
+				009B25DE1CDF8A790072F585 /* marker */,
+				009B25E61CDF8A790072F585 /* sensor */,
+			);
+			path = tracker;
+			sourceTree = "<group>";
+		};
+		009B25DE1CDF8A790072F585 /* marker */ = {
+			isa = PBXGroup;
+			children = (
+				009B25DF1CDF8A790072F585 /* MarkerDetector.cpp */,
+				009B25E01CDF8A790072F585 /* MarkerDetector.h */,
+				009B25E11CDF8A790072F585 /* MarkerParser.h */,
+				009B25E21CDF8A790072F585 /* MarkerTracker.cpp */,
+				009B25E31CDF8A790072F585 /* MarkerTracker.h */,
+				009B25E41CDF8A790072F585 /* YarrarMarkerParser.cpp */,
+				009B25E51CDF8A790072F585 /* YarrarMarkerParser.h */,
+			);
+			path = marker;
+			sourceTree = "<group>";
+		};
+		009B25E61CDF8A790072F585 /* sensor */ = {
+			isa = PBXGroup;
+			children = (
+				009B25E71CDF8A790072F585 /* SensorTracker.cpp */,
+				009B25E81CDF8A790072F585 /* SensorTracker.h */,
+			);
+			path = sensor;
+			sourceTree = "<group>";
+		};
+		009B26251CDF8E0F0072F585 /* external */ = {
+			isa = PBXGroup;
+			children = (
+				009B26261CDF8E150072F585 /* json11 */,
+			);
+			name = external;
+			sourceTree = "<group>";
+		};
+		009B26261CDF8E150072F585 /* json11 */ = {
+			isa = PBXGroup;
+			children = (
+				009B26271CDF8E300072F585 /* json11.cpp */,
+			);
+			name = json11;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		009B25511CDF7A190072F585 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				009B260D1CDF8A790072F585 /* GLProgram.h in Headers */,
+				009B26061CDF8A790072F585 /* DummyRenderer.h in Headers */,
+				009B26181CDF8A790072F585 /* MarkerDetector.h in Headers */,
+				009B26011CDF8A790072F585 /* IterableRange.h in Headers */,
+				009B25FE1CDF8A790072F585 /* FileSystem.h in Headers */,
+				009B26021CDF8A790072F585 /* LockableData.h in Headers */,
+				009B261D1CDF8A790072F585 /* YarrarMarkerParser.h in Headers */,
+				009B25FC1CDF8A790072F585 /* ApplicationPath.h in Headers */,
+				009B260F1CDF8A790072F585 /* GLShader.h in Headers */,
+				009B261F1CDF8A790072F585 /* SensorTracker.h in Headers */,
+				009B26041CDF8A790072F585 /* Pipeline.h in Headers */,
+				009B262E1CDF8E520072F585 /* StaticImageDataProvider.h in Headers */,
+				009B26111CDF8A790072F585 /* OpenGLRenderer.h in Headers */,
+				009B260B1CDF8A790072F585 /* GLContext.h in Headers */,
+				009B26091CDF8A790072F585 /* BackgroundModel.h in Headers */,
+				009B26071CDF8A790072F585 /* OpenCVRenderer.h in Headers */,
+				009B25F31CDF8A790072F585 /* IOSCameraProvider.h in Headers */,
+				009B26201CDF8A790072F585 /* Types.h in Headers */,
+				009B25621CDF7AB20072F585 /* YarrarViewController.h in Headers */,
+				009B25FA1CDF8A790072F585 /* VisualWithSensors.h in Headers */,
+				009B26051CDF8A790072F585 /* PipelineStage.h in Headers */,
+				009B26161CDF8A790072F585 /* Timer.h in Headers */,
+				009B25F81CDF8A790072F585 /* ExtendedKalmanFilter.h in Headers */,
+				009B25FB1CDF8A790072F585 /* HistoryBuffer.h in Headers */,
+				009B26131CDF8A790072F585 /* SceneModel.h in Headers */,
+				009B261B1CDF8A790072F585 /* MarkerTracker.h in Headers */,
+				009B25581CDF7A190072F585 /* Yarrar.h in Headers */,
+				009B26151CDF8A790072F585 /* Scene.h in Headers */,
+				009B26221CDF8A790072F585 /* Util.h in Headers */,
+				009B26301CDF8E520072F585 /* WebcamDataProvider.h in Headers */,
+				009B26191CDF8A790072F585 /* MarkerParser.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		009B25531CDF7A190072F585 /* Yarrar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 009B255C1CDF7A190072F585 /* Build configuration list for PBXNativeTarget "Yarrar" */;
+			buildPhases = (
+				009B254F1CDF7A190072F585 /* Sources */,
+				009B25501CDF7A190072F585 /* Frameworks */,
+				009B25511CDF7A190072F585 /* Headers */,
+				009B25521CDF7A190072F585 /* Resources */,
+				009B26331CDF8F730072F585 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Yarrar;
+			productName = Yarrar;
+			productReference = 009B25541CDF7A190072F585 /* Yarrar.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		009B254B1CDF7A190072F585 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				TargetAttributes = {
+					009B25531CDF7A190072F585 = {
+						CreatedOnToolsVersion = 7.3;
+					};
+				};
+			};
+			buildConfigurationList = 009B254E1CDF7A190072F585 /* Build configuration list for PBXProject "Yarrar" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 009B254A1CDF7A190072F585;
+			productRefGroup = 009B25551CDF7A190072F585 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				009B25531CDF7A190072F585 /* Yarrar */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		009B25521CDF7A190072F585 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		009B26331CDF8F730072F585 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PROJECT_DIR}/ios-build-framework.sh";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		009B254F1CDF7A190072F585 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				009B26101CDF8A790072F585 /* OpenGLRenderer.cpp in Sources */,
+				009B26121CDF8A790072F585 /* SceneModel.cpp in Sources */,
+				009B26081CDF8A790072F585 /* BackgroundModel.cpp in Sources */,
+				009B260A1CDF8A790072F585 /* GLContext.cpp in Sources */,
+				009B260C1CDF8A790072F585 /* GLProgram.cpp in Sources */,
+				009B26031CDF8A790072F585 /* Pipeline.cpp in Sources */,
+				009B260E1CDF8A790072F585 /* GLShader.cpp in Sources */,
+				009B25611CDF7AB20072F585 /* YarrarViewController.mm in Sources */,
+				009B262F1CDF8E520072F585 /* WebcamDataProvider.cpp in Sources */,
+				009B262D1CDF8E520072F585 /* StaticImageDataProvider.cpp in Sources */,
+				009B26171CDF8A790072F585 /* MarkerDetector.cpp in Sources */,
+				009B25FD1CDF8A790072F585 /* ApplicationPath.mm in Sources */,
+				009B26141CDF8A790072F585 /* Scene.cpp in Sources */,
+				009B261A1CDF8A790072F585 /* MarkerTracker.cpp in Sources */,
+				009B26211CDF8A790072F585 /* Util.cpp in Sources */,
+				009B261C1CDF8A790072F585 /* YarrarMarkerParser.cpp in Sources */,
+				009B25F91CDF8A790072F585 /* VisualWithSensors.cpp in Sources */,
+				009B26001CDF8A790072F585 /* FileSystem_std.cpp in Sources */,
+				009B26281CDF8E300072F585 /* json11.cpp in Sources */,
+				009B25F21CDF8A790072F585 /* IOSCameraProvider.cpp in Sources */,
+				009B261E1CDF8A790072F585 /* SensorTracker.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		009B255A1CDF7A190072F585 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		009B255B1CDF7A190072F585 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		009B255D1CDF7A190072F585 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv7s,
+					armv7,
+				);
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Yarrar",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = YARRAR_OPENGLES_CONTEXT;
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "DEBUG=1";
+				HEADER_SEARCH_PATHS = (
+					../../../external/eigen,
+					../../../external/json11,
+					"../../../src/**",
+				);
+				INFOPLIST_FILE = Yarrar/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndob.Yarrar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		009B255E1CDF7A190072F585 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					armv7s,
+					armv7,
+				);
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Yarrar",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = YARRAR_OPENGLES_CONTEXT;
+				HEADER_SEARCH_PATHS = (
+					../../../external/eigen,
+					../../../external/json11,
+					"../../../src/**",
+				);
+				INFOPLIST_FILE = Yarrar/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.ndob.Yarrar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		009B254E1CDF7A190072F585 /* Build configuration list for PBXProject "Yarrar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				009B255A1CDF7A190072F585 /* Debug */,
+				009B255B1CDF7A190072F585 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		009B255C1CDF7A190072F585 /* Build configuration list for PBXNativeTarget "Yarrar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				009B255D1CDF7A190072F585 /* Debug */,
+				009B255E1CDF7A190072F585 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 009B254B1CDF7A190072F585 /* Project object */;
+}
