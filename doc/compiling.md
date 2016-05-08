@@ -43,6 +43,16 @@ cmake -DCMAKE_TOOLCHAIN_FILE=../external/android-cmake/android.toolchain.cmake -
 make
 ```
 
+## iOS (Yarrar.framework)
+
+iOS compilation is tested and supported from **Xcode only** (CMake not currently supported).
+
+Package can be compiled for **armv7 and armv7s only**. This is a limitation of prebuilt OpenCV 3.0, so building it manually should get around this issue. In that case edit *platform/ios/Xcode/ios-build-framework.sh* to support arm64.
+
+1. Download and extract OpenCV 3.0 for iOS (http://opencv.org/downloads.html) to *platform/ios/Xcode/Yarrar*-directory.
+2. Open and build *platform/ios/Xcode/Yarrar.xcodeproj*
+3. Built Yarrar.framework-bundle will appear in *platform/ios/Xcode/output*
+
 ## Unity
 
 **Linux+Android-plugin (compilation on Linux):**
